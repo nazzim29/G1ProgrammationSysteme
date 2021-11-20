@@ -28,6 +28,7 @@ string select_dir(string path = null)
 {
     if (path == null)
     {
+       
         var table = new ConsoleTable("disk", "path", "label", "Total Size", "Free Space", "Drive Type");
         var drives = DriveInfo.GetDrives();
         foreach (var (drive, i) in drives.Select((value, i) => (value, i)))
