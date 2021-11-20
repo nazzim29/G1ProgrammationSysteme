@@ -1,22 +1,18 @@
 ﻿using EasySave.Helpers;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EasySave.Models
 {
     public class Travail : BaseINPC
     {
-        private string _name,_source, _destination,_type,_state;
-        private double _nb_file,_nb_file_remaining,_total_size;
-        public Travail(string _n,string _s, string _d, string _m)
+        private string _name, _source, _destination, _type, _state;
+        private double _nb_file, _nb_file_remaining, _total_size;
+        public Travail(string _n, string _s, string _d, string _m)
         {
             this.name = _n;
             this.source = _s;
@@ -27,12 +23,13 @@ namespace EasySave.Models
         }
         public string name
         {
-            get { 
-                return _name; 
+            get
+            {
+                return _name;
             }
             set
             {
-                _name= value;
+                _name = value;
                 RaisePropertyChanged("name");
             }
         }
@@ -44,7 +41,7 @@ namespace EasySave.Models
             }
             set
             {
-                _source= value;
+                _source = value;
                 RaisePropertyChanged("source");
             }
         }
@@ -56,7 +53,7 @@ namespace EasySave.Models
             }
             set
             {
-                _destination= value;
+                _destination = value;
                 RaisePropertyChanged("destination");
             }
         }
@@ -64,7 +61,7 @@ namespace EasySave.Models
         {
             get
             {
-                return (nb_file - nb_file_remaining) / nb_file * 100 >-1 ? String.Format("{0:0.##%}", ((nb_file-nb_file_remaining)/nb_file)) : "0%";
+                return (nb_file - nb_file_remaining) / nb_file * 100 > -1 ? String.Format("{0:0.##%}", ((nb_file - nb_file_remaining) / nb_file)) : "0%";
             }
         }
         public string type
@@ -72,7 +69,7 @@ namespace EasySave.Models
             get { return _type; }
             set
             {
-                if(value == "Complet" || value == "Diferentiel")
+                if (value == "Complet" || value == "Diferentiel")
                 {
                     _type = value;
                     RaisePropertyChanged("type");
@@ -87,7 +84,7 @@ namespace EasySave.Models
             }
             set
             {
-                _state= value;
+                _state = value;
                 RaisePropertyChanged("state");
             }
         }
@@ -95,7 +92,7 @@ namespace EasySave.Models
         {
             get
             {
-                return files.Count() ;
+                return files.Count();
             }
 
         }
@@ -107,7 +104,7 @@ namespace EasySave.Models
             }
             set
             {
-                _nb_file_remaining= value;
+                _nb_file_remaining = value;
                 RaisePropertyChanged("nb_file_remaining");
             }
         }
@@ -117,19 +114,19 @@ namespace EasySave.Models
         }
         ObservableCollection<string> files { get; set; }
         public override bool Equals(object obj) => obj is Travail && ((Travail)obj).destination.Equals(destination) && ((Travail)obj).source.Equals(source);
-        public override int GetHashCode()=> (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
+        public override int GetHashCode() => (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
         public Thread Start()
         {
             var dir = new DirectoryInfo(this.source);
-            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el=>el.FullName));
+            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));
             nb_file_remaining = nb_file;
             return new Thread(delegate ()
             {
                 this.state = "Running";
-                CreateDirs(this.destination,dir.GetDirectories());
+                CreateDirs(this.destination, dir.GetDirectories());
                 foreach (var file in files)
                 {
-                    Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel"?true:false);
+                    Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);
                     this.nb_file_remaining--;
                 }
                 this.state = "Finished";
@@ -137,10 +134,10 @@ namespace EasySave.Models
 
 
         }
-        
+
         private void CreateDirs(string path, DirectoryInfo[] dirs)
         {
-            foreach(var dir in dirs)
+            foreach (var dir in dirs)
             {
 
                 if (!Directory.Exists(Path.Combine(path, dir.Name)))
@@ -150,17 +147,18 @@ namespace EasySave.Models
                 CreateDirs(Path.Combine(path, dir.Name), dir.GetDirectories());
             }
         }
-        private void Copyfile(string source,string destination,bool dif)
+        private void Copyfile(string source, string destination, bool dif)
         {
             if (!File.Exists(source)) throw new Exception("Source file not found");
-            if(File.Exists(destination)){ 
+            if (File.Exists(destination))
+            {
                 using (var sourcef = File.OpenRead(source))
                 {
                     using (var destinationf = File.OpenRead(destination))
                     {
                         var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));
                         var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));
-                        if ( dif && hash1 == hash2)
+                        if (dif && hash1 == hash2)
                         {
                             Console.WriteLine($"{source}");
                             return;

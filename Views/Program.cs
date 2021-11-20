@@ -14,28 +14,31 @@
 
 
 
-using System;
-using System.IO;
-using System.Linq;
 //using ConsoleTables
 using ConsoleTables;
 using EasySave.ViewModels;
+using System;
+using System.IO;
+using System.Linq;
+using System.Resources;
+
 Backup vm = new Backup();
+ResourceManager resxReader = new ResourceManager("EasySave.Properties.Resources", System.Reflection.Assembly.GetExecutingAssembly());
 string select_dir(string path = null)
 {
-    if(path == null)
+    if (path == null)
     {
         var table = new ConsoleTable("disk", "path", "label", "Total Size", "Free Space", "Drive Type");
         var drives = DriveInfo.GetDrives();
-        foreach (var (drive,i) in drives.Select((value, i) => (value, i)))
+        foreach (var (drive, i) in drives.Select((value, i) => (value, i)))
         {
-            table.AddRow(i,drive.Name,drive.VolumeLabel,drive.TotalSize,drive.AvailableFreeSpace,drive.DriveType);
+            table.AddRow(i, drive.Name, drive.VolumeLabel, drive.TotalSize, drive.AvailableFreeSpace, drive.DriveType);
         }
         table.Write();
         Console.Write("\n  choisissez un disk : ");
 
-            var cmd = Int32.Parse(Console.ReadLine());
-            if (cmd< drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
+        var cmd = Int32.Parse(Console.ReadLine());
+        if (cmd < drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
 
         return select_dir();
     }
@@ -48,8 +51,9 @@ string select_dir(string path = null)
         {
             try
             {
-                table.AddRow(i,_dir.Name, _dir.GetFiles().Length, _dir.GetDirectories().Length, 00, _dir.LastWriteTime.ToString());
-            }catch(Exception ex)
+                table.AddRow(i, _dir.Name, _dir.GetFiles().Length, _dir.GetDirectories().Length, 00, _dir.LastWriteTime.ToString());
+            }
+            catch (Exception ex)
             {
                 if (ex.GetType().Name == "UnauthorizedAccessException") continue;
             }
@@ -60,9 +64,10 @@ string select_dir(string path = null)
         if (cmd == "") return Path.GetFullPath(dir.ToString());
         try
         {
-            if (Int32.Parse(cmd) > -1 && Int32.Parse(cmd)< dirs.Length) return select_dir(Path.GetFullPath(dirs[Int32.Parse(cmd)].ToString()));
+            if (Int32.Parse(cmd) > -1 && Int32.Parse(cmd) < dirs.Length) return select_dir(Path.GetFullPath(dirs[Int32.Parse(cmd)].ToString()));
 
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             return select_dir(path);
         }
@@ -83,7 +88,7 @@ void add_task()
     Console.WriteLine(@" Destination: ");
     string destination = select_dir();
     string mode = "";
-    while(mode == "")
+    while (mode == "")
     {
         Console.WriteLine("1-Sauvegarde Complete\t2-Sauvgarde Diferentielle");
         Console.Write("  Choisissez un mode: ");
@@ -101,7 +106,8 @@ void add_task()
     try
     {
         vm.NewTask(appelation, source, destination, mode);
-    }catch(Exception ex)
+    }
+    catch (Exception ex)
     {
         if (ex.Message == "this task already exists")
         {
@@ -115,10 +121,10 @@ void add_task()
 
 void ShowTasks()
 {
-    var table = new ConsoleTable("Task", "Source", "Destination", "Type", "Etat", "Nb. Files","Total Size","Progression","Last Backup Time");
-    foreach (var (task,i) in vm.tasks.Select((value, i) => (value, i)))
+    var table = new ConsoleTable("Task", "Source", "Destination", "Type", "Etat", "Nb. Files", "Total Size", "Progression", "Last Backup Time");
+    foreach (var (task, i) in vm.tasks.Select((value, i) => (value, i)))
     {
-        table.AddRow(task.name, task.source, task.destination, task.type, task.state, task.nb_file, task.total_size,task.progression, (new DirectoryInfo(task.destination)).LastWriteTime.ToString());
+        table.AddRow(task.name, task.source, task.destination, task.type, task.state, task.nb_file, task.total_size, task.progression, (new DirectoryInfo(task.destination)).LastWriteTime.ToString());
     }
     table.Write();
 }
@@ -131,7 +137,8 @@ void LaunchTask()
     {
         vm.StartTask(tache);
 
-    }catch(Exception ex)
+    }
+    catch (Exception ex)
     {
         Console.WriteLine(ex);
     }
@@ -148,7 +155,8 @@ void MenuPrincipale()
     {
         cmd = int.Parse(s: Console.ReadLine());
 
-    }catch(Exception ex)
+    }
+    catch (Exception ex)
     {
         MenuPrincipale();
     }
