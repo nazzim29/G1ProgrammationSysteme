@@ -11,14 +11,25 @@ namespace EasySave.Models
 {
     public class Travail : BaseINPC
     {
+        private string _name,_source, _destination,_type,_state;
+        private double _nb_file,_nb_file_remaining,_total_size;
+        public Travail(string _n,string _s, string _d, string _m)
+        {
+            this.name = _n;
+            this.source = _s;
+            this.destination = _d;
+            this.type = _m;
+            this.files = new ObservableCollection<string>();
+            this.state = "Inactif";
+        }
         public string name
         {
             get { 
-                return name; 
+                return _name; 
             }
             set
             {
-                name= value;
+                _name= value;
                 RaisePropertyChanged("name");
             }
         }
@@ -26,11 +37,11 @@ namespace EasySave.Models
         {
             get
             {
-                return source;
+                return _source;
             }
             set
             {
-                source= value;
+                _source= value;
                 RaisePropertyChanged("source");
             }
         }
@@ -38,22 +49,29 @@ namespace EasySave.Models
         {
             get
             {
-                return destination;
+                return _destination;
             }
             set
             {
-                destination= value;
+                _destination= value;
                 RaisePropertyChanged("destination");
+            }
+        }
+        public string progression
+        {
+            get
+            {
+                return (nb_file - nb_file_remaining) / nb_file * 100 >-1 ? String.Format("{0:0.##%}", ((nb_file-nb_file_remaining)/nb_file)) : "0%";
             }
         }
         public string type
         {
-            get { return type; }
+            get { return _type; }
             set
             {
                 if(value == "Complet" || value == "Diferentiel")
                 {
-                    type = value;
+                    _type = value;
                     RaisePropertyChanged("type");
                 }
             }
@@ -62,11 +80,11 @@ namespace EasySave.Models
         {
             get
             {
-                return state;
+                return _state;
             }
             set
             {
-                state= value;
+                _state= value;
                 RaisePropertyChanged("state");
             }
         }
@@ -74,33 +92,63 @@ namespace EasySave.Models
         {
             get
             {
-                return nb_file;
+                return files.Count() ;
             }
-            set
-            {
-                nb_file= value;
-                RaisePropertyChanged("nb_file");
-            }
+
         }
         public double nb_file_remaining
         {
             get
             {
-                return nb_file_remaining;
+                return _nb_file_remaining;
             }
             set
             {
-                nb_file_remaining= value;
+                _nb_file_remaining= value;
                 RaisePropertyChanged("nb_file_remaining");
             }
         }
-        public double total_size
+        public long total_size
         {
-            get { return total_size; }
-            set { total_size = value; RaisePropertyChanged("total_size"); }
+            get { return DirSize(new DirectoryInfo(source)); }
         }
         ObservableCollection<string> files { get; set; }
         public override bool Equals(object obj) => obj is Travail && ((Travail)obj).destination.Equals(destination) && ((Travail)obj).source.Equals(source);
         public override int GetHashCode()=> (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
+        public Thread Start()
+        {
+            var dir = new DirectoryInfo(this.source);
+            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el=>el.FullName));
+            nb_file_remaining = nb_file;
+            return new Thread(delegate ()
+            {
+                this.state = "Running";
+                foreach(var file in files)
+                {
+                    File.Copy(file, file.Replace(this.source, this.destination) , true);
+                    nb_file_remaining--;
+                }
+                this.state = "Finished";
+            });
+
+
+        }
+        private long DirSize(DirectoryInfo d)
+        {
+            long size = 0;
+            // Add file sizes.
+            FileInfo[] fis = d.GetFiles();
+            foreach (FileInfo fi in fis)
+            {
+                size += fi.Length;
+            }
+            // Add subdirectory sizes.
+            DirectoryInfo[] dis = d.GetDirectories();
+            foreach (DirectoryInfo di in dis)
+            {
+                size += DirSize(di);
+            }
+            return size;
+        }
     }
 }
