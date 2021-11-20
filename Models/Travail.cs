@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -123,15 +124,49 @@ namespace EasySave.Models
             return new Thread(delegate ()
             {
                 this.state = "Running";
-                foreach(var file in files)
+                CreateDirs(this.destination,dir.GetDirectories());
+                foreach (var file in files)
                 {
-                    File.Copy(file, file.Replace(this.source, this.destination) , true);
-                    nb_file_remaining--;
+                    Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel"?true:false);
+                    this.nb_file_remaining--;
                 }
                 this.state = "Finished";
             });
 
 
+        }
+        
+        private void CreateDirs(string path, DirectoryInfo[] dirs)
+        {
+            foreach(var dir in dirs)
+            {
+
+                if (!Directory.Exists(Path.Combine(path, dir.Name)))
+                {
+                    Directory.CreateDirectory(Path.Combine(path, dir.Name));
+                }
+                CreateDirs(Path.Combine(path, dir.Name), dir.GetDirectories());
+            }
+        }
+        private void Copyfile(string source,string destination,bool dif)
+        {
+            if (!File.Exists(source)) throw new Exception("Source file not found");
+            if(File.Exists(destination)){ 
+                using (var sourcef = File.OpenRead(source))
+                {
+                    using (var destinationf = File.OpenRead(destination))
+                    {
+                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));
+                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));
+                        if ( dif && hash1 == hash2)
+                        {
+                            Console.WriteLine($"{source}");
+                            return;
+                        };
+                    }
+                }
+            }
+            File.Copy(source, destination, true);
         }
         private long DirSize(DirectoryInfo d)
         {
