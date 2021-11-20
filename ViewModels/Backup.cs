@@ -14,6 +14,7 @@ namespace EasySave.ViewModels
     public class Backup : BaseINPC
     {
         private ObservableCollection<Travail> _tasks;
+        private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
         public ObservableCollection<Travail> tasks
         {
@@ -27,9 +28,24 @@ namespace EasySave.ViewModels
         }
         public Backup()
         {
-            _tasks = new ObservableCollection<Travail>();
+            tasks = new ObservableCollection<Travail>();
         }
 
+        public void NewTask(string name,string source,string destination,string mode)
+        {
+            Travail t = new Travail(name, source, destination, mode);
+            if (!tasks.Contains(t)) tasks.Add(t);
+
+            else throw new Exception("this task already exists");
+        }
+        public void StartTask(string name)
+        {
+            Travail t = (Travail)_tasks.Single(el => el.name == name);
+            Thread task = t.Start();
+            running_tasks.Add(task);
+            task.Start();
+            
+        }
 
 
     }

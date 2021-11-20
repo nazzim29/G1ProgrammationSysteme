@@ -33,14 +33,10 @@ string select_dir(string path = null)
         }
         table.Write();
         Console.Write("\n  choisissez un disk : ");
-        try
-        {
+
             var cmd = Int32.Parse(Console.ReadLine());
             if (cmd< drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
-        }catch(Exception ex)
-        {
-            Console.Write(ex);
-        }
+
         return select_dir();
     }
     else
@@ -50,13 +46,26 @@ string select_dir(string path = null)
         var table = new ConsoleTable("   ", "Name", "Files", "Folders", "Total Size", "Last Write Time");
         foreach (var (_dir, i) in dirs.Select((value, i) => (value, i)))
         {
-            table.AddRow(i,Path.GetFullPath(_dir.ToString()), _dir.GetFiles().Length, _dir.GetDirectories().Length, 00, _dir.LastWriteTime.ToString());
+            try
+            {
+                table.AddRow(i,_dir.Name, _dir.GetFiles().Length, _dir.GetDirectories().Length, 00, _dir.LastWriteTime.ToString());
+            }catch(Exception ex)
+            {
+                if (ex.GetType().Name == "UnauthorizedAccessException") continue;
+            }
         }
         table.Write();
         Console.Write("  Choisissez un dossier: ");
         var cmd = Console.ReadLine();
         if (cmd == "") return Path.GetFullPath(dir.ToString());
-        if (Int32.Parse(cmd) > -1 && Int32.Parse(cmd)< dirs.Length) return select_dir(Path.GetFullPath(dirs[Int32.Parse(cmd)].ToString()));
+        try
+        {
+            if (Int32.Parse(cmd) > -1 && Int32.Parse(cmd)< dirs.Length) return select_dir(Path.GetFullPath(dirs[Int32.Parse(cmd)].ToString()));
+
+        }catch(Exception ex)
+        {
+            return select_dir(path);
+        }
         return select_dir(path);
     }
 }
@@ -73,29 +82,87 @@ void add_task()
     string source = select_dir();
     Console.WriteLine(@" Destination: ");
     string destination = select_dir();
-    Console.WriteLine("1-Sauvegarde Complete\t2-Sauvgarde Diferentielle");
-    Console.Write("  Choisissez un mode: ");
-    string mode = Console.ReadLine();
-    Console.WriteLine(appelation,source,destination,mode);
+    string mode = "";
+    while(mode == "")
+    {
+        Console.WriteLine("1-Sauvegarde Complete\t2-Sauvgarde Diferentielle");
+        Console.Write("  Choisissez un mode: ");
+        mode = Console.ReadLine();
+        if (mode == "1")
+        {
+            mode = "Complet"; continue;
+        }
+        if (mode == "2")
+        {
+            mode = "Diferentiel"; continue;
+        }
+        else mode = "";
+    }
+    try
+    {
+        vm.NewTask(appelation, source, destination, mode);
+    }catch(Exception ex)
+    {
+        if (ex.Message == "this task already exists")
+        {
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(" task already exists ");
+            Console.ResetColor();
+        }
+    }
+}
+
+void ShowTasks()
+{
+    var table = new ConsoleTable("Task", "Source", "Destination", "Type", "Etat", "Nb. Files","Total Size","Progression","Last Backup Time");
+    foreach (var (task,i) in vm.tasks.Select((value, i) => (value, i)))
+    {
+        table.AddRow(task.name, task.source, task.destination, task.type, task.state, task.nb_file, task.total_size,task.progression, (new DirectoryInfo(task.destination)).LastWriteTime.ToString());
+    }
+    table.Write();
+}
+void LaunchTask()
+{
+    ShowTasks();
+    Console.Write("\n  Choisissez une tache: ");
+    string tache = Console.ReadLine();
+    try
+    {
+        vm.StartTask(tache);
+
+    }catch(Exception ex)
+    {
+        Console.WriteLine(ex);
+    }
 }
 void MenuPrincipale()
 {
     Console.WriteLine(@"  Menu Principale: ");
-    Console.WriteLine(@"    1- Afficher les traveaux            2-Ajouter un travail de sauvegarde");
-    Console.WriteLine(@"    3- liste des Disque disponible      4-Exit");
+    Console.WriteLine("    1- Afficher les traveaux\t2-Ajouter un travail de sauvegarde");
+    Console.WriteLine("    3- Lancer une tache\t\t4-Exit");
     Console.WriteLine("");
     Console.Write(@"  Tappez un chiffre: ");
-    switch (Int32.Parse(Console.ReadLine()))
+    int cmd = 0;
+    try
+    {
+        cmd = int.Parse(s: Console.ReadLine());
+
+    }catch(Exception ex)
+    {
+        MenuPrincipale();
+    }
+    switch (cmd)
     {
         case 1:
-            Console.WriteLine("heeeeeeeeeeeeeeeey");
+            ShowTasks();
             break;
         case 2:
             Console.WriteLine(@"creer un travail: ");
             add_task();
             break;
         case 3:
-            Console.WriteLine(@"liste des disques");
+            LaunchTask();
             break;
         case 4:
             Console.WriteLine(@" Exit");
@@ -104,6 +171,7 @@ void MenuPrincipale()
             MenuPrincipale();
             break;
     }
+    MenuPrincipale();
 }
 
 #region logo
