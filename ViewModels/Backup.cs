@@ -1,14 +1,10 @@
 ﻿using EasySave.Helpers;
 using EasySave.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace EasySave.ViewModels
 {
@@ -20,19 +16,19 @@ namespace EasySave.ViewModels
         public ObservableCollection<Travail> tasks
         {
             get { return _tasks; }
-            set { _tasks = value;}
+            set { _tasks = value; }
         }
         public Travail current_task
         {
             get { return current_task; }
-            set { current_task = value;}
+            set { current_task = value; }
         }
         public Backup()
         {
             tasks = new ObservableCollection<Travail>();
         }
 
-        public void NewTask(string name,string source,string destination,string mode)
+        public void NewTask(string name, string source, string destination, string mode)
         {
             Travail t = new Travail(name, source, destination, mode);
             if (!tasks.Contains(t)) tasks.Add(t);
@@ -45,7 +41,7 @@ namespace EasySave.ViewModels
             Thread task = t.Start();
             running_tasks.Add(task);
             task.Start();
-            
+
         }
 
 
