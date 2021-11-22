@@ -13,6 +13,7 @@ namespace EasySave.ViewModels
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
+        //accesseurs de la classe backup
         public ObservableCollection<Travail> tasks
         {
             get { return _tasks; }
@@ -23,11 +24,12 @@ namespace EasySave.ViewModels
             get { return current_task; }
             set { current_task = value; }
         }
+        //constructeur
         public Backup()
         {
             tasks = new ObservableCollection<Travail>();
         }
-
+        //méthode permettant d'ajouter une nouvelle tache de sauvegarde à la liste des taches
         public void NewTask(string name, string source, string destination, string mode)
         {
             Travail t = new Travail(name, source, destination, mode);
@@ -35,6 +37,7 @@ namespace EasySave.ViewModels
 
             else throw new Exception("this task already exists");
         }
+        //méthode permettant de lancer le travail de sauvegarde
         public void StartTask(string name)
         {
             Travail t = (Travail)_tasks.Single(el => el.name == name);

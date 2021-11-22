@@ -22,8 +22,8 @@ using System.IO;
 using System.Linq;
 using System.Resources;
 
-Backup vm = new Backup();
-ResourceManager resxReader = new ResourceManager("EasySave.Properties.Resources", System.Reflection.Assembly.GetExecutingAssembly());
+Backup vm = new Backup();//instanciation d'un objet de la classe backup
+//méthode permettant la selection d'un répertoire
 string select_dir(string path = null)
 {
     if (path == null)
@@ -75,6 +75,7 @@ string select_dir(string path = null)
         return select_dir(path);
     }
 }
+//méthode qui permet à l'utilisateur d'ajouter une tache
 void add_task()
 {
     Console.Write("  ");
@@ -91,7 +92,7 @@ void add_task()
     string mode = "";
     while (mode == "")
     {
-        Console.WriteLine("1-Sauvegarde Complete\t2-Sauvgarde Diferentielle");
+        Console.WriteLine("1-Sauvegarde Complete\t2-Sauvegarde Differentielle");
         Console.Write("  Choisissez un mode: ");
         mode = Console.ReadLine();
         if (mode == "1")
@@ -100,7 +101,7 @@ void add_task()
         }
         if (mode == "2")
         {
-            mode = "Diferentiel"; continue;
+            mode = "Differentiel"; continue;
         }
         else mode = "";
     }
@@ -120,6 +121,7 @@ void add_task()
     }
 }
 
+//méthode permettant d'afficher la liste des taches
 void ShowTasks()
 {
     var table = new ConsoleTable("Task", "Source", "Destination", "Type", "Etat", "Nb. Files", "Total Size", "Progression", "Last Backup Time");
@@ -129,6 +131,7 @@ void ShowTasks()
     }
     table.Write();
 }
+//méthode permettant à l'utilisateur de lancer une tache
 void LaunchTask()
 {
     ShowTasks();
@@ -144,10 +147,11 @@ void LaunchTask()
         Console.WriteLine(ex);
     }
 }
+//méthode pour afficher le menu
 void MenuPrincipale()
 {
     Console.WriteLine(@"  Menu Principale: ");
-    Console.WriteLine("    1- Afficher les traveaux\t2-Ajouter un travail de sauvegarde");
+    Console.WriteLine("    1- Afficher les travaux\t2-Ajouter un travail de sauvegarde");
     Console.WriteLine("    3- Lancer une tache\t\t4-Exit");
     Console.WriteLine("");
     Console.Write(@"  Tappez un chiffre: ");
