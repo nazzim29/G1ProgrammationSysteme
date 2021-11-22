@@ -29,15 +29,17 @@ namespace EasySave.Properties
         public static string Nb_Files = "Nombre de fichiers";
         public static string Progression = "Progression";
         public static string Last_Backup_Time = "Heure de la derniere sauvegarde";
-        public static string Choisissez_un_dossier = "";
-        public static string Complet;
-        public static string Differentiel;
-        public static string task_exists;
-        public static string Choisissez_une_tache;
-        public static string Afficher_les_traveaux;
-        public static string Ajout_sauvegarde;
-        public static string Lancer_une_tache;
-        public static string exit;
-        public static string creer_un_travail;
+        public static string Choisissez_un_disk = "Veuillez choisir un disque";
+        public static string Choisissez_un_dossier = "Veuillez choisir un dossier";
+        public static string Choisissez_un_mode = "Veuillez choisir un mode de sauvegarde";
+        public static string Complet = "Complete";
+        public static string Differentiel = "Diferentielle";
+        public static string task_exists = "Cette tâche existe déjà";
+        public static string Choisissez_une_tache = "Veuillez choisir une tâche de sauvegarde";
+        public static string Afficher_les_traveaux = "Afficher les travaux de sauvegarde";
+        public static string Ajout_sauvegarde = "Ajouter un travail de sauvegarde";
+        public static string Lancer_une_tache = "Lancer une tâche de sauvegarde";
+        public static string exit = "Quitter";
+        public static string creer_un_travail = "Créer un travail de sauvegarde";
     }
 }
