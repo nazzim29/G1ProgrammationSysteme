@@ -22,6 +22,7 @@ namespace EasySave.Models
             this.type = _m;
             this.files = new ObservableCollection<string>();
             this.state = "Inactif";
+            files = new ObservableCollection<string>(new DirectoryInfo(source).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));
         }
         //définition des accesseurs (getter/setter)
         public string name

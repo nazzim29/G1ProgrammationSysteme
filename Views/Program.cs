@@ -41,7 +41,7 @@ string select_dir(string path = null)
         var cmd = Int32.Parse(Console.ReadLine());
         if (cmd < drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
 
-        return select_dir();
+        return select_dir(path);
     }
     else
     {
