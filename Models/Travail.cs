@@ -151,15 +151,15 @@ namespace EasySave.Models
         private void Copyfile(string source, string destination, bool dif)
         {
             if (!File.Exists(source)) throw new Exception("Source file not found");
-            if (File.Exists(destination))
-            {
+            if(File.Exists(destination)&& dif)
+            { 
                 using (var sourcef = File.OpenRead(source))
                 {
                     using (var destinationf = File.OpenRead(destination))
                     {
                         var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));
                         var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));
-                        if (dif && hash1 == hash2)
+                        if (hash1 == hash2)
                         {
                             Console.WriteLine($"{source}");
                             return;
