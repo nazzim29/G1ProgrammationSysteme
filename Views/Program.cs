@@ -19,8 +19,10 @@ using System.IO;
 using System.Linq;
 //using ConsoleTables
 using ConsoleTables;
+using EasySave.Properties;
 using EasySave.ViewModels;
 Backup vm = new Backup();
+//Type lang = new Francais();
 string select_dir(string path = null)
 {
     if(path == null)

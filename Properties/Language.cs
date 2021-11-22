@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave.Properties
 {
-    public interface Language
+    public abstract class Language
     {
         public static string disk;
         public static string path;
