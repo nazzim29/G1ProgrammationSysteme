@@ -16,6 +16,7 @@
 
 //using ConsoleTables
 using ConsoleTables;
+using EasySave.Models;
 using EasySave.ViewModels;
 using System;
 using System.IO;
@@ -206,6 +207,10 @@ Console.ResetColor();
 Console.WriteLine(@"");
 #endregion //logo
 
-MenuPrincipale();
+
+var haja = new LogService(new LogService.LogJournalier());
+
+
+//MenuPrincipale();
 
 
