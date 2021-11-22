@@ -29,5 +29,15 @@ namespace EasySave.Properties
         public static string Nb_Files = "Nombre de fichiers";
         public static string Progression = "Progression";
         public static string Last_Backup_Time = "Heure de la derniere sauvegarde";
+        public static string Choisissez_un_dossier = "";
+        public static string Complet;
+        public static string Differentiel;
+        public static string task_exists;
+        public static string Choisissez_une_tache;
+        public static string Afficher_les_traveaux;
+        public static string Ajout_sauvegarde;
+        public static string Lancer_une_tache;
+        public static string exit;
+        public static string creer_un_travail;
     }
 }
