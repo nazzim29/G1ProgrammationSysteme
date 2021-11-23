@@ -11,9 +11,8 @@ namespace EasySave.ViewModels
 {
     public class Backup : BaseINPC
     {
-        public Preferences pref;
+        public Preferences preferences;
         private LogService LogService = new LogService();
-        private object preferences = new object();
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -54,7 +53,7 @@ namespace EasySave.ViewModels
 
         public void ParsePreferences()
         {
-            pref = Preferences.fromFile();
+            preferences = Preferences.fromFile();
         }
         public void ParseTasks()
         {

@@ -22,12 +22,23 @@ using System.Linq;
 using EasySave.Properties;
 using EasySave.ViewModels;
 Backup vm;
-//Type lang = new Francais();
+Language lang;
 void __init__()
 {
     vm = new Backup();
     vm.ParsePreferences();
     vm.ParseTasks();
+    switch (vm.preferences.language)
+    {
+        case "FR":
+            lang= new Francais();
+            break;
+        case "EN":
+        default:
+            lang = new Anglais();
+            break;
+            
+    }
 }
 string select_dir(string path = null)
 {
@@ -83,13 +94,13 @@ void add_task()
     Console.Write("  ");
     Console.ForegroundColor = ConsoleColor.White;
     Console.BackgroundColor = ConsoleColor.DarkGreen;
-    Console.Write(@lang.get("Appelation_de_la_sauvegarde"));
+    Console.Write(lang.get("Appelation_de_la_sauvegarde"));
     Console.ResetColor();
     Console.Write(" ");
     string appelation = Console.ReadLine();
-    Console.WriteLine("  "+ @lang.get("Source")+" : ");
+    Console.WriteLine("  "+ lang.get("Source")+" : ");
     string source = select_dir();
-    Console.WriteLine("  "+@lang.get("Destination")+" : ");
+    Console.WriteLine("  "+lang.get("Destination")+" : ");
     string destination = select_dir();
     string mode = "";
     while(mode == "")
@@ -167,14 +178,14 @@ void MenuPrincipale()
             ShowTasks();
             break;
         case 2:
-            Console.WriteLine("\n" +@lang.get("creer_un_travail"));
+            Console.WriteLine("\n" +lang.get("creer_un_travail"));
             add_task();
             break;
         case 3:
             LaunchTask();
             break;
         case 4:
-            Console.WriteLine(@lang.get("exit"));
+            Console.WriteLine(lang.get("exit"));
             break;
         default:
             MenuPrincipale();
