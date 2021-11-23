@@ -60,5 +60,51 @@ namespace EasySave.Models
                 File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks));
             }
         }
+        public class LogJournalier : LogStrategy
+        {
+            public string Path
+            {
+                get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log"; }
+            }
+            private string FileName
+            {
+                get { return $"log{DateTime.Now.ToString("dd-MM-yyyy")}.json"; }
+            }
+            public void execute(object obj)
+            {
+                if (!Directory.Exists(Path))
+                {
+                    Directory.CreateDirectory(Path);
+                }
+                if (!File.Exists(Path + $"\\{FileName}")) File.Create(Path + $"\\{FileName}").Dispose();
+                var jsontxt = File.ReadAllText(Path + $"\\{FileName}");
+                List<object> logs = new List<object>();
+                if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
+                    logs = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
+                logs.Add(obj);
+                File.WriteAllText(Path + $"\\{FileName}", JsonConvert.SerializeObject(logs));
+            }
+        }
+        public class AddTask : LogStrategy
+        {
+            public string Path
+            {
+                get { return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log"; }
+            }
+            public void execute(object obj)
+            {
+                if (!Directory.Exists(Path))
+                {
+                    Directory.CreateDirectory(Path);
+                }
+                if (!File.Exists(Path + $"\\tasks.json")) File.Create(Path + $"\\tasks.json").Dispose();
+                var jsontxt = File.ReadAllText(Path + $"\\tasks.json");
+                List<object> tasks = new List<object>();
+                if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
+                    tasks = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
+                tasks.Add(obj);
+                File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks));
+            }
+        }
     }
 }
