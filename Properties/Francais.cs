@@ -37,16 +37,15 @@ namespace EasySave.Properties
         public static string Differentiel { get { return "Différentielle"; } } 
         public static string task_exists { get { return "  Cette tâche existe déjà"; } } 
         public static string Choisissez_une_tache { get { return "  Veuillez choisir une tâche de sauvegarde :"; } } 
-        public static string Afficher_les_travaux { get { return "    1- Afficher les travaux de sauvegarde"; } } 
+        public static string Afficher_les_travaux { get { return "    1- Afficher les travaux de sauvegarde\t"; } } 
         public static string Ajout_sauvegarde { get { return "2- Ajouter un travail de sauvegarde"; } } 
-        public static string Lancer_une_tache { get { return "    3- Lancer une tâche de sauvegarde"; } } 
+        public static string Lancer_une_tache { get { return "    3- Lancer une tâche de sauvegarde\t\t"; } } 
         public static string exit { get { return "Quitter"; } } 
         public static string creer_un_travail { get { return "  Créer un travail de sauvegarde : "; } }
         public static string Menu_Principale { get { return "  Menu Principale : "; } }
         public static string Tapp_chiffre { get { return "  Veuillez entrer un chiffre : "; } }
-
-
-
+        public static string Delete_Task { get { return "4- Supprimer une tâche de sauvegarde : "; } }
+        public static string Change_Language { get { return "    5- Changer de langue "; } }
 
     }
 }

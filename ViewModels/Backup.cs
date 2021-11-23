@@ -55,6 +55,10 @@ namespace EasySave.ViewModels
         {
             preferences = Preferences.fromFile();
         }
+        public void ChangeLanguage()
+        {
+            
+        }
         public void ParseTasks()
         {
             this.tasks = new ObservableCollection<Travail>(Travail.fromFile());

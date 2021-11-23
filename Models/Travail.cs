@@ -204,6 +204,8 @@ namespace EasySave.Models
             }
             return size;
         }
+
+        //méthode renvoyant un fichier JSON contenant la liste des travaux de sauvegarde
         public static Travail[] fromFile()
         {
             string Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log";
