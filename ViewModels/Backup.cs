@@ -2,6 +2,7 @@
 using EasySave.Models;
 using EasySave.Properties;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace EasySave.ViewModels
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
+        
         //accesseurs de la classe backup
         public ObservableCollection<Travail> tasks
         {
@@ -33,6 +35,27 @@ namespace EasySave.ViewModels
             tasks = new ObservableCollection<Travail>();
             //tasks.CollectionChanged += taskschanged;
         }
+        private void stateLogger(object sender, PropertyChangedEventArgs e)
+        {
+            List<object> l = new List<object>();
+            foreach (var task in tasks)
+            {
+                object obj = new
+                {
+                    Name = task.name,
+                    SourceFilePath = task.source,
+                    TargetFilePath = task.destination,
+                    State = task.state,
+                    TotalFileToCopy = task.state == "Running" ? task.nb_file : 0,
+                    TotalFileSize = task.state == "Running" ? task.size_eligible : 0,
+                    NbFilesLeftToDo = task.state == "Running" ? task.nb_file_remaining : 0,
+                    Progression = task.progression
+                };
+                l.Add(obj);
+            }
+            new LogService().Log(l, new LogService.LogState());
+
+        }
         private void taskschanged()
         {
             LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogService.LogTasks());
@@ -41,6 +64,7 @@ namespace EasySave.ViewModels
         public void NewTask(string name, string source, string destination, string mode)
         {
             Travail t = new Travail(name, source, destination, mode);
+            t.PropertyChanged += stateLogger;
             if (!tasks.Contains(t))
             {
                 tasks.Add(t);
@@ -69,6 +93,10 @@ namespace EasySave.ViewModels
         public void ParseTasks()
         {
             this.tasks = new ObservableCollection<Travail>(Travail.fromFile());
+            foreach(var task in tasks)
+            {
+                task.PropertyChanged += stateLogger;
+            }
         }
     }
 }

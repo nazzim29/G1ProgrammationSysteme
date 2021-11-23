@@ -31,12 +31,7 @@ namespace EasySave.Models
                     Directory.CreateDirectory(Path);
                 }
                 if (!File.Exists(Path + "\\state.json")) File.Create(Path + "\\state.json").Dispose();
-                var jsontxt = File.ReadAllText(Path + "\\state.json");
-                List<object> states = new List<object>();
-                if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
-                    states = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
-                states.Add(obj);
-                File.WriteAllText(Path + "\\state.json", JsonConvert.SerializeObject(states));
+                File.WriteAllText(Path + "\\state.json", JsonConvert.SerializeObject(obj,Formatting.Indented)) ;
             }
         }
         public class LogJournalier : LogStrategy

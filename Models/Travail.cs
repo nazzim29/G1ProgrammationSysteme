@@ -31,13 +31,51 @@ namespace EasySave.Models
         }
         private void onchange(object sender, PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == "source")
+            if(e.PropertyName == "source" || e.PropertyName == "destination"|| e.PropertyName == "type")
             {
-                files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName))?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
-
+                files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName).Where(el=>isEligible(el)))?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
                 nb_file_remaining = nb_file;
                 this.state = "Inactif";
 
+
+            }
+        }
+        private bool isEligible(string el)
+        {
+            if (this.type == "Complet")
+            {
+                return true;
+            }
+            string pathdest = el.Replace(this.source, this.destination);
+            if (File.Exists(pathdest))
+            {
+                using (var sourcef = File.OpenRead(el))
+                {
+                    //on ouvre le fichier destination
+                    using (var destinationf = File.OpenRead(pathdest))
+                    {
+                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));//on hash le contenu du fichier source
+                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));//on hash le contenu du fichier destination
+                                                                                                    //si le hash est le meme on saute a l'itération suivante sans faire de sauvegarde
+                        if (hash1 == hash2)
+                        {
+                            return false; ;
+                        };
+                    }
+                }
+            }
+            return true;
+        }
+        public double size_eligible
+        {
+            get
+            {
+                double f = 0;
+                foreach(var file in files)
+                {
+                    f+= new FileInfo(file).Length;
+                }
+                return f;
             }
         }
         public string name
@@ -80,7 +118,11 @@ namespace EasySave.Models
         {
             get
             {
-                return (100 - (nb_file_remaining * 100) / nb_file) +"%";
+                if (nb_file_remaining == 0) return "100%";
+                double finit = nb_file - nb_file_remaining;
+                if (finit == 0) return "0%";
+                double p = finit * 100 / nb_file;
+                return p +"%";
             }
         }
         public string type
@@ -158,7 +200,7 @@ namespace EasySave.Models
                     {
                         log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
                     }
-                    this.nb_file_remaining--;
+                    
                 }
                 this.state = "Finished";
             });
@@ -182,27 +224,8 @@ namespace EasySave.Models
         private void Copyfile(string source, string destination, bool dif)
         {
             if (!File.Exists(source)) throw new Exception("Source file not found");//si le fichier n'existe pas on renvoie une exception
-            //si la destination existe et que la sauvegarde est différentielle 
-            if(File.Exists(destination)&& dif)
-            { 
-                //on ouvre le fichier source
-                using (var sourcef = File.OpenRead(source))
-                {
-                    //on ouvre le fichier destination
-                    using (var destinationf = File.OpenRead(destination))
-                    {
-                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));//on hash le contenu du fichier source
-                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));//on hash le contenu du fichier destination
-                        //si le hash est le meme on saute a l'itération suivante sans faire de sauvegarde
-                        if (hash1 == hash2)
-                        {
-                            Console.WriteLine($"{source}");
-                            return;
-                        };
-                    }
-                }
-            }
             File.Copy(source, destination, true);//Copie un fichier existant dans un nouveau fichier. L'écrasement d'un fichier du même nom est autorisé.
+            this.nb_file_remaining--;
         }
         //méthode qui permet de retourner la taille des fichiers d'un répertoire
         private long DirSize(DirectoryInfo d)
