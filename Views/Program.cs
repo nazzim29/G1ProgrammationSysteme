@@ -21,6 +21,8 @@ using System.IO;
 using System.Linq;
 using EasySave.Properties;
 using EasySave.ViewModels;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace EasySave.Views {
     public class ViewMain
@@ -221,9 +223,17 @@ namespace EasySave.Views {
             }
             MenuPrincipale();
         }
+        [DllImport("kernel32.dll", ExactSpelling = true)]
 
+        private static extern IntPtr GetConsoleWindow();
+        private static IntPtr ThisConsole = GetConsoleWindow();
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         static void Main(string[] args)
         {
+            ShowWindow(ThisConsole, 3);
             #region logo
             string s = "        ______                            _____                        ";
             Console.BackgroundColor = ConsoleColor.DarkGreen;
