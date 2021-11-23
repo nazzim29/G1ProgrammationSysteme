@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -17,18 +19,27 @@ namespace EasySave.Models
         //constructeur
         public Travail()
         {
-
+            PropertyChanged += onchange;
         }
         public Travail(string _n, string _s, string _d, string _m)
         {
+            PropertyChanged += onchange;
             this.name = _n;
             this.source = _s;
             this.destination = _d;
             this.type = _m;
-            this.files = new ObservableCollection<string>();
-            this.state = "Inactif";
         }
-        //définition des accesseurs (getter/setter)
+        private void onchange(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "source")
+            {
+                files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName))?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
+
+                nb_file_remaining = nb_file;
+                this.state = "Inactif";
+
+            }
+        }
         public string name
         {
             get
@@ -69,7 +80,7 @@ namespace EasySave.Models
         {
             get
             {
-                return (nb_file_remaining - nb_file) / nb_file * 100 > -1 ? String.Format("{0:0.##%}", ((nb_file - nb_file_remaining) / nb_file)) : "0%";
+                return (100 - (nb_file_remaining * 100) / nb_file) +"%";
             }
         }
         public string type
@@ -77,7 +88,7 @@ namespace EasySave.Models
             get { return _type; }
             set
             {
-                if (value == "Complet" || value == "Diferentiel")
+                if (value == "Complet" || value == "Differentiel")
                 {
                     _type = value;
                     RaisePropertyChanged("type");
@@ -100,10 +111,8 @@ namespace EasySave.Models
         {
             get
             {
-                if(files == null) files = new ObservableCollection<string>(new DirectoryInfo(source).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));
                 return files.Count();
             }
-
         }
         public double nb_file_remaining
         {
@@ -128,18 +137,27 @@ namespace EasySave.Models
         //redefinition de la fonction GetHashCode pour hasher une instance de la classe 
         public override int GetHashCode() => (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
         //fonction qui retourne un thread qui effectue la sauvegarde
-        public Thread Start()
+        public Thread Start(LogService log)
         {
             var dir = new DirectoryInfo(this.source); 
             files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));//récupérer les fichiers du répertoire
-            nb_file_remaining = nb_file;
             return new Thread(delegate ()
             {
                 this.state = "Running";
                 CreateDirs(this.destination, dir.GetDirectories());//créer les dossiers du répertoire 
+                Stopwatch timer = new Stopwatch();
                 foreach (var file in files)
                 {
-                    Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);//fonction permettant de copier les fichiers
+                    try
+                    {
+                        timer.Start();
+                        Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);//fonction permettant de copier les fichiers
+                        timer.Stop();
+                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
+                    }catch(Exception ex)
+                    {
+                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
+                    }
                     this.nb_file_remaining--;
                 }
                 this.state = "Finished";

@@ -23,6 +23,7 @@ using EasySave.Properties;
 using EasySave.ViewModels;
 Backup vm;
 Language lang;
+
 void __init__()
 {
     vm = new Backup();
@@ -114,7 +115,7 @@ void add_task()
         }
         if (mode == "2")
         {
-            mode = "Différentiel"; continue;
+            mode = "Differentiel"; continue;
         }
         else mode = "";
     }
@@ -153,7 +154,7 @@ void LaunchTask()
 
     }catch(Exception ex)
     {
-        Console.WriteLine(ex);
+        if (ex.GetType() == typeof(InvalidOperationException)) LaunchTask();
     }
 }
 void MenuPrincipale()

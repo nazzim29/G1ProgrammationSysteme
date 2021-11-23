@@ -31,21 +31,28 @@ namespace EasySave.ViewModels
         public Backup()
         {
             tasks = new ObservableCollection<Travail>();
+            //tasks.CollectionChanged += taskschanged;
+        }
+        private void taskschanged()
+        {
+            LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogService.LogTasks());
         }
         //méthode permettant d'ajouter une nouvelle tache de sauvegarde à la liste des taches
         public void NewTask(string name, string source, string destination, string mode)
         {
             Travail t = new Travail(name, source, destination, mode);
-            LogService.Log(new {name = name, source = source,destination=destination,type = mode}, new LogService.AddTask());
-            if (!tasks.Contains(t)) tasks.Add(t);
-
+            if (!tasks.Contains(t))
+            {
+                tasks.Add(t);
+                taskschanged();
+            }
             else throw new Exception("this task already exists");
         }
         //méthode permettant de lancer le travail de sauvegarde
         public void StartTask(string name)
         {
-            Travail t = (Travail)_tasks.Single(el => el.name == name);
-            Thread task = t.Start();
+           Travail t = (Travail)_tasks.Single(el => el.name == name);
+            Thread task = t.Start(LogService);
             running_tasks.Add(task);
             task.Start();
 
