@@ -1,4 +1,5 @@
 ﻿using EasySave.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -14,6 +15,10 @@ namespace EasySave.Models
         private string _name, _source, _destination, _type, _state;
         private double _nb_file, _nb_file_remaining, _total_size;
         //constructeur
+        public Travail()
+        {
+
+        }
         public Travail(string _n, string _s, string _d, string _m)
         {
             this.name = _n;
@@ -22,7 +27,6 @@ namespace EasySave.Models
             this.type = _m;
             this.files = new ObservableCollection<string>();
             this.state = "Inactif";
-            files = new ObservableCollection<string>(new DirectoryInfo(source).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));
         }
         //définition des accesseurs (getter/setter)
         public string name
@@ -65,7 +69,7 @@ namespace EasySave.Models
         {
             get
             {
-                return (nb_file - nb_file_remaining) / nb_file * 100 > -1 ? String.Format("{0:0.##%}", ((nb_file - nb_file_remaining) / nb_file)) : "0%";
+                return (nb_file_remaining - nb_file) / nb_file * 100 > -1 ? String.Format("{0:0.##%}", ((nb_file - nb_file_remaining) / nb_file)) : "0%";
             }
         }
         public string type
@@ -96,6 +100,7 @@ namespace EasySave.Models
         {
             get
             {
+                if(files == null) files = new ObservableCollection<string>(new DirectoryInfo(source).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));
                 return files.Count();
             }
 
@@ -198,6 +203,21 @@ namespace EasySave.Models
                 size += DirSize(di);
             }
             return size;
+        }
+        public static Travail[] fromFile()
+        {
+            string Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log";
+            if (!Directory.Exists(Path))
+            {
+                Directory.CreateDirectory(Path);
+            }
+            if (!File.Exists(Path + $"\\tasks.json"))
+            {
+                File.Create(Path + $"\\tasks.json").Dispose();
+                return new Travail[0];
+            }
+            
+            return JsonConvert.DeserializeObject<Travail[]>(File.ReadAllText(Path + $"\\tasks.json")) ?? new Travail[0]; ;
         }
     }
 }

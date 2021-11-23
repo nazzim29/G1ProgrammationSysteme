@@ -57,7 +57,7 @@ namespace EasySave.Models
                 if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
                     tasks = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
                 tasks.Remove(obj);
-                File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks));
+                File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks,Formatting.Indented));
             }
         }
         public class LogJournalier : LogStrategy
@@ -82,7 +82,7 @@ namespace EasySave.Models
                 if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
                     logs = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
                 logs.Add(obj);
-                File.WriteAllText(Path + $"\\{FileName}", JsonConvert.SerializeObject(logs));
+                File.WriteAllText(Path + $"\\{FileName}", JsonConvert.SerializeObject(logs,Formatting.Indented));
             }
         }
         public class AddTask : LogStrategy
@@ -103,8 +103,9 @@ namespace EasySave.Models
                 if (JsonConvert.DeserializeObject<object>(jsontxt) != null)
                     tasks = new List<object>(JsonConvert.DeserializeObject<object[]>(jsontxt));
                 tasks.Add(obj);
-                File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks));
+                File.WriteAllText(Path + $"\\tasks.json", JsonConvert.SerializeObject(tasks,Formatting.Indented));
             }
         }
+        public void Log(object obj, LogStrategy strat) => strat.execute(obj);
     }
 }

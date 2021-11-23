@@ -1,5 +1,6 @@
 ﻿using EasySave.Helpers;
 using EasySave.Models;
+using EasySave.Properties;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,6 +11,9 @@ namespace EasySave.ViewModels
 {
     public class Backup : BaseINPC
     {
+        public Preferences pref;
+        private LogService LogService = new LogService();
+        private object preferences = new object();
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -33,6 +37,7 @@ namespace EasySave.ViewModels
         public void NewTask(string name, string source, string destination, string mode)
         {
             Travail t = new Travail(name, source, destination, mode);
+            LogService.Log(new {name = name, source = source,destination=destination,type = mode}, new LogService.AddTask());
             if (!tasks.Contains(t)) tasks.Add(t);
 
             else throw new Exception("this task already exists");
@@ -47,6 +52,13 @@ namespace EasySave.ViewModels
 
         }
 
-
+        public void ParsePreferences()
+        {
+            pref = Preferences.fromFile();
+        }
+        public void ParseTasks()
+        {
+            this.tasks = new ObservableCollection<Travail>(Travail.fromFile());
+        }
     }
 }

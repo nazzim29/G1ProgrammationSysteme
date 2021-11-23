@@ -25,8 +25,14 @@ using System.Linq;
 using ConsoleTables;
 using EasySave.Properties;
 using EasySave.ViewModels;
-Backup vm = new Backup();
+Backup vm;
 //Type lang = new Francais();
+void __init__()
+{
+    vm = new Backup();
+    vm.ParsePreferences();
+    vm.ParseTasks();
+}
 string select_dir(string path = null)
 {
     if(path == null)
@@ -205,9 +211,7 @@ Console.WriteLine(@"");
 #endregion //logo
 
 
-var haja = new LogService(new LogService.LogJournalier());
-
-
-//MenuPrincipale();
+__init__();
+MenuPrincipale();
 
 
