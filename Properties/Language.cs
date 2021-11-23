@@ -34,9 +34,10 @@ namespace EasySave.Properties
         public static string Differentiel{ get; }
         public static string task_exists{ get; }
         public static string Choisissez_une_tache{ get; }
-        public static string Afficher_les_traveaux{ get; }
+        public static string Afficher_les_travaux{ get; }
         public static string Ajout_sauvegarde{ get; }
         public static string Lancer_une_tache{ get; }
+        public static string Modes_sauvegarde { get; }
         public static string exit{ get; }
         public static string creer_un_travail{ get; }
         public static string Menu_Principale { get; }

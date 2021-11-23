@@ -26,20 +26,23 @@ namespace EasySave.Properties
         public static string Task { get { return "Task"; } }
         public static string Type { get { return "Type"; } }
         public static string Etat { get { return "State"; } }
-        public static string Nb_Files { get { return "Number of files"; } }
+        public static string Nb_Files { get { return "Nb. Files"; } }
         public static string Progression { get { return "Progression"; } }
         public static string Last_Backup_Time { get { return "Last Backup Time"; } }
-        public static string Choisissez_un_disk { get { return "Please choose a disk"; } }
-        public static string Choisissez_un_dossier { get { return "Please choose a folder"; } }
-        public static string Choisissez_un_mode { get { return "Please choose a backup mode"; } }
+        public static string Choisissez_un_disk { get { return "  Please choose a disk: "; } }
+        public static string Choisissez_un_dossier { get { return "  Please choose a folder: "; } }
+        public static string Modes_sauvegarde { get { return "  Backup Modes : "; } }
+        public static string Choisissez_un_mode { get { return "  Please choose a backup mode: "; } }
         public static string Complet { get { return "Full backup"; } }
         public static string Differentiel { get { return "Differential backup"; } }
-        public static string task_exists { get { return "This task already exists"; } }
-        public static string Choisissez_une_tache { get { return "Please choose a task"; } }
-        public static string Afficher_les_traveaux { get { return "Show task list"; } }
-        public static string Ajout_sauvegarde { get { return "Add a backup work"; } }
-        public static string Lancer_une_tache { get { return "Run a backup task"; } }
+        public static string task_exists { get { return "  This task already exists"; } }
+        public static string Choisissez_une_tache { get { return "  Please choose a task:"; } }
+        public static string Afficher_les_travaux { get { return "    1- Show task list"; } }
+        public static string Ajout_sauvegarde { get { return "2- Add a backup work"; } }
+        public static string Lancer_une_tache { get { return "    3- Run a backup task"; } }
         public static string exit { get { return "Exit"; } }
-        public static string creer_un_travail { get { return "Create a backup work"; } }
+        public static string creer_un_travail { get { return "  Create a backup work:"; } }
+        public static string Menu_Principale { get { return "  Main Menu : "; } }
+        public static string Tapp_chiffre { get { return "  Please enter a number: "; } }
     }
 }

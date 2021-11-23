@@ -18,7 +18,7 @@ namespace EasySave.Properties
         public static string Files { get { return "Fichiers"; } }  
         public static string Folders { get { return "Dossiers"; } }  
         public static string Last_Write_Time { get { return "Heure de la derniere modification"; } }
-        public static string Appelation_de_la_sauvegarde { get { return "Appelation de la sauvegarde"; } } 
+        public static string Appelation_de_la_sauvegarde { get { return "  Appelation de la sauvegarde :"; } } 
         public static string Source { get { return "Source"; } } 
         public static string Destination { get { return "Destination"; } } 
         public static string Sauvegarde_Complete { get { return "Sauvegarde Complete"; } } 
@@ -26,23 +26,24 @@ namespace EasySave.Properties
         public static string Task { get { return "Tache"; } }
         public static string Type { get { return "Type"; } } 
         public static string Etat { get { return "Etat"; } } 
-        public static string Nb_Files { get { return "Nombre de fichiers"; } } 
+        public static string Nb_Files { get { return "Nb. Fichiers"; } } 
         public static string Progression { get { return "Progression"; } } 
-        public static string Last_Backup_Time { get { return "Heure de la dernière sauvegarde"; } } 
-        public static string Choisissez_un_disk { get { return "Veuillez choisir un disque"; } } 
-        public static string Choisissez_un_dossier { get { return "Veuillez choisir un dossier"; } } 
-        public static string Choisissez_un_mode { get { return "Veuillez choisir un mode de sauvegarde"; } } 
+        public static string Last_Backup_Time { get { return "Heure dernière sauvegarde"; } } 
+        public static string Choisissez_un_disk { get { return "  Veuillez choisir un disque : "; } } 
+        public static string Choisissez_un_dossier { get { return "  Veuillez choisir un dossier : "; } } 
+        public static string Modes_sauvegarde { get { return "  Modes de sauvegarde : "; } } 
+        public static string Choisissez_un_mode { get { return "  Veuillez choisir un mode de sauvegarde : "; } } 
         public static string Complet { get { return "Complete"; } } 
-        public static string Differentiel { get { return "Diferentielle"; } } 
-        public static string task_exists { get { return "Cette tâche existe déjà"; } } 
-        public static string Choisissez_une_tache { get { return "Veuillez choisir une tâche de sauvegarde"; } } 
-        public static string Afficher_les_traveaux { get { return "    1- Afficher les traveaux"; } } 
-        public static string Ajout_sauvegarde { get { return "2-Ajouter un travail de sauvegarde"; } } 
+        public static string Differentiel { get { return "Différentielle"; } } 
+        public static string task_exists { get { return "  Cette tâche existe déjà"; } } 
+        public static string Choisissez_une_tache { get { return "  Veuillez choisir une tâche de sauvegarde :"; } } 
+        public static string Afficher_les_travaux { get { return "    1- Afficher les travaux de sauvegarde"; } } 
+        public static string Ajout_sauvegarde { get { return "2- Ajouter un travail de sauvegarde"; } } 
         public static string Lancer_une_tache { get { return "    3- Lancer une tâche de sauvegarde"; } } 
         public static string exit { get { return "Quitter"; } } 
-        public static string creer_un_travail { get { return "Créer un travail de sauvegarde: "; } }
-        public static string Menu_Principale { get { return " Menu Principale : "; } }
-        public static string Tapp_chiffre { get { return "  Tappez un chiffre: "; } }
+        public static string creer_un_travail { get { return "  Créer un travail de sauvegarde : "; } }
+        public static string Menu_Principale { get { return "  Menu Principale : "; } }
+        public static string Tapp_chiffre { get { return "  Veuillez entrer un chiffre : "; } }
 
 
 

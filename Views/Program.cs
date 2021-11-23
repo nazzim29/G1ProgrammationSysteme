@@ -33,7 +33,7 @@ string select_dir(string path = null)
             table.AddRow(i, drive.Name, drive.VolumeLabel, drive.TotalSize, drive.AvailableFreeSpace, drive.DriveType);
         }
         table.Write();
-        Console.Write("\n  "+lang.get("Choisissez_un_disk")+" : ");
+        Console.Write("\n"+lang.get("Choisissez_un_disk"));
 
         var cmd = Int32.Parse(Console.ReadLine());
         if (cmd < drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
@@ -57,7 +57,7 @@ string select_dir(string path = null)
             }
         }
         table.Write();
-        Console.Write("  " + lang.get("Choisissez_un_dossier") + " : ");
+        Console.Write(lang.get("Choisissez_un_dossier"));
         var cmd = Console.ReadLine();
         if (cmd == "") return Path.GetFullPath(dir.ToString());
         try
@@ -76,19 +76,19 @@ void add_task()
     Console.Write("  ");
     Console.ForegroundColor = ConsoleColor.White;
     Console.BackgroundColor = ConsoleColor.DarkGreen;
-    Console.Write(@lang.get("Appelation_de_la_sauvegarde")+" :");
+    Console.Write(@lang.get("Appelation_de_la_sauvegarde"));
     Console.ResetColor();
     Console.Write(" ");
     string appelation = Console.ReadLine();
-    Console.WriteLine(@lang.get("Source")+" : ");
+    Console.WriteLine("  "+ @lang.get("Source")+" : ");
     string source = select_dir();
-    Console.WriteLine(@lang.get("Destination")+" : ");
+    Console.WriteLine("  "+@lang.get("Destination")+" : ");
     string destination = select_dir();
     string mode = "";
     while(mode == "")
     {
-        Console.WriteLine("1-"+lang.get("Sauvegarde_Complete")+"\t2-"+lang.get("Sauvegarde_Différentielle"));
-        Console.Write("  "+lang.get("Choisissez_un_mode")+" : ");
+        Console.WriteLine("\n" + lang.get("Modes_sauvegarde") + "\n  1- " +lang.get("Sauvegarde_Complete")+"\t2- "+lang.get("Sauvegarde_Différentielle"));
+        Console.Write(lang.get("Choisissez_un_mode"));
         mode = Console.ReadLine();
         if (mode == "1")
         {
@@ -127,7 +127,7 @@ void ShowTasks()
 void LaunchTask()
 {
     ShowTasks();
-    Console.Write("\n  Choisissez une tache: ");
+    Console.Write("\n"+lang.get("Choisissez_une_tache"));
     string tache = Console.ReadLine();
     try
     {
@@ -141,8 +141,8 @@ void LaunchTask()
 void MenuPrincipale()
 {
     Console.WriteLine(@lang.get("Menu_Principale"));
-    Console.WriteLine(lang.get("Afficher_les_traveaux")+"\t\t"+lang.get("Ajout_sauvegarde"));
-    Console.WriteLine(lang.get("Lancer_une_tache")+"\t4-"+lang.get("exit"));
+    Console.WriteLine(lang.get("Afficher_les_travaux")+"\t"+lang.get("Ajout_sauvegarde"));
+    Console.WriteLine(lang.get("Lancer_une_tache")+ "\t\t4- " + lang.get("exit"));
     Console.WriteLine("");
     Console.Write(@lang.get("Tapp_chiffre"));
     int cmd = 0;
@@ -160,7 +160,7 @@ void MenuPrincipale()
             ShowTasks();
             break;
         case 2:
-            Console.WriteLine(@lang.get("creer_un_travail"));
+            Console.WriteLine("\n" +@lang.get("creer_un_travail"));
             add_task();
             break;
         case 3:
