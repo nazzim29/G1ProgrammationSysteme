@@ -28,7 +28,7 @@ namespace EasySave.Properties
         public static string Etat { get { return "Etat"; } } 
         public static string Nb_Files { get { return "Nombre de fichiers"; } } 
         public static string Progression { get { return "Progression"; } } 
-        public static string Last_Backup_Time { get { return "Heure de la derniere sauvegarde"; } } 
+        public static string Last_Backup_Time { get { return "Heure de la dernière sauvegarde"; } } 
         public static string Choisissez_un_disk { get { return "Veuillez choisir un disque"; } } 
         public static string Choisissez_un_dossier { get { return "Veuillez choisir un dossier"; } } 
         public static string Choisissez_un_mode { get { return "Veuillez choisir un mode de sauvegarde"; } } 
@@ -36,10 +36,16 @@ namespace EasySave.Properties
         public static string Differentiel { get { return "Diferentielle"; } } 
         public static string task_exists { get { return "Cette tâche existe déjà"; } } 
         public static string Choisissez_une_tache { get { return "Veuillez choisir une tâche de sauvegarde"; } } 
-        public static string Afficher_les_traveaux { get { return "Afficher les travaux de sauvegarde"; } } 
-        public static string Ajout_sauvegarde { get { return "Ajouter un travail de sauvegarde"; } } 
-        public static string Lancer_une_tache { get { return "Lancer une tâche de sauvegarde"; } } 
+        public static string Afficher_les_traveaux { get { return "    1- Afficher les traveaux"; } } 
+        public static string Ajout_sauvegarde { get { return "2-Ajouter un travail de sauvegarde"; } } 
+        public static string Lancer_une_tache { get { return "    3- Lancer une tâche de sauvegarde"; } } 
         public static string exit { get { return "Quitter"; } } 
-        public static string creer_un_travail { get { return "Créer un travail de sauvegarde"; } } 
+        public static string creer_un_travail { get { return "Créer un travail de sauvegarde: "; } }
+        public static string Menu_Principale { get { return " Menu Principale : "; } }
+        public static string Tapp_chiffre { get { return "  Tappez un chiffre: "; } }
+
+
+
+
     }
 }
