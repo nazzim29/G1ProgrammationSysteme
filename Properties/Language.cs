@@ -9,38 +9,44 @@ namespace EasySave.Properties
     public abstract class Language
     {
         public static string disk { get; }
-        public static string path;
-        public static string label;
-        public static string Total_Size;
-        public static string Free_Space;
-        public static string Drive_Type;
-        public static string Name;
-        public static string Files;
-        public static string Folders;
-        public static string Last_Write_Time;
-        public static string Appelation_de_la_sauvegarde;
-        public static string Source;
-        public static string Destination;
-        public static string Sauvegarde_Complete;
-        public static string Sauvegarde_Différentielle;
-        public static string Task;
-        public static string Type;
-        public static string Etat;
-        public static string Nb_Files;
-        public static string Progression;
-        public static string Last_Backup_Time;
-        public static string Choisissez_un_dossier;
-        public static string Complet;
-        public static string Differentiel;
-        public static string task_exists;
-        public static string Choisissez_une_tache;
-        public static string Afficher_les_traveaux;
-        public static string Ajout_sauvegarde;
-        public static string Lancer_une_tache;
-        public static string exit;
-        public static string creer_un_travail;
-
-
+        public static string path{ get; }
+        public static string label{ get; }
+        public static string Total_Size{ get; }
+        public static string Free_Space{ get; }
+        public static string Drive_Type{ get; }
+        public static string Name{ get; }
+        public static string Files{ get; }
+        public static string Folders{ get; }
+        public static string Last_Write_Time{ get; }
+        public static string Appelation_de_la_sauvegarde{ get; }
+        public static string Source{ get; }
+        public static string Destination{ get; }
+        public static string Sauvegarde_Complete{ get; }
+        public static string Sauvegarde_Différentielle{ get; }
+        public static string Task{ get; }
+        public static string Type{ get; }
+        public static string Etat{ get; }
+        public static string Nb_Files{ get; }
+        public static string Progression{ get; }
+        public static string Last_Backup_Time{ get; }
+        public static string Choisissez_un_dossier{ get; }
+        public static string Complet{ get; }
+        public static string Differentiel{ get; }
+        public static string task_exists{ get; }
+        public static string Choisissez_une_tache{ get; }
+        public static string Afficher_les_travaux{ get; }
+        public static string Ajout_sauvegarde{ get; }
+        public static string Lancer_une_tache{ get; }
+        public static string Modes_sauvegarde { get; }
+        public static string exit{ get; }
+        public static string creer_un_travail{ get; }
+        public static string Menu_Principale { get; }
+        public static string Tapp_chiffre { get; }
+        public string get(string prop)
+        {
+            return this.GetType().GetProperty(prop).GetValue(this, null).ToString();
+           
+        }
 
     }
 }

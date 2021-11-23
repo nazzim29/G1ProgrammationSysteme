@@ -13,16 +13,12 @@
 
 
 
-
-//using ConsoleTables
 using ConsoleTables;
 using EasySave.Models;
 using EasySave.ViewModels;
 using System;
 using System.IO;
 using System.Linq;
-//using ConsoleTables
-using ConsoleTables;
 using EasySave.Properties;
 using EasySave.ViewModels;
 Backup vm;
@@ -37,14 +33,14 @@ string select_dir(string path = null)
 {
     if(path == null)
     {
-        var table = new ConsoleTable("disk", "path", "label", "Total Size", "Free Space", "Drive Type");
+        var table = new ConsoleTable(lang.get("disk"), lang.get("path"), lang.get("label"), lang.get("Total_Size"), lang.get("Free_Space"), lang.get("Drive_Type"));
         var drives = DriveInfo.GetDrives();
         foreach (var (drive, i) in drives.Select((value, i) => (value, i)))
         {
             table.AddRow(i, drive.Name, drive.VolumeLabel, drive.TotalSize, drive.AvailableFreeSpace, drive.DriveType);
         }
         table.Write();
-        Console.Write("\n  Choisissez un disk : ");
+        Console.Write("\n"+lang.get("Choisissez_un_disk"));
 
         var cmd = Int32.Parse(Console.ReadLine());
         if (cmd < drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
@@ -55,7 +51,7 @@ string select_dir(string path = null)
     {
         var dir = new DirectoryInfo(path);
         var dirs = dir.GetDirectories();
-        var table = new ConsoleTable("   ", "Name", "Files", "Folders", "Total Size", "Last Write Time");
+        var table = new ConsoleTable("   ", lang.get("Name"), lang.get("Files"), lang.get("Folders"), lang.get("Total_Size"), lang.get("Last_Write_Time"));
         foreach (var (_dir, i) in dirs.Select((value, i) => (value, i)))
         {
             try
@@ -68,7 +64,7 @@ string select_dir(string path = null)
             }
         }
         table.Write();
-        Console.Write("  Choisissez un dossier: ");
+        Console.Write(lang.get("Choisissez_un_dossier"));
         var cmd = Console.ReadLine();
         if (cmd == "") return Path.GetFullPath(dir.ToString());
         try
@@ -87,19 +83,19 @@ void add_task()
     Console.Write("  ");
     Console.ForegroundColor = ConsoleColor.White;
     Console.BackgroundColor = ConsoleColor.DarkGreen;
-    Console.Write(@"Appelation de la sauvegarde:");
+    Console.Write(@lang.get("Appelation_de_la_sauvegarde"));
     Console.ResetColor();
     Console.Write(" ");
     string appelation = Console.ReadLine();
-    Console.WriteLine(@" Source: ");
+    Console.WriteLine("  "+ @lang.get("Source")+" : ");
     string source = select_dir();
-    Console.WriteLine(@" Destination: ");
+    Console.WriteLine("  "+@lang.get("Destination")+" : ");
     string destination = select_dir();
     string mode = "";
     while(mode == "")
     {
-        Console.WriteLine("1-Sauvegarde Complete\t2-Sauvegarde Différentielle");
-        Console.Write("  Choisissez un mode: ");
+        Console.WriteLine("\n" + lang.get("Modes_sauvegarde") + "\n  1- " +lang.get("Sauvegarde_Complete")+"\t2- "+lang.get("Sauvegarde_Différentielle"));
+        Console.Write(lang.get("Choisissez_un_mode"));
         mode = Console.ReadLine();
         if (mode == "1")
         {
@@ -120,7 +116,7 @@ void add_task()
         {
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(" task already exists ");
+            Console.WriteLine(lang.get("task_exists"));
             Console.ResetColor();
         }
     }
@@ -128,7 +124,7 @@ void add_task()
 
 void ShowTasks()
 {
-    var table = new ConsoleTable("Task", "Source", "Destination", "Type", "Etat", "Nb. Files","Total Size","Progression","Last Backup Time");
+    var table = new ConsoleTable(lang.get("Task"), lang.get("Source"), lang.get("Destination"), lang.get("Type"), lang.get("Etat"), lang.get("Nb_Files"), lang.get("Total_Size"), lang.get("Progression"), lang.get("Last_Backup_Time"));
     foreach (var (task,i) in vm.tasks.Select((value, i) => (value, i)))
     {
         table.AddRow(task.name, task.source, task.destination, task.type, task.state, task.nb_file, task.total_size, task.progression, (new DirectoryInfo(task.destination)).LastWriteTime.ToString());
@@ -138,7 +134,7 @@ void ShowTasks()
 void LaunchTask()
 {
     ShowTasks();
-    Console.Write("\n  Choisissez une tache: ");
+    Console.Write("\n"+lang.get("Choisissez_une_tache"));
     string tache = Console.ReadLine();
     try
     {
@@ -151,11 +147,11 @@ void LaunchTask()
 }
 void MenuPrincipale()
 {
-    Console.WriteLine(@"  Menu Principale: ");
-    Console.WriteLine("    1- Afficher les traveaux\t2-Ajouter un travail de sauvegarde");
-    Console.WriteLine("    3- Lancer une tache\t\t4-Exit");
+    Console.WriteLine(lang.get("Menu_Principale"));
+    Console.WriteLine(lang.get("Afficher_les_travaux")+"\t"+lang.get("Ajout_sauvegarde"));
+    Console.WriteLine(lang.get("Lancer_une_tache")+ "\t\t4- " + lang.get("exit"));
     Console.WriteLine("");
-    Console.Write(@"  Tappez un chiffre: ");
+    Console.Write(lang.get("Tapp_chiffre"));
     int cmd = 0;
     try
     {
@@ -171,14 +167,14 @@ void MenuPrincipale()
             ShowTasks();
             break;
         case 2:
-            Console.WriteLine(@"creer un travail: ");
+            Console.WriteLine("\n" +@lang.get("creer_un_travail"));
             add_task();
             break;
         case 3:
             LaunchTask();
             break;
         case 4:
-            Console.WriteLine(@" Exit");
+            Console.WriteLine(@lang.get("exit"));
             break;
         default:
             MenuPrincipale();
