@@ -8,7 +8,7 @@ namespace EasySave.Properties
 {
     public abstract class Language
     {
-        public static string disk;
+        public static string disk { get; }
         public static string path;
         public static string label;
         public static string Total_Size;
