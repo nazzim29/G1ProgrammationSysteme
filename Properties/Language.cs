@@ -42,6 +42,8 @@ namespace EasySave.Properties
         public static string creer_un_travail{ get; }
         public static string Menu_Principale { get; }
         public static string Tapp_chiffre { get; }
+        public static string Delete_Task { get; }
+        public static string Change_Language { get; }
         public string get(string prop)
         {
             return this.GetType().GetProperty(prop).GetValue(this, null).ToString();

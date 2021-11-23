@@ -36,13 +36,17 @@ namespace EasySave.Properties
         public static string Complet { get { return "Full backup"; } }
         public static string Differentiel { get { return "Differential backup"; } }
         public static string task_exists { get { return "  This task already exists"; } }
-        public static string Choisissez_une_tache { get { return "  Please choose a task:"; } }
-        public static string Afficher_les_travaux { get { return "    1- Show task list"; } }
+        public static string Choisissez_une_tache { get { return "  Please choose a task: "; } }
+        public static string Afficher_les_travaux { get { return "    1- Show task list\t\t"; } }
         public static string Ajout_sauvegarde { get { return "2- Add a backup work"; } }
-        public static string Lancer_une_tache { get { return "    3- Run a backup task"; } }
+        public static string Lancer_une_tache { get { return "    3- Run a backup task\t"; } }
         public static string exit { get { return "Exit"; } }
         public static string creer_un_travail { get { return "  Create a backup work:"; } }
         public static string Menu_Principale { get { return "  Main Menu : "; } }
         public static string Tapp_chiffre { get { return "  Please enter a number: "; } }
+        public static string Delete_Task { get { return "4- Delete a task "; } }
+        public static string Change_Language { get { return "    5- Change the language "; } }
+
+
     }
 }

@@ -27,6 +27,10 @@ namespace EasySave.Properties
             var pref = JsonConvert.DeserializeObject<Preferences>(File.ReadAllText(PrefPath+"\\config.json"));
             return pref;
         }
+        public void Save()
+        {
+
+        } 
         public Preferences(string _language = "EN")
         {
             this.language = _language;

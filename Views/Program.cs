@@ -32,7 +32,7 @@ void __init__()
     switch (vm.preferences.language)
     {
         case "FR":
-            lang= new Francais();
+            lang = new Francais();
             break;
         case "EN":
         default:
@@ -157,11 +157,24 @@ void LaunchTask()
         if (ex.GetType() == typeof(InvalidOperationException)) LaunchTask();
     }
 }
+//supprimer une tache 
+void DeleteTask()
+{
+    ShowTasks();
+    Console.Write("\n" + lang.get("Choisissez_une_tache"));
+    string task = Console.ReadLine();
+}
+//changer de langue
+void ChangeLang()
+{
+    vm.ChangeLanguage();
+}
 void MenuPrincipale()
 {
     Console.WriteLine(lang.get("Menu_Principale"));
-    Console.WriteLine(lang.get("Afficher_les_travaux")+"\t"+lang.get("Ajout_sauvegarde"));
-    Console.WriteLine(lang.get("Lancer_une_tache")+ "\t\t4- " + lang.get("exit"));
+    Console.WriteLine(lang.get("Afficher_les_travaux")+lang.get("Ajout_sauvegarde"));
+    Console.WriteLine(lang.get("Lancer_une_tache")+lang.get("Delete_Task"));
+    Console.WriteLine(lang.get("Change_Language")+"\t6- " + lang.get("exit"));
     Console.WriteLine("");
     Console.Write(lang.get("Tapp_chiffre"));
     int cmd = 0;
@@ -186,6 +199,12 @@ void MenuPrincipale()
             LaunchTask();
             break;
         case 4:
+            DeleteTask();
+            break;
+        case 5:
+            ChangeLang();
+            break;
+        case 6:
             Console.WriteLine(lang.get("exit"));
             break;
         default:
