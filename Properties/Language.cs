@@ -45,6 +45,7 @@ namespace EasySave.Properties
         public static string Delete_Task { get; }
         public static string Change_Language { get; }
         public static string Limite_taches { get; }
+        public static string Revenir_en_arriere { get; }
         public string get(string prop)
         {
             return this.GetType().GetProperty(prop).GetValue(this, null).ToString();

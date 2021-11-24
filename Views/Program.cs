@@ -95,7 +95,7 @@ namespace EasySave.Views
                     }
                 }
                 table.Write();
-                Console.Write(lang.get("Choisissez_un_dossier") + (dir.Parent != null? "(vide pour selectionner)" : "(vide pour selectionner et  .. pour revenir en Arriere)"));
+                Console.Write(lang.get("Choisissez_un_dossier") + (dir.Parent != null? "(vide pour selectionner) :" : lang.get("Revenir_en_arriere")));
                 var cmd = Console.ReadLine();
                 Console.WriteLine(dir.Parent);
                 if (cmd == ".." && dir.Parent != null) return select_dir(dir.Parent.FullName);
@@ -118,7 +118,7 @@ namespace EasySave.Views
             {
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.BackgroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("Vous avez atteint la limite de tache enregistré"); //todo:add to language
+                Console.WriteLine(lang.get("Limite_taches"));
                 Console.ResetColor();
                 return;
             }

@@ -30,7 +30,7 @@ namespace EasySave.Properties
         public static string Progression { get { return "Progression"; } } 
         public static string Last_Backup_Time { get { return "Heure dernière sauvegarde"; } } 
         public static string Choisissez_un_disk { get { return "  Veuillez choisir un disque : "; } } 
-        public static string Choisissez_un_dossier { get { return "  Veuillez choisir un dossier : "; } } 
+        public static string Choisissez_un_dossier { get { return "  Veuillez choisir un dossier "; } } 
         public static string Modes_sauvegarde { get { return "  Modes de sauvegarde : "; } } 
         public static string Choisissez_un_mode { get { return "  Veuillez choisir un mode de sauvegarde : "; } } 
         public static string Complet { get { return "Complete"; } } 
@@ -44,9 +44,10 @@ namespace EasySave.Properties
         public static string creer_un_travail { get { return "  Créer un travail de sauvegarde : "; } }
         public static string Menu_Principale { get { return "  Menu Principale : "; } }
         public static string Tapp_chiffre { get { return "  Veuillez entrer un chiffre : "; } }
-        public static string Delete_Task { get { return "4- Supprimer une tâche de sauvegarde : "; } }
-        public static string Change_Language { get { return "    5- Changer de langue "; } }
+        public static string Delete_Task { get { return "4- Supprimer une tâche de sauvegarde "; } }
+        public static string Change_Language { get { return "    5- Changer de langue \t\t"; } }
         public static string Limite_taches { get { return "  Vous avez atteint la limite de tâche enregistré"; } }
+        public static string Revenir_en_arriere { get { return " ( Entrer pour selectionner le dossier actuel / .. pour revenir en arrière ) : "; } }
 
     }
 }
