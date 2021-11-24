@@ -8,6 +8,7 @@ namespace EasySave.Properties
 {
     class Anglais : Language
     {
+        //application words in english
         public static string disk { get { return "Disk"; } }
         public static string path { get { return "Path"; } }
         public static string label { get { return "Name"; } }
@@ -36,7 +37,7 @@ namespace EasySave.Properties
         public static string Complet { get { return "Full backup"; } }
         public static string Differentiel { get { return "Differential backup"; } }
         public static string task_exists { get { return "  This task already exists"; } }
-        public static string Choisissez_une_tache { get { return "  Please choose a task: "; } }
+        public static string Choisissez_une_tache { get { return "  Please choose a backup task: "; } }
         public static string Afficher_les_travaux { get { return "    1- Show task list\t\t"; } }
         public static string Ajout_sauvegarde { get { return "2- Add a backup work"; } }
         public static string Lancer_une_tache { get { return "    3- Run a backup task\t"; } }

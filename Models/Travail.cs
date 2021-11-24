@@ -14,6 +14,7 @@ namespace EasySave.Models
     public class Travail : BaseINPC
     {
         //déclaration des propriétés d'un travail
+        //backup properties
         private string _name, _source, _destination, _type, _state;
         private double _nb_file, _nb_file_remaining, _total_size;
         //constructeur
@@ -29,10 +30,12 @@ namespace EasySave.Models
             this.destination = _d;
             this.type = _m;
         }
+        //notifies 
         private void onchange(object sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName == "source" || e.PropertyName == "destination"|| e.PropertyName == "type")
             {
+                //get all the files of a directory
                 files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName).Where(el=>isEligible(el)))?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
                 nb_file_remaining = nb_file;
                 this.state = "Inactif";
@@ -40,6 +43,7 @@ namespace EasySave.Models
 
             }
         }
+        //verifies if the file has to be copied or not
         private bool isEligible(string el)
         {
             if (this.type == "Complet")
@@ -52,11 +56,14 @@ namespace EasySave.Models
                 using (var sourcef = File.OpenRead(el))
                 {
                     //on ouvre le fichier destination
+                    //opens the destination file
                     using (var destinationf = File.OpenRead(pathdest))
                     {
-                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));//on hash le contenu du fichier source
-                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));//on hash le contenu du fichier destination
-                                                                                                    //si le hash est le meme on saute a l'itération suivante sans faire de sauvegarde
+                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));//we hash the content of the source file//on hash le contenu du fichier source
+                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));//we hash the content of the destination file;//on hash le contenu du fichier destination
+
+                        //if the hash is the same we move to the next iteration without making a backup
+                        //si le hash est le meme on saute a l'itération suivante sans faire de sauvegarde
                         if (hash1 == hash2)
                         {
                             return false; ;
@@ -66,6 +73,7 @@ namespace EasySave.Models
             }
             return true;
         }
+        //***properties(getter and setter)***//
         public double size_eligible
         {
             get
@@ -173,27 +181,31 @@ namespace EasySave.Models
             get { return DirSize(new DirectoryInfo(source)); }
         }
         ObservableCollection<string> files { get; set; }
-        
+        //***properties(getter and setter)***//
+
+        //redefinition of the Equals method, which makes it possible to verify equality between two bodies of the working class
         //redefinition de la méthode Equals qui permet de vérifier l'égalité entre deux instances de la classe travail 
         public override bool Equals(object obj) => obj is Travail && ((Travail)obj).destination.Equals(destination) && ((Travail)obj).source.Equals(source);
-        //redefinition de la fonction GetHashCode pour hasher une instance de la classe 
+        //redefinition of the GetHashCode method to hash a class instance
+        //redefinition de la fonction GetHashCode pour hacher une instance de la classe 
         public override int GetHashCode() => (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
+        //function that returns a thread that executes the backup
         //fonction qui retourne un thread qui effectue la sauvegarde
         public Thread Start(LogService log)
         {
             var dir = new DirectoryInfo(this.source); 
-            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));//récupérer les fichiers du répertoire
+            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));//get files from the directory
             return new Thread(delegate ()
             {
                 this.state = "Running";
-                CreateDirs(this.destination, dir.GetDirectories());//créer les dossiers du répertoire 
+                CreateDirs(this.destination, dir.GetDirectories());//recreates the structure of the directory
                 Stopwatch timer = new Stopwatch();
                 foreach (var file in files)
                 {
                     try
                     {
                         timer.Start();
-                        Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);//fonction permettant de copier les fichiers
+                        Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);//function to copy files
                         timer.Stop();
                         log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
                     }catch(Exception ex)
@@ -207,6 +219,7 @@ namespace EasySave.Models
 
 
         }
+        //method to recreate the structure of the source directory
         //méthode permettant de recréer la structure de la source
         private void CreateDirs(string path, DirectoryInfo[] dirs)
         {
@@ -220,13 +233,17 @@ namespace EasySave.Models
                 CreateDirs(Path.Combine(path, dir.Name), dir.GetDirectories());
             }
         }
+        //method for copying files
         //methode permettant de faire la copie des fichiers
         private void Copyfile(string source, string destination, bool dif)
         {
+            //if the file does not exist an exception is returned
             if (!File.Exists(source)) throw new Exception("Source file not found");//si le fichier n'existe pas on renvoie une exception
+            //Copy an existing file to a new file. The overwriting of a file with the same name is allowed.
             File.Copy(source, destination, true);//Copie un fichier existant dans un nouveau fichier. L'écrasement d'un fichier du même nom est autorisé.
-            this.nb_file_remaining--;
+            this.nb_file_remaining--;//every time we make a copy the number of files decreases
         }
+        //method to return the file size of a directory
         //méthode qui permet de retourner la taille des fichiers d'un répertoire
         private long DirSize(DirectoryInfo d)
         {
@@ -245,8 +262,7 @@ namespace EasySave.Models
             }
             return size;
         }
-
-        //méthode renvoyant un fichier JSON contenant la liste des travaux de sauvegarde
+        //method returning a table of backup tasks from the JSON tasks file
         public static Travail[] fromFile()
         {
             string Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log";

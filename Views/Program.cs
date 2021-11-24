@@ -30,18 +30,20 @@ namespace EasySave.Views
 {
     public class ViewMain
     {
-        Backup vm;
-        Language lang;
-
+        Backup vm;//instance of backup class 
+        Language lang;//instance of language class        
+        
+        //method to initialize the application
         void __init__()
         {
-            vm = new Backup();
+            vm = new Backup();//initialize the object with the constructor
             vm.ParsePreferences();
             vm.preferences.PropertyChanged += OnPrefChanged;
             vm.ParseTasks();
             OnPrefChanged(this, new PropertyChangedEventArgs("language"));
 
         }
+        //event handler for preferences changes
         private void OnPrefChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "language")
@@ -60,8 +62,10 @@ namespace EasySave.Views
             }
 
         }
+        //method to select directory path 
         string select_dir(string path = null)
         {
+    
             if (path == null)
             {
                 var table = new ConsoleTable(lang.get("disk"), lang.get("path"), lang.get("label"), lang.get("Total_Size"), lang.get("Free_Space"), lang.get("Drive_Type"));
@@ -95,7 +99,7 @@ namespace EasySave.Views
                     }
                 }
                 table.Write();
-                Console.Write(lang.get("Choisissez_un_dossier") + (dir.Parent != null? "(vide pour selectionner) :" : lang.get("Revenir_en_arriere")));
+                Console.Write(lang.get("Choisissez_un_dossier") + (dir.Parent != null? lang.get("Revenir_en_arriere") : lang.get("Revenir_en_arriere")));
                 var cmd = Console.ReadLine();
                 Console.WriteLine(dir.Parent);
                 if (cmd == ".." && dir.Parent != null) return select_dir(dir.Parent.FullName);
@@ -112,6 +116,7 @@ namespace EasySave.Views
                 return select_dir(path);
             }
         }
+        //method to add a task
         void add_task()
         {
             if (vm.tasks.Count() >= 5)
@@ -151,11 +156,11 @@ namespace EasySave.Views
             }
             try
             {
-                vm.NewTask(appelation, source, destination, mode);
+                vm.NewTask(appelation, source, destination, mode);//creates the task 
             }
             catch (Exception ex)
             {
-                if (ex.Message == "this task already exists")
+                if (ex.Message == "this task already exists")//shows an error message if the task already exists
                 {
                     Console.BackgroundColor = ConsoleColor.Red;
                     Console.ForegroundColor = ConsoleColor.White;
@@ -164,7 +169,7 @@ namespace EasySave.Views
                 }
             }
         }
-
+        //print the list of tasks in a table
         void ShowTasks()
         {
             var table = new ConsoleTable(lang.get("Task"), lang.get("Source"), lang.get("Destination"), lang.get("Type"), lang.get("Etat"), lang.get("Nb_Files"), lang.get("Total_Size"), lang.get("Progression"), lang.get("Last_Backup_Time"));
@@ -174,14 +179,15 @@ namespace EasySave.Views
             }
             table.Write();
         }
+        //method to launch a task
         void LaunchTask()
         {
-            ShowTasks();
+            ShowTasks();//display the tasks's list 
             Console.Write("\n" + lang.get("Choisissez_une_tache"));
-            string tache = Console.ReadLine();
+            string tache = Console.ReadLine();//read the task's name
             try
             {
-                vm.StartTask(tache);
+                vm.StartTask(tache);//starts the task
 
             }
             catch (Exception ex)
@@ -189,7 +195,7 @@ namespace EasySave.Views
                 if (ex.GetType() == typeof(InvalidOperationException)) LaunchTask();
             }
         }
-        //supprimer une tache 
+        //method to delete a task 
         void DeleteTask()
         {
             ShowTasks();
@@ -205,11 +211,12 @@ namespace EasySave.Views
                 DeleteTask();
             }
         }
-        //changer de langue
+        //method to change the language
         void ChangeLang()
         {
             vm.ChangeLanguage();
         }
+        //method to manage the menu
         void MenuPrincipale()
         {
             Console.WriteLine(lang.get("Menu_Principale"));
@@ -262,7 +269,7 @@ namespace EasySave.Views
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
 
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);//shows the window in full screen mode
         static void Main(string[] args)
         {
             ShowWindow(ThisConsole, 3);

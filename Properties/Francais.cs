@@ -8,6 +8,7 @@ namespace EasySave.Properties
 {
     public class Francais : Language
     {
+        //application words in french
         public static string disk { get { return "Disque"; } }
         public static string path { get { return "Chemin"; } }
         public static string label { get { return "Nom"; } }
@@ -18,7 +19,7 @@ namespace EasySave.Properties
         public static string Files { get { return "Fichiers"; } }  
         public static string Folders { get { return "Dossiers"; } }  
         public static string Last_Write_Time { get { return "Heure de la derniere modification"; } }
-        public static string Appelation_de_la_sauvegarde { get { return "  Appelation de la sauvegarde :"; } } 
+        public static string Appelation_de_la_sauvegarde { get { return "  Appellation de la sauvegarde :"; } } 
         public static string Source { get { return "Source"; } } 
         public static string Destination { get { return "Destination"; } } 
         public static string Sauvegarde_Complete { get { return "Sauvegarde Complete"; } } 
@@ -36,7 +37,7 @@ namespace EasySave.Properties
         public static string Complet { get { return "Complete"; } } 
         public static string Differentiel { get { return "Différentielle"; } } 
         public static string task_exists { get { return "  Cette tâche existe déjà"; } } 
-        public static string Choisissez_une_tache { get { return "  Veuillez choisir une tâche de sauvegarde :"; } } 
+        public static string Choisissez_une_tache { get { return "  Veuillez choisir une tâche de sauvegarde : "; } } 
         public static string Afficher_les_travaux { get { return "    1- Afficher les travaux de sauvegarde\t"; } } 
         public static string Ajout_sauvegarde { get { return "2- Ajouter un travail de sauvegarde"; } } 
         public static string Lancer_une_tache { get { return "    3- Lancer une tâche de sauvegarde\t\t"; } } 
