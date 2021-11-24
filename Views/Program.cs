@@ -233,7 +233,7 @@ namespace EasySave.Views {
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         static void Main(string[] args)
         {
-            ShowWindow(ThisConsole, 3);
+            ShowWindow(ThisConsole, 3 );
             #region logo
             string s = "        ______                            _____                        ";
             Console.BackgroundColor = ConsoleColor.DarkGreen;
