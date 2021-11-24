@@ -95,10 +95,11 @@ namespace EasySave.Views
                     }
                 }
                 table.Write();
-                Console.Write(lang.get("Choisissez_un_dossier"));
+                Console.Write(lang.get("Choisissez_un_dossier") + (dir.Parent != null? "(vide pour selectionner)" : "(vide pour selectionner et  .. pour revenir en Arriere)"));
                 var cmd = Console.ReadLine();
-                if (cmd == "..") return select_dir(dir.Parent.FullName);
-                if (cmd == "") return Path.GetFullPath(dir.ToString());
+                Console.WriteLine(dir.Parent);
+                if (cmd == ".." && dir.Parent != null) return select_dir(dir.Parent.FullName);
+                if (cmd == "" || cmd == "..") return Path.GetFullPath(dir.ToString());
                 try
                 {
                     if (Int32.Parse(cmd) > -1 && Int32.Parse(cmd) < dirs.Length) return select_dir(Path.GetFullPath(dirs[Int32.Parse(cmd)].ToString()));
