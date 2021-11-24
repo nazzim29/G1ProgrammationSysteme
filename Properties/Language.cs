@@ -44,6 +44,7 @@ namespace EasySave.Properties
         public static string Tapp_chiffre { get; }
         public static string Delete_Task { get; }
         public static string Change_Language { get; }
+        public static string Limite_taches { get; }
         public string get(string prop)
         {
             return this.GetType().GetProperty(prop).GetValue(this, null).ToString();

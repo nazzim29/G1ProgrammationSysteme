@@ -46,6 +46,7 @@ namespace EasySave.Properties
         public static string Tapp_chiffre { get { return "  Veuillez entrer un chiffre : "; } }
         public static string Delete_Task { get { return "4- Supprimer une tâche de sauvegarde : "; } }
         public static string Change_Language { get { return "    5- Changer de langue "; } }
+        public static string Limite_taches { get { return "  Vous avez atteint la limite de tâche enregistré"; } }
 
     }
 }
