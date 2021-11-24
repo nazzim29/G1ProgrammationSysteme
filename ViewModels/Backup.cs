@@ -56,6 +56,14 @@ namespace EasySave.ViewModels
             new LogService().Log(l, new LogService.LogState());
 
         }
+        public void DeleteTask(List<Travail> tasks)
+        {
+            foreach(var task in tasks)
+            {
+                this.tasks.Remove(task);
+            }
+            taskschanged();
+        }
         private void taskschanged()
         {
             LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogService.LogTasks());
@@ -85,9 +93,12 @@ namespace EasySave.ViewModels
         public void ParsePreferences()
         {
             preferences = Preferences.fromFile();
+
         }
         public void ChangeLanguage()
         {
+            if (this.preferences.language == "EN") { preferences.language = "FR"; return; }
+            if (this.preferences.language == "FR") { preferences.language = "EN"; return; }
             
         }
         public void ParseTasks()

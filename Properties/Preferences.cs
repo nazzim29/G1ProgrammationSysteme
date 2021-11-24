@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using EasySave.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -9,10 +11,15 @@ using System.Threading.Tasks;
 namespace EasySave.Properties
 {
 
-    public class Preferences
+    public class Preferences : BaseINPC
     {
         private static readonly string PrefPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+"\\EasySave\\Preferences";
-        public string language;
+        private string _language;
+        public string language
+        {
+            get { return _language; }
+            set { _language = value; RaisePropertyChanged("language"); }
+        }
         public static Preferences fromFile()
         {
             if (!Directory.Exists(PrefPath))
@@ -33,7 +40,20 @@ namespace EasySave.Properties
         } 
         public Preferences(string _language = "EN")
         {
-            this.language = _language;
+            PropertyChanged += Save;
+            this._language = _language;
+        }
+        private void Save(object sender, PropertyChangedEventArgs e)
+        {
+            if (!Directory.Exists(PrefPath))
+            {
+                Directory.CreateDirectory(PrefPath);
+            }
+            if (!File.Exists(PrefPath + "\\config.json"))
+            {
+                File.Create(PrefPath + "\\config.json").Dispose();
+            }
+                File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language }, Formatting.Indented));
         }
     }
 }

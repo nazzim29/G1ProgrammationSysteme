@@ -23,8 +23,11 @@ using EasySave.Properties;
 using EasySave.ViewModels;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.ComponentModel;
 
-namespace EasySave.Views {
+namespace EasySave.Views
+{
     public class ViewMain
     {
         Backup vm;
@@ -34,18 +37,28 @@ namespace EasySave.Views {
         {
             vm = new Backup();
             vm.ParsePreferences();
+            vm.preferences.PropertyChanged += OnPrefChanged;
             vm.ParseTasks();
-            switch (vm.preferences.language)
-            {
-                case "FR":
-                    lang = new Francais();
-                    break;
-                case "EN":
-                default:
-                    lang = new Anglais();
-                    break;
+            OnPrefChanged(this, new PropertyChangedEventArgs("language"));
 
+        }
+        private void OnPrefChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "language")
+            {
+                switch (vm.preferences.language)
+                {
+                    case "FR":
+                        this.lang = new Francais();
+                        break;
+                    case "EN":
+                    default:
+                        this.lang = new Anglais();
+                        break;
+
+                }
             }
+
         }
         string select_dir(string path = null)
         {
@@ -84,6 +97,7 @@ namespace EasySave.Views {
                 table.Write();
                 Console.Write(lang.get("Choisissez_un_dossier"));
                 var cmd = Console.ReadLine();
+                if (cmd == "..") return select_dir(dir.Parent.FullName);
                 if (cmd == "") return Path.GetFullPath(dir.ToString());
                 try
                 {
@@ -99,6 +113,14 @@ namespace EasySave.Views {
         }
         void add_task()
         {
+            if (vm.tasks.Count() >= 5)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.WriteLine("Vous avez atteint la limite de tache enregistré"); //todo:add to language
+                Console.ResetColor();
+                return;
+            }
             Console.Write("  ");
             Console.ForegroundColor = ConsoleColor.White;
             Console.BackgroundColor = ConsoleColor.DarkGreen;
@@ -172,6 +194,15 @@ namespace EasySave.Views {
             ShowTasks();
             Console.Write("\n" + lang.get("Choisissez_une_tache"));
             string task = Console.ReadLine();
+            if (task == "") return;
+            if (vm.tasks.Select(el => el.name).Contains(task))
+            {
+                vm.DeleteTask(new List<Travail>(vm.tasks.Where(el => el.name == task)));
+            }
+            else
+            {
+                DeleteTask();
+            }
         }
         //changer de langue
         void ChangeLang()
@@ -233,7 +264,7 @@ namespace EasySave.Views {
         private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
         static void Main(string[] args)
         {
-            ShowWindow(ThisConsole, 3 );
+            ShowWindow(ThisConsole, 3);
             #region logo
             string s = "        ______                            _____                        ";
             Console.BackgroundColor = ConsoleColor.Gray;
