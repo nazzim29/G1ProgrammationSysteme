@@ -176,6 +176,7 @@ namespace EasySave.Views
         }
         void LaunchTask()
         {
+            if (vm.preferences.ModeCopy == ModeCopy.sequentiel) { vm.StartTask(); return; }
             ShowTasks();
             Console.Write("\n" + lang.get("Choisissez_une_tache"));
             string tache = Console.ReadLine();
