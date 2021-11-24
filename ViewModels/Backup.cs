@@ -80,7 +80,11 @@ namespace EasySave.ViewModels
                     {
                         if(state == "Finished" && fr == 0 && i < tasks.Count())
                         {
-                            tasks[i + 1].Start(LogService).Start();
+                            running_tasks.Clear();
+                            var t = tasks[i + 1].Start(LogService);
+                            t.Name = tasks[i + 1].name;
+                            running_tasks.Add(t);
+                            t.Start();
                         }
                     }
                 };
@@ -105,6 +109,7 @@ namespace EasySave.ViewModels
             {
                 Travail t = (Travail)_tasks.Single(el => el.name == name);
                 Thread task = t.Start(LogService);
+                task.Name = name;
                 running_tasks.Add(task);
                 task.Start();
                 return;
@@ -112,13 +117,16 @@ namespace EasySave.ViewModels
             }
             if(preferences.ModeCopy == ModeCopy.sequentiel)
             {
-                tasks[0].Start(LogService).Start();
+                var t  = tasks[0].Start(LogService);
+                t.Name = tasks[0].name;
+                running_tasks.Clear();
+                running_tasks.Add(t);
+                t.Start();
                 return;
             }
 
 
         }
-
     public void ParsePreferences()
         {
             preferences = Preferences.fromFile();
@@ -129,6 +137,10 @@ namespace EasySave.ViewModels
             if (this.preferences.language == "EN") { preferences.language = "FR"; return; }
             if (this.preferences.language == "FR") { preferences.language = "EN"; return; }
             
+        }
+        public void ChangeCopyMode(ModeCopy mode)
+        {
+            preferences.ModeCopy = mode;
         }
         public void ParseTasks()
         {
@@ -144,7 +156,11 @@ namespace EasySave.ViewModels
                     {
                         if (state == "Finished" && fr == 0 && i+1 < tasks.Count())
                         {
-                            tasks[i + 1].Start(LogService).Start();
+                            running_tasks.Clear();
+                            var t = tasks[i + 1].Start(LogService);
+                            t.Name = tasks[i + 1].name;
+                            running_tasks.Add(t);
+                            t.Start();
                         }
                     }
                 };

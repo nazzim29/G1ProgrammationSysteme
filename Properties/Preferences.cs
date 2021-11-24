@@ -44,10 +44,11 @@ namespace EasySave.Properties
             var pref = JsonConvert.DeserializeObject<Preferences>(File.ReadAllText(PrefPath+"\\config.json"));
             return pref;
         }
-        public Preferences(string _language = "EN")
+        public Preferences(string _language = "EN",ModeCopy mode = ModeCopy.simultane)
         {
             PropertyChanged += Save;
             this._language = _language;
+            this._modeCopy = mode;
         }
         private void Save(object sender, PropertyChangedEventArgs e)
         {
