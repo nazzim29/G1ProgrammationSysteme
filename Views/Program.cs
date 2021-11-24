@@ -236,7 +236,7 @@ namespace EasySave.Views {
             ShowWindow(ThisConsole, 3 );
             #region logo
             string s = "        ______                            _____                        ";
-            Console.BackgroundColor = ConsoleColor.DarkGreen;
+            Console.BackgroundColor = ConsoleColor.Gray;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.SetCursorPosition((Console.WindowWidth - s.Length) / 2, Console.CursorTop);
             Console.WriteLine(@"        ______                            _____                        ");
