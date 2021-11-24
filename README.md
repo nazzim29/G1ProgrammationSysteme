@@ -61,7 +61,7 @@ For any information please refer to the user guide
 [Documentation User](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/Documentation_Version_1.0.pdf)
 
 ## Project Status
-Version 1.0 : Done
+Version 1.0 : Done :white_check_mark: 
 
 
 ## Created by 
