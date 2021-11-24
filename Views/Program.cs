@@ -250,12 +250,10 @@ namespace EasySave.Views
                     break;
                 case 6:
                     Console.WriteLine(lang.get("exit"));
+                    Environment.Exit(0);
                     break;
                 case 7:
                     vm.ChangeCopyMode(vm.preferences.ModeCopy == ModeCopy.sequentiel ? ModeCopy.simultane : ModeCopy.sequentiel);
-                    break;
-                case 8:
-
                     break;
                 default:
                     MenuPrincipale();
