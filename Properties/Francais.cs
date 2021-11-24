@@ -46,9 +46,14 @@ namespace EasySave.Properties
         public static string Menu_Principale { get { return "  Menu Principale : "; } }
         public static string Tapp_chiffre { get { return "  Veuillez entrer un chiffre : "; } }
         public static string Delete_Task { get { return "4- Supprimer une tâche de sauvegarde "; } }
-        public static string Change_Language { get { return "    5- Changer de langue \t\t"; } }
+        public static string Change_Language { get { return "    5- Changer de langue "; } }
         public static string Limite_taches { get { return "  Vous avez atteint la limite de tâche enregistré"; } }
         public static string Revenir_en_arriere { get { return " ( Entrer pour selectionner le dossier actuel / .. pour revenir en arrière ) : "; } }
+        public static string Copy_mode { get { return "\t\t\t6- Changer le mode de copie "; } }
+        public static string sequentiel { get { return "Séquentielle"; } }
+        public static string simultane { get { return "Simultanée"; } }
+
+
 
     }
 }

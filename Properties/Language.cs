@@ -46,6 +46,9 @@ namespace EasySave.Properties
         public static string Change_Language { get; }
         public static string Limite_taches { get; }
         public static string Revenir_en_arriere { get; }
+        public static string Copy_mode { get; }
+        public static string sequentiel { get; }
+        
         public string get(string prop)
         {
             return this.GetType().GetProperty(prop).GetValue(this, null).ToString();

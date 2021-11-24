@@ -223,8 +223,8 @@ namespace EasySave.Views
             Console.WriteLine(lang.get("Menu_Principale"));
             Console.WriteLine(lang.get("Afficher_les_travaux") + lang.get("Ajout_sauvegarde"));
             Console.WriteLine(lang.get("Lancer_une_tache") + lang.get("Delete_Task"));
-            Console.WriteLine(lang.get("Change_Language") + "\t6- " + lang.get("exit"));
-            Console.WriteLine("\t7-change Copy Mode "+$"({vm.preferences.ModeCopy})");
+            Console.WriteLine(lang.get("Change_Language")+$"({vm.preferences.language})" + lang.get("Copy_mode") + $"({lang.get(vm.preferences.ModeCopy.ToString())})");
+            Console.WriteLine("    7- " + lang.get("exit"));
             Console.WriteLine("");
             Console.Write(lang.get("Tapp_chiffre"));
             int cmd = 0;
@@ -255,11 +255,11 @@ namespace EasySave.Views
                 case 5:
                     ChangeLang();
                     break;
-                case 6:
+                case 7:
                     Console.WriteLine(lang.get("exit"));
                     Environment.Exit(0);
                     break;
-                case 7:
+                case 6:
                     vm.ChangeCopyMode(vm.preferences.ModeCopy == ModeCopy.sequentiel ? ModeCopy.simultane : ModeCopy.sequentiel);
                     break;
                 default:

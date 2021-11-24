@@ -196,6 +196,7 @@ namespace EasySave.Models
         {
             var dir = new DirectoryInfo(this.source);
             files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName).Where(el => isEligible(el))) ?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
+            nb_file_remaining = files.Count();
             return new Thread(delegate ()
             {
                 this.state = "Running";
