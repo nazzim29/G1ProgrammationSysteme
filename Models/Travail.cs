@@ -173,6 +173,7 @@ namespace EasySave.Models
             set
             {
                 _nb_file_remaining = value;
+                
                 RaisePropertyChanged("nb_file_remaining");
             }
         }
@@ -193,8 +194,8 @@ namespace EasySave.Models
         //fonction qui retourne un thread qui effectue la sauvegarde
         public Thread Start(LogService log)
         {
-            var dir = new DirectoryInfo(this.source); 
-            files = new ObservableCollection<string>(dir.GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName));//get files from the directory
+            var dir = new DirectoryInfo(this.source);
+            files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName).Where(el => isEligible(el))) ?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
             return new Thread(delegate ()
             {
                 this.state = "Running";

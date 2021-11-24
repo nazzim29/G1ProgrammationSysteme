@@ -74,6 +74,25 @@ namespace EasySave.ViewModels
         private void taskschanged()
         {
             LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogService.LogTasks());
+            foreach(var (task,i) in tasks.Select((el,i)=>(el,i)))
+            {
+                task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+                {
+                    int fr  = (int)sender.GetType().GetField("nb_file_remaining").GetValue(sender);
+                    string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
+                    if (preferences.ModeCopy == ModeCopy.sequentiel)
+                    {
+                        if(state == "Finished" && fr == 0 && i < tasks.Count())
+                        {
+                            running_tasks.Clear();
+                            var t = tasks[i + 1].Start(LogService);
+                            t.Name = tasks[i + 1].name;
+                            running_tasks.Add(t);
+                            t.Start();
+                        }
+                    }
+                };
+            }
         }
         //méthode permettant d'ajouter une nouvelle tache de sauvegarde à la liste des taches
         //method for adding a new backup task to the task list
@@ -89,17 +108,31 @@ namespace EasySave.ViewModels
             else throw new Exception("this task already exists");
         }
         //méthode permettant de lancer le travail de sauvegarde
-       //method to launch a backup job or multiple backup jobs
-        public void StartTask(string name)
+        public void StartTask(string name = null)
         {
-            Travail t = (Travail)_tasks.Single(el => el.name == name);
-            Thread task = t.Start(LogService);//Causes the operating system to change the state of the current instance to Running, and optionally supplies an object containing data to be used by the method the thread executes
-            running_tasks.Add(task);
-            task.Start();
+            if(name != null)
+            {
+                Travail t = (Travail)_tasks.Single(el => el.name == name);
+                Thread task = t.Start(LogService);
+                task.Name = name;
+                running_tasks.Add(task);
+                task.Start();
+                return;
+
+            }
+            if(preferences.ModeCopy == ModeCopy.sequentiel)
+            {
+                var t  = tasks[0].Start(LogService);
+                t.Name = tasks[0].name;
+                running_tasks.Clear();
+                running_tasks.Add(t);
+                t.Start();
+                return;
+            }
+
 
         }
-        //method that store the content of the config file in an object instantiated from Preferences
-        public void ParsePreferences()
+    public void ParsePreferences()
         {
             preferences = Preferences.fromFile();
 
@@ -111,13 +144,33 @@ namespace EasySave.ViewModels
             if (this.preferences.language == "FR") { preferences.language = "EN"; return; }
             
         }
+        public void ChangeCopyMode(ModeCopy mode)
+        {
+            preferences.ModeCopy = mode;
+        }
         //method to read the list of the task in the task file
         public void ParseTasks()
         {
             this.tasks = new ObservableCollection<Travail>(Travail.fromFile());
-            foreach(var task in tasks)
+            foreach(var (task,i) in tasks.Select((el,i)=>(el,i)))
             {
                 task.PropertyChanged += stateLogger;
+                task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+                {
+                    double fr = (double)sender.GetType().GetProperty("nb_file_remaining").GetValue(sender);
+                    string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
+                    if (preferences.ModeCopy == ModeCopy.sequentiel)
+                    {
+                        if (state == "Finished" && fr == 0 && i+1 < tasks.Count())
+                        {
+                            running_tasks.Clear();
+                            var t = tasks[i + 1].Start(LogService);
+                            t.Name = tasks[i + 1].name;
+                            running_tasks.Add(t);
+                            t.Start();
+                        }
+                    }
+                };
             }
         }
     }
