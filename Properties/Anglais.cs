@@ -30,7 +30,7 @@ namespace EasySave.Properties
         public static string Progression { get { return "Progression"; } }
         public static string Last_Backup_Time { get { return "Last Backup Time"; } }
         public static string Choisissez_un_disk { get { return "  Please choose a disk: "; } }
-        public static string Choisissez_un_dossier { get { return "  Please choose a folder: "; } }
+        public static string Choisissez_un_dossier { get { return "  Please choose a folder "; } }
         public static string Modes_sauvegarde { get { return "  Backup Modes : "; } }
         public static string Choisissez_un_mode { get { return "  Please choose a backup mode: "; } }
         public static string Complet { get { return "Full backup"; } }
@@ -47,6 +47,7 @@ namespace EasySave.Properties
         public static string Delete_Task { get { return "4- Delete a task "; } }
         public static string Change_Language { get { return "    5- Change the language "; } }
         public static string Limite_taches { get { return "  You have reached the limit of the saved tasks"; } }
+        public static string Revenir_en_arriere { get { return "( Enter to select current folder / .. to go back ): "; } }
 
 
     }
