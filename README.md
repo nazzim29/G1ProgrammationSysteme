@@ -1,6 +1,6 @@
 
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://cdn.discordapp.com/attachments/768553163270651936/913177117167091732/unknown.png" width="400"></a></p>
+<p align="center"><img src="https://cdn.discordapp.com/attachments/768553163270651936/913177117167091732/unknown.png" width="300"></p>
 
 
 
