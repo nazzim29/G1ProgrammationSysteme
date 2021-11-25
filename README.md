@@ -58,8 +58,8 @@ To open the application, download the executable file by following the link:
 
 
 For any information please refer to the user guide:
-[Documentation User EN version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/DocumentationEN_Version_1.0.pdf)
-[Documentation User FR version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/DocumentationFR_Version_1.0.pdf)
+ [Documentation User EN version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/DocumentationEN_Version_1.0.pdf)
+ [Documentation User FR version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/DocumentationFR_Version_1.0.pdf)
 
 ## Project Status
 Version 1.0 : Done :white_check_mark: 
