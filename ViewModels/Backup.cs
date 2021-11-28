@@ -78,7 +78,7 @@ namespace EasySave.ViewModels
             {
                 task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
                 {
-                    int fr  = (int)sender.GetType().GetField("nb_file_remaining").GetValue(sender);
+                    double fr  = (double)sender.GetType().GetProperty("nb_file_remaining").GetValue(sender);
                     string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
                     if (preferences.ModeCopy == ModeCopy.sequentiel)
                     {

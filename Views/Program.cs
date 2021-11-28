@@ -87,7 +87,7 @@ namespace EasySave.Views
                 Console.Write("\n" + lang.get("Choisissez_un_disk"));
 
                 var cmd = Int32.Parse(Console.ReadLine());
-                if (cmd < drives.Length && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
+                if (cmd < drives.Count() && cmd > -1) return select_dir(Path.GetFullPath(drives[cmd].ToString()));
 
                 return select_dir(path);
             }
