@@ -69,7 +69,16 @@ namespace EasySave.Views
             if (path == null)
             {
                 var table = new ConsoleTable(lang.get("disk"), lang.get("path"), lang.get("label"), lang.get("Total_Size"), lang.get("Free_Space"), lang.get("Drive_Type"));
-                var drives = DriveInfo.GetDrives();
+                var drives = new List<DriveInfo>(DriveInfo.GetDrives());
+                foreach(var drive in drives)
+                {
+                    try{
+                        var haja = drive.Name;
+                    }catch(Exception ex)
+                    {
+                        drives.Remove(drive);
+                    }
+                }
                 foreach (var (drive, i) in drives.Select((value, i) => (value, i)))
                 {
                     table.AddRow(i, drive.Name, drive.VolumeLabel, drive.TotalSize, drive.AvailableFreeSpace, drive.DriveType);
