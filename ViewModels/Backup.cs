@@ -82,7 +82,7 @@ namespace EasySave.ViewModels
                     string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
                     if (preferences.ModeCopy == ModeCopy.sequentiel)
                     {
-                        if(state == "Finished" && fr == 0 && i < tasks.Count())
+                        if(state == "Finished" && fr == 0 && i+1 < tasks.Count())
                         {
                             running_tasks.Clear();
                             var t = tasks[i + 1].Start(LogService);
