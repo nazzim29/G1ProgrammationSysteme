@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasySave", "EasySave.csproj", "{EDED0406-7816-40CC-97B9-CB154B825F43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EasySave-GUI", "..\EasySave-GUI\EasySave-GUI.csproj", "{05125DF5-93E2-4BD2-8A64-D1D0902BC0B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDED0406-7816-40CC-97B9-CB154B825F43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDED0406-7816-40CC-97B9-CB154B825F43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDED0406-7816-40CC-97B9-CB154B825F43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDED0406-7816-40CC-97B9-CB154B825F43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05125DF5-93E2-4BD2-8A64-D1D0902BC0B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05125DF5-93E2-4BD2-8A64-D1D0902BC0B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05125DF5-93E2-4BD2-8A64-D1D0902BC0B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05125DF5-93E2-4BD2-8A64-D1D0902BC0B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BC351137-D886-41B3-99A3-B4FA1F5D011F}
+	EndGlobalSection
+EndGlobal
