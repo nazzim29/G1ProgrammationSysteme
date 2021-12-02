@@ -10,10 +10,10 @@ namespace EasySave_GUI.Libs
     public class RelayCommand : ICommand
     {
 
-        Action<object> _executemethod;
+        Action _executemethod;
         Func<object, bool> _canexecutemethod;
 
-        public RelayCommand(Action<object> executemethod, Func<object, bool> canexecutemethod)
+        public RelayCommand(Action executemethod, Func<object, bool> canexecutemethod)
         {
             _executemethod = executemethod;
             _canexecutemethod = canexecutemethod;
@@ -40,7 +40,7 @@ namespace EasySave_GUI.Libs
 
         public void Execute(object parameter)
         {
-            _executemethod(parameter);
+            _executemethod();
         }
     }
 }

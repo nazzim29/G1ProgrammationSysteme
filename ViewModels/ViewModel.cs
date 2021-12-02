@@ -22,8 +22,19 @@ namespace EasySave_GUI.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private Backup _backup;
+        private Backup _newbackup;
+        public Backup NewBackup
+        {
+            get { 
+                if( _newbackup == null ) _newbackup = new Backup();
+                return _newbackup; }
+            set 
+            { 
+                _newbackup = value;
+                OnPropertyChanged("NewBackup");
+            }
+        }
         private ObservableCollection<Backup> _backups;
-        private ICommand _changetype;
         private LogService _logService;
         private LogService LogService
         {
@@ -53,14 +64,17 @@ namespace EasySave_GUI.ViewModels
                 OnPropertyChanged("Backups");
             }
         }
+
+        private ICommand _changetype;
         private ICommand _addTaskCommand;
+        private ICommand _deleteTaskCommand;
         public ICommand ChangeTypeCommand
         {
             get
             {
                 if (_changetype == null)
                 {
-                    _changetype = new RelayCommand(ChangeType, null);
+                    _changetype = new RelayCommand(()=>ChangeType(), (object sender)=>true);
                 }
                 return _changetype;
             }
@@ -71,27 +85,37 @@ namespace EasySave_GUI.ViewModels
             {
                 if(_addTaskCommand == null)
                 {
-                    _addTaskCommand = new RelayCommand(AddTask, (object param) => true) ;
+                    _addTaskCommand = new RelayCommand(() => AddTask(), (object param) => true) ;
                 }
                 return _addTaskCommand;
             }
         }
-        public void AddTask(object task)
+        public ICommand DeleteTaskCommand
         {
-            Backup.Name = task.ToString();
-            return;
-            Backup t = task as Backup;
-            if (t == null) return;
-            Backups.Add(t);
-            Backup = new Backup();
-            Backup.Name = "khlas";
-            Backup.Source = "c:\\";
+            get
+            {
+                if (_deleteTaskCommand == null) _deleteTaskCommand = new RelayCommand(() => DeleteTask(), (object sender) => true);
+                return _deleteTaskCommand;
+            }
         }
-        private void ChangeType(object param)
+        public void AddTask()
+        {
+            this.Backups.Add(new Backup
+            {
+                Name = NewBackup.Name,
+                Destination = NewBackup.Destination,
+                Source = NewBackup.Source,
+                Type = NewBackup.Type
+            });
+        }
+        private void ChangeType()
         {
             Backup.Type = BackupType.Complete;
         }
-
+        private void DeleteTask()
+        {
+            Backups.Remove(Backup);
+        }
         public ViewModel()
         {
             Backups = new ObservableCollection<Backup>(Backup.fromFile());

@@ -43,7 +43,7 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Appellation"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding Backup.Name}"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding NewBackup.Name}"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
@@ -52,7 +52,7 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Source"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0" Text="{Binding Backup.Source}"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0" Text="{Binding NewBackup.Source}"/>
                             <Button Height="25" BorderThickness="0"
                                     Width="50"
                                     Margin="20,0,0,0"
@@ -67,7 +67,7 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Destination"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding Backup.Destination}"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding NewBackup.Destination}"/>
                             <Button Height="25" BorderThickness="0"
                                     Width="50"
                                     Margin="20,0,0,0"
@@ -101,7 +101,7 @@
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
-                                Content="Ajouter" Click="Button_Click" >
+                                Content="Ajouter" Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" >
                             </Button>
                         </Border>
                         <Border CornerRadius="6"
@@ -127,14 +127,15 @@
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
-                                Content="Supprimer">
+                                Content="Supprimer"
+                                    Command="{Binding DeleteTaskCommand}">
                             </Button>
                         </Border>
 
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path= Backups ,Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" CurrentItem="{Binding Backup}" />
+            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Backups, Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" CurrentItem="{Binding Backup}" IsReadOnly="True" />
 
 
 
