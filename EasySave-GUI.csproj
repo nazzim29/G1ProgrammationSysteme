@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="DiagrammeUML\" />
     <Folder Include="Views\" />
   </ItemGroup>
 
