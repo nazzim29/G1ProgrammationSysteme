@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,30 +9,38 @@ namespace EasySave_GUI.Libs
 {
     public class RelayCommand : ICommand
     {
-        public RelayCommand(Action<object> execute) : this(execute, null)
+
+        Action<object> _executemethod;
+        Func<object, bool> _canexecutemethod;
+
+        public RelayCommand(Action<object> executemethod, Func<object, bool> canexecutemethod)
         {
+            _executemethod = executemethod;
+            _canexecutemethod = canexecutemethod;
         }
-        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
-        {
-            if (execute == null)
-                throw new ArgumentNullException("execute");
-            _execute = execute;
-            _canExecute = canExecute;
-        }
+
+
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute(parameter);
+            if (_canexecutemethod != null)
+            {
+                return _canexecutemethod(parameter);
+            }
+            else
+            {
+                return false;
+            }
         }
+
         public event EventHandler CanExecuteChanged
         {
             add { CommandManager.RequerySuggested += value; }
             remove { CommandManager.RequerySuggested -= value; }
         }
+
         public void Execute(object parameter)
         {
-            _execute(parameter);
+            _executemethod(parameter);
         }
-        private readonly Action<object> _execute;
-        private readonly Predicate<object> _canExecute;
     }
 }

@@ -23,8 +23,8 @@ namespace EasySave_GUI.ViewModels
         }
         private Backup _backup;
         private ObservableCollection<Backup> _backups;
-        private ICommand _start_command;
-
+        private ICommand _changetype;
+        
         public Backup Backup
         {
             get { return _backup; }
@@ -45,21 +45,45 @@ namespace EasySave_GUI.ViewModels
                 OnPropertyChanged("Backups");
             }
         }
-        public ICommand StartCommand
+        private ICommand _addTaskCommand;
+        public ICommand ChangeTypeCommand
         {
             get
             {
-                if (_start_command == null)
+                if (_changetype == null)
                 {
-                    _start_command = new RelayCommand(param => Start(), null);
+                    _changetype = new RelayCommand(ChangeType, null);
                 }
-                return _start_command;
+                return _changetype;
             }
         }
-        private void Start()
+        public ICommand AddTaskCommand
         {
-
+            get
+            {
+                if(_addTaskCommand == null)
+                {
+                    _addTaskCommand = new RelayCommand(AddTask, (object param) => true) ;
+                }
+                return _addTaskCommand;
+            }
         }
+        public void AddTask(object task)
+        {
+            Backup.Name = task.ToString();
+            return;
+            Backup t = task as Backup;
+            if (t == null) return;
+            Backups.Add(t);
+            Backup = new Backup();
+            Backup.Name = "khlas";
+            Backup.Source = "c:\\";
+        }
+        private void ChangeType(object param)
+        {
+            Backup.Type = BackupType.Complete;
+        }
+
         public ViewModel()
         {
             Backups = new ObservableCollection<Backup>(Backup.fromFile());

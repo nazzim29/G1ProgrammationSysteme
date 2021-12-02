@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EasySave_GUI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,11 @@ namespace EasySave_GUI
         public MainWindow()
         {
             InitializeComponent();
+            DataContext = new ViewModel();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

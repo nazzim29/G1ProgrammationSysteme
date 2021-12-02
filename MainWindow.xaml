@@ -3,13 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:easysaveInterface"
+        xmlns:local="clr-namespace:EasySave_GUI.ViewModels"
         mc:Ignorable="d"
         Height="600" Width="920"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Transparent"
         AllowsTransparency="True">
+    <Window.DataContext>
+        <local:ViewModel />
+    </Window.DataContext>
     <Border Background="#f0f0f0"
             CornerRadius="20">
         <Grid>
@@ -40,7 +43,7 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Appellation"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding Backup.Name}"/>
 
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
@@ -49,14 +52,14 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Source"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0" Text="{Binding Backup.Source}"/>
                             <Button Height="25" BorderThickness="0"
                                     Width="50"
                                     Margin="20,0,0,0"
                                     Background="#8056A3"
                                     FontSize="18"
                                     Foreground="White"
-                                    Content=". . ."/>
+                                    Content=". . ." />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
                             <Label
@@ -64,7 +67,7 @@
                                 Height="40"                       
                                 Foreground="White"
                                 Content="Destination"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding Backup.Destination}"/>
                             <Button Height="25" BorderThickness="0"
                                     Width="50"
                                     Margin="20,0,0,0"
@@ -77,11 +80,11 @@
 
                         <StackPanel Orientation="Horizontal">
                             <RadioButton FontSize="18" Foreground="White"
-                                Height="40" Margin="15,0,0,0">
+                                Height="40" Margin="15,0,0,0" GroupName="" IsChecked="{Binding Backup.Type.Complete}">
                                 Sauvegarde complete
                             </RadioButton>
-                            <RadioButton FontSize="18" Foreground="White"
-                                Height="40" Margin="30,0,0,0">
+                            <RadioButton FontSize="18" Foreground="White" Name="Differentiel"
+                                Height="40" Margin="30,0,0,0" Command="{Binding ChangeTypeCommand}" CommandParameter="{Binding ElementName=Differentiel, Path=Content}">
                                 Sauvegarde differentielle
                             </RadioButton>
                         </StackPanel>
@@ -98,7 +101,7 @@
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
-                                Content="Ajouter" >
+                                Content="Ajouter" Click="Button_Click" >
                             </Button>
                         </Border>
                         <Border CornerRadius="6"
@@ -131,15 +134,16 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
+            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path= Backups ,Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" />
 
 
 
         </Grid>
     </Border>
 
-    </Window>
+</Window>
 
- <!--  <Grid x:Name="EasySave">
+<!--  <Grid x:Name="EasySave">
 
         <DataGrid ItemsSource="{Binding Backups}" AutoGenerateColumns="False">
             <DataGrid.Columns>

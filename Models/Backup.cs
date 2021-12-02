@@ -144,7 +144,7 @@ namespace EasySave_GUI.Models
         {
             Files.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Files_CollectionChanged);
         }
-        public override bool Equals(object obj) => obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
+        public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
 
         private static void CreateDirs(string path, DirectoryInfo[] dirs)
