@@ -23,6 +23,36 @@ namespace EasySave_GUI.ViewModels
         }
         private Backup _backup;
         private Backup _newbackup;
+        private Backup _runningTask;
+        private ObservableCollection<Backup> _q;
+        private bool _CanLaunch;
+        private ObservableCollection<Backup> Q
+        {
+            get { return _q; }
+            set { _q = value; OnPropertyChanged("Q"); }
+        }
+        private Backup RunningTask
+        {
+            get
+            {
+                if(_runningTask == null) _runningTask = new Backup();
+                return _runningTask;
+            }
+            set { _runningTask = value; OnPropertyChanged("RunningTask"); }
+        }
+        public bool CanLaunch
+        {
+            get
+            {
+                if (_CanLaunch == null) _CanLaunch = true;
+                return _CanLaunch;
+            }
+            set
+            {
+                _CanLaunch = value;
+                OnPropertyChanged("CanLaunch");
+            }
+        }
         public Backup NewBackup
         {
             get { 
@@ -68,6 +98,7 @@ namespace EasySave_GUI.ViewModels
         private ICommand _changetype;
         private ICommand _addTaskCommand;
         private ICommand _deleteTaskCommand;
+        private ICommand _LaunchCommand;
         public ICommand ChangeTypeCommand
         {
             get
@@ -98,6 +129,14 @@ namespace EasySave_GUI.ViewModels
                 return _deleteTaskCommand;
             }
         }
+        public ICommand LaunchCommand
+        {
+            get
+            {
+                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => true);
+                return _LaunchCommand;
+            }
+        }
         public void AddTask()
         {
             this.Backups.Add(new Backup
@@ -116,12 +155,49 @@ namespace EasySave_GUI.ViewModels
         {
             Backups.Remove(Backup);
         }
+        private void Launch(bool next=false)
+        {
+            CanLaunch = false;
+            if (Preferences.Mode == CopyMode.Sequentielle)
+            {
+                if (next && Q.Count() != 0) return Q[0].Start();
+                Backup.PropertyChanged += LaunchNext;
+                Q.Add(Backup);
+                if(Q.Count() ==1) return Q[0].Start();
+            }
+        }
+
+        private void LaunchNext(object? sender, PropertyChangedEventArgs e)
+        {
+            if ((sender as Backup).State == BackupState.Finie)
+            {
+                Q.Remove((sender as Backup));
+                Launch(true);
+            }
+        }
+
         public ViewModel()
         {
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
+            Q = new ObservableCollection<Backup>();
+            Q.CollectionChanged += new NotifyCollectionChangedEventHandler(Changed_q);
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
             PropertyChanged += SaveTasks;
+            PropertyChanged += checklaunch;
 
+        }
+
+        private void Changed_q(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged("Q");
+        }
+
+        private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Backup" || e.PropertyName == "Q")
+            {
+                if(Backup == RunningTask || Q.Contains(Backup)) CanLaunch = false;
+            }
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
         {

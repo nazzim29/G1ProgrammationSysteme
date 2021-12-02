@@ -26,5 +26,7 @@ namespace EasySave_GUI
             InitializeComponent();
             DataContext = new ViewModel();
         }
+
+
     }
 }
