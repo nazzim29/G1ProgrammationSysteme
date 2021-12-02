@@ -1,17 +1,145 @@
-﻿<Window x:Class="EasySave_GUI.MainWindow"
+﻿<Window x:Class="easysaveInterface.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:EasySave_GUI.ViewModels"
+        xmlns:local="clr-namespace:easysaveInterface"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" BindingGroup="{Binding Mode=OneWay}">
+        Height="600" Width="920"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+    <Border Background="#f0f0f0"
+            CornerRadius="20">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Border Grid.Row="1" Grid.Column="1" CornerRadius="6"
+                    BorderBrush="#B49CC9"
+                    BorderThickness="6"
+                    Margin="10"
+                    Height="204"                       
+                    VerticalAlignment="top">
+                <StackPanel
+                    Orientation="Horizontal"
+                    Background="#B49CC9"
+                    Height="200"
+                    RenderTransformOrigin="0.5,0.5">
+                    <StackPanel Width="590" 
+                                Margin="20,5,5,5">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <Label
+                                FontSize="18"
+                                Height="40"                       
+                                Foreground="White"
+                                Content="Appellation"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0"/>
 
-    <Window.DataContext>
-        <local:ViewModel />
-        <!--<Binding Source="{DesignInstance Type=local:ViewModel, IsDesignTimeCreatable=True}"></Binding>-->
-    </Window.DataContext>
-    <Grid x:Name="EasySave">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <Label
+                                FontSize="18"
+                                Height="40"                       
+                                Foreground="White"
+                                Content="Source"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0"/>
+                            <Button Height="25" BorderThickness="0"
+                                    Width="50"
+                                    Margin="20,0,0,0"
+                                    Background="#8056A3"
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Content=". . ."/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                            <Label
+                                FontSize="18"
+                                Height="40"                       
+                                Foreground="White"
+                                Content="Destination"/>
+                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0"/>
+                            <Button Height="25" BorderThickness="0"
+                                    Width="50"
+                                    Margin="20,0,0,0"
+                                    Background="#8056A3"
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Content=". . ."/>
+                        </StackPanel>
+
+
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton FontSize="18" Foreground="White"
+                                Height="40" Margin="15,0,0,0">
+                                Sauvegarde complete
+                            </RadioButton>
+                            <RadioButton FontSize="18" Foreground="White"
+                                Height="40" Margin="30,0,0,0">
+                                Sauvegarde differentielle
+                            </RadioButton>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <Border CornerRadius="6"
+                                BorderBrush="#8056A3"
+                                BorderThickness="6"
+                                HorizontalAlignment="Right" 
+                                Margin="0,10,10,10" >
+                            <Button Height="40" BorderThickness="0"
+                                Width="170"
+                                Background="#8056A3"
+                                FontSize="18"
+                                Foreground="White"
+                                Content="Ajouter" >
+                            </Button>
+                        </Border>
+                        <Border CornerRadius="6"
+                                BorderBrush="#8056A3"
+                                BorderThickness="6"
+                                HorizontalAlignment="Right" 
+                                Margin="10,0" >
+                            <Button Height="40" BorderThickness="0"
+                                Width="170"
+                                Background="#8056A3"
+                                FontSize="18"
+                                Foreground="White"
+                                Content="Lancer" >
+                            </Button>
+                        </Border>
+                        <Border CornerRadius="6"
+                                BorderBrush="#8056A3"
+                                BorderThickness="6"
+                                HorizontalAlignment="Right" 
+                                Margin="10" >
+                            <Button Height="40" BorderThickness="0"
+                                Width="170"
+                                Background="#8056A3"
+                                FontSize="18"
+                                Foreground="White"
+                                Content="Supprimer">
+                            </Button>
+                        </Border>
+
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+
+
+        </Grid>
+    </Border>
+
+    </Window>
+
+ <!--  <Grid x:Name="EasySave">
 
         <DataGrid ItemsSource="{Binding Backups}" AutoGenerateColumns="False">
             <DataGrid.Columns>
@@ -22,5 +150,4 @@
                 <DataGridTextColumn Header="state" Binding="{Binding State}"/>
             </DataGrid.Columns>
         </DataGrid>
-    </Grid>
-</Window>
+    </Grid>--> 
