@@ -134,7 +134,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path= Backups ,Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" />
+            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Path= Backups ,Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" CurrentItem="{Binding Backup}" />
 
 
 

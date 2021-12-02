@@ -24,7 +24,15 @@ namespace EasySave_GUI.ViewModels
         private Backup _backup;
         private ObservableCollection<Backup> _backups;
         private ICommand _changetype;
-        
+        private LogService _logService;
+        private LogService LogService
+        {
+            get
+            {
+                if(_logService == null) _logService = new LogService();
+                return _logService;
+            }
+        }
         public Backup Backup
         {
             get { return _backup; }
@@ -88,11 +96,40 @@ namespace EasySave_GUI.ViewModels
         {
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
+            PropertyChanged += SaveTasks;
 
         }
-
+        private void SaveTasks(object? sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == "Backups" || e.PropertyName == "Backup") LogService.Log(this.Backups.Select(el => new { name = el.Name, source = el.Source, destination = el.Destination, type = el.Type }), new LogTasks());
+        }
         private void Backups_ChangedCollection(object? sender, NotifyCollectionChangedEventArgs e)
         {
+            if(e.Action == NotifyCollectionChangedAction.Add)
+            {
+                foreach(var item in e.NewItems)
+                {
+                    (item as Backup).PropertyChanged += SaveTasks;
+                }
+            }
+            //foreach (var (task, i) in tasks.Select((el, i) => (el, i)))
+            //{
+            //    task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
+            //    {
+            //        int fr = (int)sender.GetType().GetField("nb_file_remaining").GetValue(sender);
+            //        string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
+            //        if (preferences.ModeCopy == ModeCopy.sequentiel)
+            //        {
+            //            if (state == "Finished" && fr == 0 && i < tasks.Count())
+            //            {
+            //                running_tasks.Clear();
+            //                var t = tasks[i + 1].Start(LogService);
+            //                t.Name = tasks[i + 1].name;
+            //                running_tasks.Add(t);
+            //                t.Start();
+            //            }
+            //        }
+            //    };
             OnPropertyChanged("Backups");
         }
     }
