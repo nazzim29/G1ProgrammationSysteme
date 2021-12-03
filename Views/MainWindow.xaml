@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:EasySave_GUI.ViewModels"
         xmlns:Models="clr-namespace:EasySave_GUI.Models"
         mc:Ignorable="d"
-        Height="700" Width="920"
+        Height="650" Width="920"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Transparent"
@@ -94,9 +94,9 @@
                             <Button Height="30" BorderThickness="0"
                                         Width="50"
                                         Margin="20,0,0,0"
-                                        Background="#8056A3"
                                         FontSize="18"
                                         Foreground="White"
+                                        Style="{StaticResource brosehover}" 
                                         Content=". . ." Click="Button_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
@@ -118,9 +118,9 @@
                             <Button Height="30" BorderThickness="0"
                                         Width="50"
                                         Margin="20,0,0,0"
-                                        Background="#8056A3"
                                         FontSize="18"
                                         Foreground="White"
+                                        Style="{StaticResource brosehover}" 
                                         Content=". . ." Click="Button_Click_1"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
@@ -152,67 +152,49 @@
                     </StackPanel>
                 </Border>
                 <StackPanel>
-                    <Border CornerRadius="6"
-                                BorderBrush="#8056A3"
-                                BorderThickness="6"
-                                HorizontalAlignment="Right" 
-                                Margin="0,10,10,15" >
-                        <Button Height="40" BorderThickness="0"
-                                Width="170"
-                                Background="#8056A3"
-                                FontSize="18"
-                                Foreground="White"
-                                Content="Ajouter"
-                                FontWeight="Bold"
-				Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" >
-                        </Button>
-                    </Border>
-                    <Border CornerRadius="6"
-                                BorderBrush="#8056A3"
-                                BorderThickness="6"
-                                HorizontalAlignment="Right" 
-                                Margin="10,0" >
-                        <Button Height="40" BorderThickness="0"
-                                Width="170"
-                                Background="#8056A3"
-                                FontSize="18"
-                                Foreground="White"
-                                Content="Lancer"
-                                FontWeight="Bold"
-				IsEnabled="{Binding CanLaunch}" Command="{Binding LaunchCommand}" >
-                        </Button>
-                    </Border>
-                    <Border CornerRadius="6"
-                                BorderBrush="#8056A3"
-                                BorderThickness="6"
-                                HorizontalAlignment="Right" 
-                                Margin="10,15,10,10" >
-                        <Button Height="40" BorderThickness="0"
-                                Width="170"
-                                Background="#8056A3"
-                                FontSize="18"
-                                Foreground="White"
-                                Content="Supprimer"
-                                FontWeight="Bold"
-				Command="{Binding DeleteTaskCommand}">
-                        </Button>
-                    </Border>
-                    <Border CornerRadius="6"
-                                BorderBrush="#8056A3"
-                                BorderThickness="6"
-                                HorizontalAlignment="Right" 
-                                Margin="10,3" >
-                        <Button Height="40" BorderThickness="0"
-                                Width="170"
-                                Background="#8056A3"
-                                FontSize="18"
-                                Foreground="White"
-                                Content="Quitter"
-                                FontWeight="Bold"
-				Command="">
-                        </Button>
-                    </Border>
+                    <Button HorizontalAlignment="Right" 
+                            Margin="10"
+                            Height="50" 
+                            Width="180"
+                            FontSize="18"
+                            Foreground="White"
+                            Content="Ajouter"
+                            FontWeight="Bold"
+                            Style="{StaticResource btnHover}"
+                            Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" Click="Button_Click_2"/>
 
+                    <Button HorizontalAlignment="Right" 
+                            Margin="10,8"
+                            Height="50" 
+                            Width="180"
+                            FontSize="18"
+                            Foreground="White"
+                            Content="Lancer"
+                            FontWeight="Bold"
+                            Style="{StaticResource btnHover}" 
+                            Command="{Binding LaunchCommand}"/>
+
+                    <Button HorizontalAlignment="Right" 
+                            Margin="10,8"
+                            Height="50" 
+                            Width="180"
+                            FontSize="18"
+                            Foreground="White"
+                            Content="Supprimer"
+                            FontWeight="Bold"
+                            Style="{StaticResource btnHover}" 
+                            Command="{Binding DeleteTaskCommand}"/>
+
+                    <Button HorizontalAlignment="Right" 
+                            Margin="10,8"
+                            Height="50" 
+                            Width="180"
+                            FontSize="18"
+                            Foreground="White"
+                            Content="Quitter"
+                            FontWeight="Bold"
+                            Style="{StaticResource btnHover}" 
+                            Command=""/>
                 </StackPanel>
 
             </StackPanel>
@@ -220,12 +202,12 @@
 
             <DataGrid Grid.Row="2" Grid.Column="1" 
                       x:Name="EasySave"
-                      Height="250" Width="815" 
+                      Height="200" Width="815" 
                       HorizontalAlignment="Left" 
                       Margin="0,15,0,0"   
                       VerticalAlignment="Top" 
                       RowHeight="25" 
-                      FontSize="14"
+                      FontSize="15"
                       Background="Transparent" 
                       RowBackground="White"
                       GridLinesVisibility="Vertical" 
