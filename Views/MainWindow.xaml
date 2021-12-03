@@ -170,7 +170,7 @@
                                      Text="{Binding Preferences.CryptExt}"
                                      VerticalAlignment="Center"
                                      FontSize="15"
-                                     VerticalContentAlignment="Center"/>
+                                     VerticalContentAlignment="Center" IsEnabled="{Binding canChangeparam}"/>
                             <Button Height="30" BorderThickness="0"
                                     FontFamily="Corbel"
                                     FontWeight="Bold"
@@ -232,7 +232,7 @@
                             Content="Quitter"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="" Click="Button_Click_2"/>
+                            Command="" Click="Button_Click_2" IsEnabled="{Binding canChangeparam}"/>
                 </StackPanel>
 
             </StackPanel>

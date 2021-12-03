@@ -165,7 +165,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => true);
+                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => Backup != null);
                 return _LaunchCommand;
             }
         }
@@ -200,7 +200,7 @@ namespace EasySave_GUI.ViewModels
             {
                     if (next)
                     {
-                        if(Q.Count() != 0) Q[0].Start(LogService);
+                        if(Q.Count() != 0) Q[0].Start(LogService,Preferences.CryptExt);
                         return;
                     }
                 if(!Q.Contains(Backup))
@@ -210,18 +210,27 @@ namespace EasySave_GUI.ViewModels
                     Backup.State = BackupState.En_Attente;
                     if (Q.Count() == 1)
                     {
-                        Q[0].Start(LogService);
+                        Q[0].Start(LogService,Preferences.CryptExt);
                         return;
                     }
                 }
             }
             else
             {
+                if (next) return;
                 if (!Q.Contains(Backup))
                 {
+                    Backup.PropertyChanged += LaunchNext;
                     Q.Add(Backup);
-                    Backup.Start(LogService);
+                    Backup.Start(LogService,Preferences.CryptExt);
                 }
+            }
+        }
+        public bool canChangeparam
+        {
+            get
+            {
+                return Q.Count() == 0;
             }
         }
         private void LaunchNext(object? sender, PropertyChangedEventArgs e)
@@ -248,6 +257,7 @@ namespace EasySave_GUI.ViewModels
         private void Changed_q(object? sender, NotifyCollectionChangedEventArgs e)
         {
             OnPropertyChanged("Q");
+            OnPropertyChanged("canChangeparam");
         }
 
         private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)

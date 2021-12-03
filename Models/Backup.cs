@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace EasySave_GUI.Models
@@ -43,6 +44,11 @@ namespace EasySave_GUI.Models
             string pathdest = el.Replace(this.Source, this.Destination);
             if (File.Exists(pathdest))
             {
+                var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(Destination + "\\cryptedfiles.json"));
+                if (cryptedFiles.Contains(el))
+                {
+                    return true;
+                }
                 using (var sourcef = File.OpenRead(el))
                 {
                     //on ouvre le fichier destination
@@ -207,7 +213,7 @@ namespace EasySave_GUI.Models
         }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
-        public void Start(LogService log)
+        public void Start(LogService log,string cryptExt)
         {
             var dir = new DirectoryInfo(Source);
             Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
@@ -221,10 +227,24 @@ namespace EasySave_GUI.Models
                 {
                     try
                     {
-                        timer.Start();
-                        Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
-                        timer.Stop();
-                        log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                        if(new Regex(cryptExt).IsMatch(file.Extension))
+                        {
+                            timer.Start();
+                            var gg = CryptFile(file);
+                            timer.Stop();
+                            if (gg< 0)
+                            {
+                                log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds,CryptageTime= gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                            }
+                        }
+                        else
+                        {
+                            timer.Start();
+                            Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
+                            timer.Stop();
+                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds,CryptageTime= 0, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                        }
+                        
                     }
                     catch (Exception ex)
                     {
@@ -237,6 +257,25 @@ namespace EasySave_GUI.Models
             });
             Thread.Start();
         }
+
+        private double CryptFile(FileInfo file)
+        {
+            var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(Destination + "\\cryptedfiles.json"));
+            cryptedFiles.Add(file.FullName.Replace(this.Source, this.Destination));
+            File.WriteAllText($"{Destination}\\cryptedfiles.json", JsonConvert.SerializeObject(cryptedFiles, Formatting.Indented));
+            var p = new Process();
+            p.StartInfo.FileName = "CryptoSoft.exe";
+            p.StartInfo.Arguments = $"{file.FullName} {file.FullName.Replace(Source, Destination)}";
+            p.Start();
+            p.WaitForExit();
+            if(p.ExitCode != 0)
+            {
+                return (double)p.ExitCode;
+            }
+            return p.TotalProcessorTime.TotalMilliseconds;
+
+        }
+
         private void Copyfile(FileInfo source, string destination)
         {
             //if the file does not exist an exception is returned
