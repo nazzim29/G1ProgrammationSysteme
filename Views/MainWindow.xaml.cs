@@ -37,5 +37,14 @@ namespace EasySave_GUI
             }
 
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dlg = new VistaFolderBrowserDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                (DataContext as ViewModel).NewBackup.Destination = dlg.SelectedPath;
+            }
+        }
     }
 }
