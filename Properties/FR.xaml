@@ -5,4 +5,14 @@
 
     <system:String x:Key="backup_name">Appelation</system:String>
     <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="destination">Destination</system:String>
+    <system:String x:Key="type">Type</system:String>
+    <system:String x:Key="crypt">Cryptage</system:String>
+    <system:String x:Key="ajouter">Ajouter</system:String>
+    <system:String x:Key="lancer">Lancer</system:String>
+    <system:String x:Key="supp">Supprimer</system:String>
+    <system:String x:Key="quitter">Quitter</system:String>
+    <system:String x:Key="sequentiel">Séquentiel</system:String>
+    <system:String x:Key="simultane">Simultané</system:String>
+
 </ResourceDictionary>
