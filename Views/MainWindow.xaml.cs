@@ -46,5 +46,10 @@ namespace EasySave_GUI
                 (DataContext as ViewModel).NewBackup.Destination = dlg.SelectedPath;
             }
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

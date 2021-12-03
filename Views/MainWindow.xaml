@@ -209,7 +209,7 @@
                                 Foreground="White"
                                 Content="Quitter"
                                 FontWeight="Bold"
-				Command="">
+				Command="" Click="Button_Click_2">
                         </Button>
                     </Border>
 
