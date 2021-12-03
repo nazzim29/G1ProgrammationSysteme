@@ -27,7 +27,7 @@ namespace EasySave_GUI.Models
     }
     public class Backup : BaseModel
     {
-        private Thread Thread;
+        public Thread Thread;
         private string _name, _source, _destination;
         private BackupType _type;
         private BackupState _state;
@@ -232,10 +232,9 @@ namespace EasySave_GUI.Models
                             timer.Start();
                             var gg = CryptFile(file);
                             timer.Stop();
-                            if (gg< 0)
-                            {
+
                                 log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds,CryptageTime= gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
-                            }
+
                         }
                         else
                         {
@@ -260,8 +259,9 @@ namespace EasySave_GUI.Models
 
         private double CryptFile(FileInfo file)
         {
-            var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(Destination + "\\cryptedfiles.json"));
-            cryptedFiles.Add(file.FullName.Replace(this.Source, this.Destination));
+            var cryptedFiles = new List<string>();
+            if (File.Exists(Destination + "\\cryptedfiles.json")) cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Destination + "\\cryptedfiles.json")));
+            if(cryptedFiles.Contains(file.FullName.Replace(this.Source, this.Destination))) cryptedFiles.Add(file.FullName.Replace(this.Source, this.Destination));
             File.WriteAllText($"{Destination}\\cryptedfiles.json", JsonConvert.SerializeObject(cryptedFiles, Formatting.Indented));
             var p = new Process();
             p.StartInfo.FileName = "CryptoSoft.exe";
