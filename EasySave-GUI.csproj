@@ -6,7 +6,7 @@
     <RootNamespace>EasySave_GUI</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
-	<requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+	
   </PropertyGroup>
 
   <ItemGroup>
