@@ -90,7 +90,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center" 
-                                    Text="{Binding NewBackup.Source}"/>
+                                    Text="{Binding NewBackup.Source, Mode=OneWay}"/>
                             <Button Height="30" BorderThickness="0"
                                         Width="50"
                                         Margin="20,0,0,0"
@@ -114,7 +114,7 @@
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center"
-                                    Text="{Binding NewBackup.Destination}"/>
+                                    Text="{Binding NewBackup.Destination, Mode=OneWay}"/>
                             <Button Height="30" BorderThickness="0"
                                         Width="50"
                                         Margin="20,0,0,0"
@@ -161,7 +161,7 @@
                             Content="Ajouter"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}"
-                            Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" Click="Button_Click_2"/>
+                            Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}"/>
 
                     <Button HorizontalAlignment="Right" 
                             Margin="10,8"
@@ -219,7 +219,7 @@
                       HorizontalGridLinesBrush="Green"
                       VerticalGridLinesBrush="#F0F0F0"
                       ItemsSource="{Binding Backups, Mode=TwoWay}"   
-                      SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}">
+                      SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True">
             </DataGrid>
 
 

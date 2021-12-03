@@ -9,6 +9,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="image\langue.png" />
+    <None Remove="image\logolongremovebg.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="image\langue.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="image\logolongremovebg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DiagrammeUML\" />
   </ItemGroup>
 
