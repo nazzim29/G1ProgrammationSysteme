@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_GUI.Properties
 {
-    public enum Mode : ushort
+    public enum CopyMode : ushort
     {
         sequentiel = 1,
         simultane = 2
@@ -25,8 +25,8 @@ namespace EasySave_GUI.Properties
         }
         private static readonly string PrefPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Preferences";//the path of the preferences config file
         private string _language;
-        private Mode _Mode;
-        public Mode Mode
+        private CopyMode _Mode;
+        public CopyMode Mode
         {
             get { return _Mode; }
             set { _Mode = value; OnPropertyChanged("Mode"); }
@@ -53,7 +53,7 @@ namespace EasySave_GUI.Properties
             var pref = JsonConvert.DeserializeObject<Preferences>(File.ReadAllText(PrefPath + "\\config.json"));
             return pref;
         }
-        public Preferences(string _language = "EN", Mode mode = Mode.simultane)
+        public Preferences(string _language = "EN", CopyMode mode = CopyMode.simultane)
         {
             PropertyChanged += Save;
             this._language = _language;

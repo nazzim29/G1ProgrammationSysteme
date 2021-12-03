@@ -17,12 +17,12 @@ namespace EasySave_GUI.ViewModels
     public class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private Preferences preferences;
+        private Preferences _preferences;
         private Backup _backup;
         private Backup _newbackup;
         private Backup _runningTask;
@@ -32,6 +32,17 @@ namespace EasySave_GUI.ViewModels
         {
             get { return _q; }
             set { _q = value; OnPropertyChanged("Q"); }
+        }
+        public Preferences Preferences
+        {
+            get
+            {
+                return _preferences;
+            }
+            set
+            {
+                _preferences = value; OnPropertyChanged("Preferences");
+            }
         }
         private Backup RunningTask
         {
@@ -160,13 +171,25 @@ namespace EasySave_GUI.ViewModels
         private void Launch(bool next=false)
         {
             CanLaunch = false;
-            /*if (preferences.Mode == CopyMode.Sequentielle)
+            if (Preferences.Mode == CopyMode.sequentiel)
             {
-                if (next && Q.Count() != 0) return Q[0].Start();
+                if (next && Q.Count() != 0)
+                {
+                    Q[0].Start();
+                    return;
+                }
                 Backup.PropertyChanged += LaunchNext;
                 Q.Add(Backup);
-                if(Q.Count() ==1) return Q[0].Start();
-            }*/
+                if (Q.Count() == 1)
+                {
+                    Q[0].Start();
+                    return;
+                }
+            }
+            else
+            {
+
+            }
         }
 
         private void LaunchNext(object? sender, PropertyChangedEventArgs e)
@@ -180,6 +203,7 @@ namespace EasySave_GUI.ViewModels
 
         public ViewModel()
         {
+            Preferences = Preferences.fromFile();
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
             Q = new ObservableCollection<Backup>();
             Q.CollectionChanged += new NotifyCollectionChangedEventHandler(Changed_q);
