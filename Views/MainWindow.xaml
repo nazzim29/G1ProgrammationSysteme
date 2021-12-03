@@ -17,142 +17,223 @@
             CornerRadius="20">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="50"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="70"/>
+                <RowDefinition Height="90"/>
+                <RowDefinition Height="210"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="1" Grid.Column="1" CornerRadius="6"
-                    BorderBrush="#B49CC9"
-                    BorderThickness="6"
-                    Margin="10"
-                    Height="204"                       
-                    VerticalAlignment="top">
-                <StackPanel
-                    Orientation="Horizontal"
-                    Background="#B49CC9"
-                    Height="200"
-                    RenderTransformOrigin="0.5,0.5">
-                    <StackPanel Width="590" 
-                                Margin="20,5,5,5">
+
+            <Image Grid.Row="0" Grid.Column="1"
+                   Source="C:\Users\Maryam\Source\Repos\nazzim29\G1ProgrammationSysteme\image\logolongremovebg.png"
+                   HorizontalAlignment="Left"
+                   Margin="20,30,0,0" />
+            <Image Grid.Row="0" Grid.Column="1"
+                   Source="C:\Users\Maryam\Source\Repos\nazzim29\G1ProgrammationSysteme\image\lang.jpg"
+                   HorizontalAlignment="right"
+                   Margin="0,30,20,0" />
+
+            <StackPanel Grid.Row="1" Grid.Column="1"
+                        Orientation="Horizontal">
+                <Border CornerRadius="6"
+                            BorderBrush="#B49CC9"
+                            BorderThickness="6"
+                            Margin="10"
+                            Width="600"
+                            Height="190"       
+                            Background="#B49CC9"  
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="top">
+                    <StackPanel Margin="20,5,5,5"
+                                    RenderTransformOrigin="0.5,0.5">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label
-                                FontSize="18"
-                                Height="40"                       
-                                Foreground="White"
-                                Content="Appellation"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding NewBackup.Name}"/>
-
+                            <Label FontWeight="Bold"
+                                    FontSize="18"
+                                    Height="40"                       
+                                    Foreground="White"
+                                    Content="Appellation"/>
+                            <TextBox Height="30"
+                                    TextWrapping="Wrap"
+                                    Width="300"
+                                    Margin="50,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    VerticalContentAlignment="Center" 
+                                    Text="{Binding Backup.Name}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                        Margin="0,0,0,5">
+                            <Label FontWeight="Bold"
+                                    FontSize="18"
+                                    Height="40"                       
+                                    Foreground="White"
+                                    Content="Source"/>
+                            <TextBox 
+                                    Height="30"
+                                    TextWrapping="Wrap"
+                                    Width="300"
+                                    Margin="91,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    VerticalContentAlignment="Center" 
+                                    Text="{Binding Backup.Source}"/>
+                            <Button Height="30" BorderThickness="0"
+                                        Width="50"
+                                        Margin="20,0,0,0"
+                                        Background="#8056A3"
+                                        FontSize="18"
+                                        Foreground="White"
+                                        Content=". . ."/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label
-                                FontSize="18"
-                                Height="40"                       
-                                Foreground="White"
-                                Content="Source"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="87,0,0,0" Text="{Binding NewBackup.Source}"/>
-                            <Button Height="25" BorderThickness="0"
-                                    Width="50"
-                                    Margin="20,0,0,0"
-                                    Background="#8056A3"
+                            <Label FontWeight="Bold"
                                     FontSize="18"
+                                    Height="40"                       
                                     Foreground="White"
-                                    Content=". . ." />
+                                    Content="Destination"/>
+                            <TextBox
+                                    Height="30"
+                                    TextWrapping="Wrap"
+                                    Width="300"
+                                    Margin="50,0,0,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    VerticalContentAlignment="Center"
+                                    Text="{Binding Backup.Destination}"/>
+                            <Button Height="30" BorderThickness="0"
+                                        Width="50"
+                                        Margin="20,0,0,0"
+                                        Background="#8056A3"
+                                        FontSize="18"
+                                        Foreground="White"
+                                        Content=". . ."/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
-                            <Label
-                                FontSize="18"
-                                Height="40"                       
-                                Foreground="White"
-                                Content="Destination"/>
-                            <TextBox Height="24" TextWrapping="Wrap" Width="200" Margin="50,0,0,0" Text="{Binding NewBackup.Destination}"/>
-                            <Button Height="25" BorderThickness="0"
-                                    Width="50"
-                                    Margin="20,0,0,0"
-                                    Background="#8056A3"
-                                    FontSize="18"
-                                    Foreground="White"
-                                    Content=". . ."/>
-                        </StackPanel>
-
-
                         <StackPanel Orientation="Horizontal">
-                            <RadioButton FontSize="18" Foreground="White"
-                                Height="40" Margin="15,0,0,0" GroupName="" IsChecked="{Binding Backup.Type.Complete}">
-                                Sauvegarde complete
+                            <RadioButton FontSize="25"
+                                         Foreground="White"
+                                         FontWeight="Bold"
+                                         Height="20"
+                                         Margin="15,0,10,0"
+                                         RenderTransformOrigin="0.5,0.5" 
+                                         IsChecked="{Binding Backup.Type.Complete}">
+                                <RadioButton.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </RadioButton.RenderTransform>
                             </RadioButton>
-                            <RadioButton FontSize="18" Foreground="White" Name="Differentiel"
-                                Height="40" Margin="30,0,0,0" Command="{Binding ChangeTypeCommand}" CommandParameter="{Binding ElementName=Differentiel, Path=Content}">
-                                Sauvegarde differentielle
+                            <Label FontWeight="Bold"
+                                    FontSize="18"
+                                    Height="40"                       
+                                    Foreground="White"
+                                    Content="Sauvegarde complete"/>
+                            <RadioButton FontSize="18"
+                                         Foreground="White"
+                                         FontWeight="Bold"
+                                         Height="20"
+                                         Margin="15,0,10,0" RenderTransformOrigin="0.5,0.5" 
+                                         Command="{Binding ChangeTypeCommand}" CommandParameter="{Binding ElementName=Differentiel, Path=Content}">
+                                <RadioButton.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                        <SkewTransform/>
+                                        <RotateTransform/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </RadioButton.RenderTransform>
                             </RadioButton>
+                            <Label FontWeight="Bold"
+                                    FontSize="18"
+                                    Height="40"                       
+                                    Foreground="White"
+                                    Content="Sauvegarde differentielle"/>
+
                         </StackPanel>
                     </StackPanel>
-
-                    <StackPanel>
-                        <Border CornerRadius="6"
+                </Border>
+                <StackPanel>
+                    <Border CornerRadius="6"
                                 BorderBrush="#8056A3"
                                 BorderThickness="6"
                                 HorizontalAlignment="Right" 
-                                Margin="0,10,10,10" >
-                            <Button Height="40" BorderThickness="0"
+                                Margin="0,10,10,15" >
+                        <Button Height="40" BorderThickness="0"
                                 Width="170"
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
-                                Content="Ajouter" Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" >
-                            </Button>
-                        </Border>
-                        <Border CornerRadius="6"
+                                Content="Ajouter"
+                                FontWeight="Bold"
+				Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}" >
+                        </Button>
+                    </Border>
+                    <Border CornerRadius="6"
                                 BorderBrush="#8056A3"
                                 BorderThickness="6"
                                 HorizontalAlignment="Right" 
                                 Margin="10,0" >
-                            <Button Height="40" BorderThickness="0"
+                        <Button Height="40" BorderThickness="0"
                                 Width="170"
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
-                                Content="Lancer" IsEnabled="{Binding CanLaunch}" Command="{Binding LaunchCommand}" >
-                            </Button>
-                        </Border>
-                        <Border CornerRadius="6"
+                                Content="Lancer"
+                                FontWeight="Bold"
+				IsEnabled="{Binding CanLaunch}" Command="{Binding LaunchCommand}" >
+                        </Button>
+                    </Border>
+                    <Border CornerRadius="6"
                                 BorderBrush="#8056A3"
                                 BorderThickness="6"
                                 HorizontalAlignment="Right" 
-                                Margin="10" >
-                            <Button Height="40" BorderThickness="0"
+                                Margin="10,15,10,10" >
+                        <Button Height="40" BorderThickness="0"
                                 Width="170"
                                 Background="#8056A3"
                                 FontSize="18"
                                 Foreground="White"
                                 Content="Supprimer"
-                                    Command="{Binding DeleteTaskCommand}">
-                            </Button>
-                        </Border>
+                                FontWeight="Bold"
+				Command="{Binding DeleteTaskCommand}">
+                        </Button>
+                    </Border>
 
-                    </StackPanel>
                 </StackPanel>
-            </Border>
-            <DataGrid x:Name="datagrid" Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Backups, Mode=TwoWay}" Margin="0,230,0,0" SelectedItem="{Binding Backup}" SelectionMode="Single" CurrentItem="{Binding Backup}" IsReadOnly="True" />
 
+            </StackPanel>
+
+
+            <DataGrid Grid.Row="2" Grid.Column="1" 
+                      x:Name="EasySave"
+                      Height="250" Width="815" 
+                      HorizontalAlignment="Left" 
+                      Margin="0,15,0,0"   
+                      VerticalAlignment="Top" 
+                      RowHeight="25" 
+                      FontSize="14"
+                      Background="Transparent" 
+                      RowBackground="White"
+                      GridLinesVisibility="Vertical" 
+                      HeadersVisibility="All"  
+                      BorderBrush="#F0F0F0" 
+                      BorderThickness="0"
+                      HorizontalScrollBarVisibility="Visible" 
+                      SelectionMode="Single"  
+                      HorizontalGridLinesBrush="Green"
+                      VerticalGridLinesBrush="#F0F0F0"
+                      ItemsSource="{Binding Backups, Mode=TwoWay}"   
+                      SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}">
+            </DataGrid>
 
 
         </Grid>
     </Border>
 
+
 </Window>
-
-<!--  <Grid x:Name="EasySave">
-
-        <DataGrid ItemsSource="{Binding Backups}" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="name" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="source" Binding="{Binding Source}"/>
-                <DataGridTextColumn Header="dest" Binding="{Binding Destination}"/>
-                <DataGridTextColumn Header="type" Binding="{Binding Type}"/>
-                <DataGridTextColumn Header="state" Binding="{Binding State}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </Grid>--> 
