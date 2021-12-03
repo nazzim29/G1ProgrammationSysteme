@@ -22,7 +22,7 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="100"/>
+                <RowDefinition Height="120"/>
                 <RowDefinition Height="280"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -186,6 +186,21 @@
                                 Content="Supprimer"
                                 FontWeight="Bold"
 				Command="{Binding DeleteTaskCommand}">
+                        </Button>
+                    </Border>
+                    <Border CornerRadius="6"
+                                BorderBrush="#8056A3"
+                                BorderThickness="6"
+                                HorizontalAlignment="Right" 
+                                Margin="10,3" >
+                        <Button Height="40" BorderThickness="0"
+                                Width="170"
+                                Background="#8056A3"
+                                FontSize="18"
+                                Foreground="White"
+                                Content="Quitter"
+                                FontWeight="Bold"
+				Command="">
                         </Button>
                     </Border>
 
