@@ -26,6 +26,7 @@ namespace EasySave_GUI
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             EN = new ResourceDictionary();
             FR = new ResourceDictionary();
             EN.Source = new Uri("..\\Properties\\EN.xaml", UriKind.Relative);

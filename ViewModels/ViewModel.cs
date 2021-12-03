@@ -1,23 +1,22 @@
 ﻿using EasySave_GUI.Libs;
 using EasySave_GUI.Models;
 using EasySave_GUI.Properties;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Management;
 
 namespace EasySave_GUI.ViewModels
 {
     public class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        
+        private ManagementEventWatcher processStartEvent;
+        private ManagementEventWatcher processStopEvent;
+        private bool canlaunch;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -166,7 +165,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => Backup != null);
+                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => Backup != null && canlaunch);
                 return _LaunchCommand;
             }
         }
@@ -213,11 +212,11 @@ namespace EasySave_GUI.ViewModels
             CanLaunch = false;
             if (Preferences.Mode == CopyMode.sequentiel)
             {
-                    if (next)
-                    {
-                        if(Q.Count() != 0) Q[0].Start(LogService,Preferences.CryptExt);
-                        return;
-                    }
+                if (next&&canlaunch)
+                {
+                    if(Q.Count() != 0) Q[0].Start(LogService,Preferences.CryptExt);
+                    return;
+                }
                 if(!Q.Contains(Backup))
                 {
                     Backup.PropertyChanged += LaunchNext;
@@ -260,6 +259,13 @@ namespace EasySave_GUI.ViewModels
         public ViewModel()
         {
             Preferences = Preferences.fromFile();
+            processStartEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStartTrace");
+            processStopEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStopTrace");
+            canlaunch = true;
+            processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
+            processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
+            processStartEvent.Start();
+            processStopEvent.Start();
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
             Q = new ObservableCollection<Backup>();
             Q.CollectionChanged += new NotifyCollectionChangedEventHandler(Changed_q);
@@ -267,6 +273,52 @@ namespace EasySave_GUI.ViewModels
             PropertyChanged += SaveTasks;
             PropertyChanged += checklaunch;
 
+        }
+
+        private void processended(object sender, EventArrivedEventArgs e)
+        {
+            var proname = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            if(proname == Preferences.LogicielMetier)
+            {
+                canlaunch = true;
+                if (Preferences.Mode == CopyMode.sequentiel)
+                {
+                    if (Q[0].State == BackupState.En_Attente)
+                    {
+                        Launch(true);
+                    }
+                }
+                else
+                {
+                    foreach (var i in Q)
+                    {
+                        if (i.State == BackupState.En_Attente)
+                        {
+                            i.State = BackupState.En_Cours;
+                            i.Thread.Resume();
+                        }
+                    }
+                }
+
+            }
+        }
+
+        private void processlaunched(object sender, EventArrivedEventArgs e)
+        {
+            var proname = e.NewEvent.Properties["ProcessName"].Value.ToString();
+            if(proname == Preferences.LogicielMetier)
+            {
+                canlaunch = false;
+                OnPropertyChanged("canLaunch");
+                if(Preferences.Mode != CopyMode.sequentiel)
+                {
+                    foreach(var i  in Q)
+                    {
+                        i.State = BackupState.En_Attente;
+                        i.Thread.Suspend();
+                    }
+                }
+            }
         }
 
         private void Changed_q(object? sender, NotifyCollectionChangedEventArgs e)
