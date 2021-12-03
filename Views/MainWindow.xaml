@@ -42,14 +42,25 @@
                    Source="\image\logolongremovebg.png"
                    HorizontalAlignment="Left"
                    Margin="20,30,0,0" />
-            <Image Grid.Row="0" Grid.Column="1"
+            <Button HorizontalAlignment="right"
+                   Margin="0,10,10.4,0.4" 
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    BorderThickness="0" 
+                    Padding="-4" Grid.Column="1" Style="{StaticResource nohover}" Click="Button_Click_3" Command="{Binding ChangeLanguageCommand}">
+                <Image Grid.Row="0" Grid.Column="1"
+                   Source="/image/langue.png"
+                   HorizontalAlignment="Center" Height="100" Width="98">
+            </Image>
+            </Button>
+            <!--<Image Grid.Row="0" Grid.Column="1"
                    Source="/image/langue.png"
                    HorizontalAlignment="right"
                    Margin="0,30,20,0" MouseDown="Image_MouseDown">
                 <Image.InputBindings>
                     <MouseBinding Gesture="LeftClick" Command="{Binding ChangeLanguageCommand}" />
                 </Image.InputBindings>
-            </Image>
+            </Image>-->
 
             <StackPanel Grid.Row="1" Grid.Column="1"
                         Orientation="Horizontal">

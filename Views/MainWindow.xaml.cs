@@ -66,7 +66,7 @@ namespace EasySave_GUI
             Close();
         }
 
-        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        private void Button_Click_3(object sender, RoutedEventArgs e)
         {
             if ((DataContext as ViewModel).Preferences.language == "EN")
             {
@@ -79,5 +79,10 @@ namespace EasySave_GUI
                 this.Resources.MergedDictionaries.Add(FR);
             }
         }
+
+        /*private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            
+        }*/
     }
 }
