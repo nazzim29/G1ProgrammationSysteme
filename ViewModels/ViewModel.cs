@@ -112,6 +112,25 @@ namespace EasySave_GUI.ViewModels
         private ICommand _addTaskCommand;
         private ICommand _deleteTaskCommand;
         private ICommand _LaunchCommand;
+        private ICommand _ChangeModeToSimultaneCommand;
+        private ICommand _ChangeModeToSequentielCommand;
+
+        public ICommand ChangeModeToSimultaneCommand
+        {
+            get
+            {
+                if (_ChangeModeToSimultaneCommand == null) _ChangeModeToSimultaneCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.simultane),(object p) => Preferences.Mode != CopyMode.simultane);
+                return _ChangeModeToSimultaneCommand;
+            }
+        }
+        public ICommand ChangeModeToSequentielCommand
+        {
+            get
+            {
+                if (_ChangeModeToSequentielCommand == null) _ChangeModeToSequentielCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.sequentiel),(object p) => Preferences.Mode != CopyMode.sequentiel);
+                return _ChangeModeToSequentielCommand;
+            }
+        }
         public ICommand ChangeTypeCommand
         {
             get
@@ -149,6 +168,11 @@ namespace EasySave_GUI.ViewModels
                 if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => true);
                 return _LaunchCommand;
             }
+        }
+        public void ChangeCopyMode(CopyMode m)
+        {
+            if (Preferences.Mode == m) return;
+            Preferences.Mode = m;
         }
         public void AddTask()
         {
@@ -200,7 +224,6 @@ namespace EasySave_GUI.ViewModels
                 }
             }
         }
-
         private void LaunchNext(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender as Backup).State == BackupState.Finie)
