@@ -119,7 +119,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_ChangeModeToSimultaneCommand == null) _ChangeModeToSimultaneCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.simultane),(object p) => Preferences.Mode != CopyMode.simultane);
+                if (_ChangeModeToSimultaneCommand == null) _ChangeModeToSimultaneCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.simultane),(object p) => Preferences.Mode != CopyMode.simultane && Q.Count() == 0);
                 return _ChangeModeToSimultaneCommand;
             }
         }
@@ -127,7 +127,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_ChangeModeToSequentielCommand == null) _ChangeModeToSequentielCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.sequentiel),(object p) => Preferences.Mode != CopyMode.sequentiel);
+                if (_ChangeModeToSequentielCommand == null) _ChangeModeToSequentielCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.sequentiel),(object p) => Preferences.Mode != CopyMode.sequentiel && Q.Count() == 0);
                 return _ChangeModeToSequentielCommand;
             }
         }
