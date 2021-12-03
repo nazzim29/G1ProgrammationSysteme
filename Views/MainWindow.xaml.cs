@@ -51,5 +51,11 @@ namespace EasySave_GUI
             Close();
         }
 
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            ResourceDictionary Ressource = new ResourceDictionary();
+            Ressource.Source = new Uri("Properties/EN.xaml");
+            this.Resources.MergedDictionaries.Add(Ressource);
+        }
     }
 }

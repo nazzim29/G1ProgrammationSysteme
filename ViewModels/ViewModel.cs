@@ -114,6 +114,7 @@ namespace EasySave_GUI.ViewModels
         private ICommand _LaunchCommand;
         private ICommand _ChangeModeToSimultaneCommand;
         private ICommand _ChangeModeToSequentielCommand;
+        private ICommand _changeLanguageCommand;
 
         public ICommand ChangeModeToSimultaneCommand
         {
@@ -169,6 +170,20 @@ namespace EasySave_GUI.ViewModels
                 return _LaunchCommand;
             }
         }
+        public ICommand ChangeLanguageCommand
+        {
+            get
+            {
+                if (_changeLanguageCommand == null) _changeLanguageCommand = new RelayCommand(() => ChangeLanguage(), (object sender) => true);
+                return _changeLanguageCommand;
+            }
+        }
+
+        private void ChangeLanguage()
+        {
+            Preferences.language = Preferences.language.ToString() == "EN" ? "FR" : "EN";
+        }
+
         public void ChangeCopyMode(CopyMode m)
         {
             if (Preferences.Mode == m) return;
@@ -290,5 +305,7 @@ namespace EasySave_GUI.ViewModels
             //    };
             OnPropertyChanged("Backups");
         }
+
+   
     }
 }

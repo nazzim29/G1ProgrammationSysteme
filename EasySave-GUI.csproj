@@ -14,10 +14,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Properties\EN.xaml" />
+    <Page Remove="Properties\FR.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="image\langue.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="image\logolongremovebg.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Properties\EN.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Properties\FR.xaml">
+      <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

@@ -44,7 +44,11 @@
             <Image Grid.Row="0" Grid.Column="1"
                    Source="\image\langue.png"
                    HorizontalAlignment="right"
-                   Margin="0,30,20,0" />
+                   Margin="0,30,20,0" MouseDown="Image_MouseDown">
+                <Image.InputBindings>
+                    <MouseBinding Gesture="LeftClick" Command="{Binding ChangeLanguageCommand}" />
+                </Image.InputBindings>
+            </Image>
 
             <StackPanel Grid.Row="1" Grid.Column="1"
                         Orientation="Horizontal">
