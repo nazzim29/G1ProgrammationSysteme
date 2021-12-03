@@ -170,25 +170,34 @@ namespace EasySave_GUI.ViewModels
         }
         private void Launch(bool next=false)
         {
+
             CanLaunch = false;
             if (Preferences.Mode == CopyMode.sequentiel)
             {
-                if (next && Q.Count() != 0)
+                    if (next)
+                    {
+                        if(Q.Count() != 0) Q[0].Start(LogService);
+                        return;
+                    }
+                if(!Q.Contains(Backup))
                 {
-                    Q[0].Start();
-                    return;
-                }
-                Backup.PropertyChanged += LaunchNext;
-                Q.Add(Backup);
-                if (Q.Count() == 1)
-                {
-                    Q[0].Start();
-                    return;
+                    Backup.PropertyChanged += LaunchNext;
+                    Q.Add(Backup);
+                    Backup.State = BackupState.En_Attente;
+                    if (Q.Count() == 1)
+                    {
+                        Q[0].Start(LogService);
+                        return;
+                    }
                 }
             }
             else
             {
-
+                if (!Q.Contains(Backup))
+                {
+                    Q.Add(Backup);
+                    Backup.Start(LogService);
+                }
             }
         }
 
