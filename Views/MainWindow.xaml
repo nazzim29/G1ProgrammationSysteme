@@ -57,60 +57,65 @@
                             Background="#B49CC9"  
                             HorizontalAlignment="Left"
                             VerticalAlignment="top">
-                    <StackPanel Margin="20,5,5,5"
-                                    RenderTransformOrigin="0.5,0.5">
+                    <StackPanel Margin="20,8,5,5"
+                                RenderTransformOrigin="0.5,0.5">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
-                                    FontSize="18"
-                                    Height="40"                       
-                                    Foreground="White"
-                                    Content="Appellation"/>
+                                   FontSize="18"
+                                   Height="40"                       
+                                   Foreground="White"
+                                   FontFamily="Corbel"
+                                   Content="Appellation"/>
                             <TextBox Height="30"
-                                    TextWrapping="Wrap"
-                                    Width="300"
-                                    Margin="50,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="15"
-                                    VerticalContentAlignment="Center" 
-                                    Text="{Binding NewBackup.Name}"/>
+                                     TextWrapping="Wrap"
+                                     Width="390"
+                                     Margin="55,0,0,0"
+                                     VerticalAlignment="Center"
+                                     FontSize="15"
+                                     FontFamily="Corbel"
+                                     VerticalContentAlignment="Center" 
+                                     Text="{Binding NewBackup.Name}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal"
-                                        Margin="0,0,0,5">
+                                    Margin="0,0,0,5">
                             <Label FontWeight="Bold"
-                                    FontSize="18"
-                                    Height="40"                       
-                                    Foreground="White"
-                                    Content="Source"/>
-                            <TextBox 
-                                    Height="30"
+                                   FontFamily="Corbel"
+                                   FontSize="18"
+                                   Height="40"                       
+                                   Foreground="White"
+                                   Content="Source"/>
+                            <TextBox Height="30"
+                                     FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
-                                    Width="300"
+                                    Width="320"
                                     Margin="91,0,0,0"
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center" 
                                     Text="{Binding NewBackup.Source, Mode=OneWay}"/>
                             <Button Height="30" BorderThickness="0"
-                                        Width="50"
-                                        Margin="20,0,0,0"
-                                        FontSize="18"
-                                        Foreground="White"
-                                        Style="{StaticResource brosehover}" 
-                                        Content=". . ." Click="Button_Click"/>
+                                    FontFamily="Corbel"
+                                    Width="50"
+                                    Margin="20,0,0,0"
+                                    FontSize="18"
+                                    Foreground="White"
+                                    Style="{StaticResource brosehover}" 
+                                    Content=". . ." Click="Button_Click"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
+                                   FontFamily="Corbel"
                                     FontSize="18"
                                     Height="40"                       
                                     Foreground="White"
                                     Content="Destination"/>
-                            <TextBox
-                                    Height="30"
+                            <TextBox Height="30"
+                                     FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
-                                    Width="300"
-                                    Margin="50,0,0,0"
+                                    Width="320"
+                                    Margin="55,0,0,0"
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center"
@@ -125,34 +130,62 @@
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
-                                    FontSize="18"
-                                    Height="40"                       
+                                   FontFamily="Corbel"
+                                   FontSize="18"
+                                   Height="40"                       
+                                   Foreground="White"
+                                   Content="Type" Width="107"/>
+                            <ComboBox Background="White" 
+                                      FontFamily="Corbel"
+                                      FontSize="15"
+                                      VerticalContentAlignment="Center" 
+                                      Margin="50,0,0,0" x:Name="ComboBox1" 
+                                      VerticalAlignment="Center" 
+                                      Width="220" Height="30" 
+                                      BorderBrush="White"
+                                      SelectedItem="{Binding NewBackup.Type}" 
+                                      ItemsSource="{Binding Source={StaticResource enumValues}}"/>
+                            <Button Height="30" BorderThickness="0"
+                                    FontFamily="Corbel"
+                                    FontWeight="Bold"
+                                    Width="150"
+                                    Margin="20,0,0,0"
+                                    FontSize="16"
                                     Foreground="White"
-                                    Content="Type" Width="107"/>
-                            <ComboBox Background="White" FontSize="15" VerticalContentAlignment="Center" Margin="50,0,0,0" x:Name="ComboBox1" VerticalAlignment="Center" Width="300" Height="30" BorderBrush="White" SelectedItem="{Binding NewBackup.Type}" ItemsSource="{Binding Source={StaticResource enumValues}}">
-                                
-                            </ComboBox>
+                                    Style="{StaticResource brosehover}" 
+                                    Content="Séquentielle"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
-                                    FontSize="18"
-                                    Height="40"                       
+                                   FontFamily="Corbel"
+                                   FontSize="18"
+                                   Height="40"                       
+                                   Foreground="White"
+                                   Content="Cryptage" Width="107"/>
+                            <TextBox Height="30"
+                                     FontFamily="Corbel"
+                                     TextWrapping="Wrap"
+                                     Width="220"
+                                     Margin="50,0,0,0"
+                                     Text="{Binding Preferences.CryptExt}"
+                                     VerticalAlignment="Center"
+                                     FontSize="15"
+                                     VerticalContentAlignment="Center" TextChanged="TextBox_TextChanged"/>
+                            <Button Height="30" BorderThickness="0"
+                                    FontFamily="Corbel"
+                                    FontWeight="Bold"
+                                    Width="150"
+                                    Margin="20,0,0,0"
+                                    FontSize="16"
                                     Foreground="White"
-                                    Content="Cryptage" Width="107"/>
-                            <TextBox 
-                                    Height="30"
-                                    TextWrapping="Wrap"
-                                    Width="300"
-                                    Margin="50,0,0,0"
-                                    Text="{Binding Preferences.CryptExt}"
-                                    VerticalAlignment="Center"
-                                    FontSize="15"
-                                    VerticalContentAlignment="Center" />
+                                    Style="{StaticResource brosehover}" 
+                                    Content="Simultané"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
                 <StackPanel>
                     <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
                             Margin="10"
                             Height="50" 
                             Width="180"
@@ -161,9 +194,11 @@
                             Content="Ajouter"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}"
-                            Command="{Binding AddTaskCommand}" CommandParameter="{Binding NewBackup}"/>
+                            Command="{Binding AddTaskCommand}" 
+                            CommandParameter="{Binding NewBackup}"/>
 
                     <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
                             Margin="10,8"
                             Height="50" 
                             Width="180"
@@ -175,6 +210,7 @@
                             Command="{Binding LaunchCommand}"/>
 
                     <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
                             Margin="10,8"
                             Height="50" 
                             Width="180"
@@ -186,6 +222,7 @@
                             Command="{Binding DeleteTaskCommand}"/>
 
                     <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
                             Margin="10,8"
                             Height="50" 
                             Width="180"
@@ -210,13 +247,14 @@
                       FontSize="15"
                       Background="Transparent" 
                       RowBackground="White"
-                      GridLinesVisibility="Vertical" 
+                      GridLinesVisibility="All" 
                       HeadersVisibility="All"  
                       BorderBrush="#F0F0F0" 
-                      BorderThickness="0"
+                      BorderThickness="0" 
                       HorizontalScrollBarVisibility="Visible" 
                       SelectionMode="Single"  
-                      HorizontalGridLinesBrush="Green"
+                      Foreground="#2F203C"
+                      HorizontalGridLinesBrush="#F0F0F0"
                       VerticalGridLinesBrush="#F0F0F0"
                       ItemsSource="{Binding Backups, Mode=TwoWay}"   
                       SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True">
