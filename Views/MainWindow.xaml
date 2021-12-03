@@ -73,7 +73,8 @@
                                     Content="Source"/>
                             <TextBox 
                                     Height="30"
-                                    TextWrapping="Wrap"
+                                    TextWrapping="NoWrap"
+                                    AcceptsReturn="False" 
                                     Width="300"
                                     Margin="91,0,0,0"
                                     VerticalAlignment="Center"
@@ -96,7 +97,8 @@
                                     Content="Destination"/>
                             <TextBox
                                     Height="30"
-                                    TextWrapping="Wrap"
+                                    TextWrapping="NoWrap"
+                                    AcceptsReturn="False" 
                                     Width="300"
                                     Margin="50,0,0,0"
                                     VerticalAlignment="Center"
