@@ -8,9 +8,9 @@ namespace EasySave_GUI.Properties
 {
     public abstract class Langue
     {
-        public virtual void ToString()
+        public virtual string ToString()
         {
-            
+            return "hadja";
         }
     }
 }

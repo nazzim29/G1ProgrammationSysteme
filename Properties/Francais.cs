@@ -8,9 +8,9 @@ namespace EasySave_GUI.Properties
 {
     class Francais : Langue
     {
-        public override void ToString()
+        public override string ToString()
         {
-            base.ToString();
+            return "hadja";
         }
     }
 }
