@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EasySave_GUI.ViewModels"
         mc:Ignorable="d"
-        Height="600" Width="920"
+        Height="700" Width="920"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Transparent"
@@ -22,17 +22,17 @@
                 <ColumnDefinition Width="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="90"/>
-                <RowDefinition Height="210"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="280"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
             <Image Grid.Row="0" Grid.Column="1"
-                   Source="C:\Users\Maryam\Source\Repos\nazzim29\G1ProgrammationSysteme\image\logolongremovebg.png"
+                   Source="\image\logolongremovebg.png"
                    HorizontalAlignment="Left"
                    Margin="20,30,0,0" />
             <Image Grid.Row="0" Grid.Column="1"
-                   Source="C:\Users\Maryam\Source\Repos\nazzim29\G1ProgrammationSysteme\image\lang.jpg"
+                   Source="\image\langue.png"
                    HorizontalAlignment="right"
                    Margin="0,30,20,0" />
 
@@ -43,7 +43,7 @@
                             BorderThickness="6"
                             Margin="10"
                             Width="600"
-                            Height="190"       
+                            Height="250"       
                             Background="#B49CC9"  
                             HorizontalAlignment="Left"
                             VerticalAlignment="top">
@@ -111,49 +111,32 @@
                                         Foreground="White"
                                         Content=". . ."/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
-                            <RadioButton FontSize="25"
-                                         Foreground="White"
-                                         FontWeight="Bold"
-                                         Height="20"
-                                         Margin="15,0,10,0"
-                                         RenderTransformOrigin="0.5,0.5" 
-                                         IsChecked="{Binding Backup.Type.Complete}">
-                                <RadioButton.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </RadioButton.RenderTransform>
-                            </RadioButton>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
                                     FontSize="18"
                                     Height="40"                       
                                     Foreground="White"
-                                    Content="Sauvegarde complete"/>
-                            <RadioButton FontSize="18"
-                                         Foreground="White"
-                                         FontWeight="Bold"
-                                         Height="20"
-                                         Margin="15,0,10,0" RenderTransformOrigin="0.5,0.5" 
-                                         Command="{Binding ChangeTypeCommand}" CommandParameter="{Binding ElementName=Differentiel, Path=Content}">
-                                <RadioButton.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
-                                        <SkewTransform/>
-                                        <RotateTransform/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </RadioButton.RenderTransform>
-                            </RadioButton>
+                                    Content="Type" Width="107"/>
+                            <ComboBox Background="White" FontSize="15" VerticalContentAlignment="Center" Margin="50,0,0,0" x:Name="ComboBox1" VerticalAlignment="Center" Width="300" Height="30" BorderBrush="White">
+                                <ComboBoxItem Content="Complete"/>
+                                <ComboBoxItem Content="Differentielle"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
                                     FontSize="18"
                                     Height="40"                       
                                     Foreground="White"
-                                    Content="Sauvegarde differentielle"/>
-
+                                    Content="Cryptage" Width="107"/>
+                            <TextBox 
+                                    Height="30"
+                                    TextWrapping="Wrap"
+                                    Width="300"
+                                    Margin="50,0,0,0"
+                                    Text="Entrer les extentions des fichiers à crypter"
+                                    VerticalAlignment="Center"
+                                    FontSize="15"
+                                    VerticalContentAlignment="Center" />
                         </StackPanel>
                     </StackPanel>
                 </Border>
