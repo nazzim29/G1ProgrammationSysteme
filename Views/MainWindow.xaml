@@ -154,7 +154,7 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content="Séquentielle"/>
+                                    Content="Séquentielle" Command ="{Binding ChangeModeToSequentielCommand}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -180,7 +180,8 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content="Simultané"/>
+                                    Content="Simultané"
+                                    Command="{Binding ChangeModeToSimultaneCommand}"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>

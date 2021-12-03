@@ -1,11 +1,14 @@
 ﻿using EasySave_GUI.Libs;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Threading;
 
 namespace EasySave_GUI.Models
 {
@@ -18,10 +21,12 @@ namespace EasySave_GUI.Models
     {
         Inactif,
         En_Cours,
+        En_Attente,
         Finie
     }
     public class Backup : BaseModel
     {
+        private Thread Thread;
         private string _name, _source, _destination;
         private BackupType _type;
         private BackupState _state;
@@ -62,17 +67,18 @@ namespace EasySave_GUI.Models
         {
             get 
             {
-                if (_source == null) return new ObservableCollection<FileInfo>();
-                if (_files == null) _files = new ObservableCollection<FileInfo>(new DirectoryInfo(_source).GetFiles("*", SearchOption.AllDirectories).Where(el=>isEligible(el.FullName)));
+                if (_source == null) _files = new ObservableCollection<FileInfo>();
                 return _files; 
             }
             set 
             {
                 if (_files == value) return;
                 _files = value;
+                NbFileRemaining = _files.Count();
                 OnPropertyChanged("Files");
                 OnPropertyChanged("NbFile");
                 OnPropertyChanged("TotalSize");
+                OnPropertyChanged("Progression");
             }
         }
         public string Name
@@ -91,6 +97,7 @@ namespace EasySave_GUI.Models
             set 
             {
                 if (_source == value) return;
+
                 _source = value;
                 OnPropertyChanged("Source");
                 OnPropertyChanged("Files");
@@ -133,7 +140,6 @@ namespace EasySave_GUI.Models
             get { return _state; }
             set 
             { 
-                if(State == value) return;
                 _state = value;
                 OnPropertyChanged("State");
             }
@@ -146,6 +152,7 @@ namespace EasySave_GUI.Models
                 if(_nb_file_remaining == value) return;
                 _nb_file_remaining = value;
                 OnPropertyChanged("NbFileRemaining");
+                OnPropertyChanged("Progression");
             }
         }
         public double TotalSize
@@ -162,6 +169,7 @@ namespace EasySave_GUI.Models
         {
             get
             {
+                if (State == BackupState.Inactif) return "0%";
                 if (NbFileRemaining == 0) return "100%";
                 double finit = NbFile - NbFileRemaining;
                 if (finit == 0) return "0%";
@@ -180,16 +188,62 @@ namespace EasySave_GUI.Models
         {
 
             OnPropertyChanged("Files");
+            OnPropertyChanged("Progression");
+            OnPropertyChanged("NbFile");
+            OnPropertyChanged("NbFileRemaining");
         }
         public Backup()
         {
             Files.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Files_CollectionChanged);
+            PropertyChanged += nbfilechanged;
+        }
+        private void nbfilechanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Source") Files = new ObservableCollection<FileInfo>(new DirectoryInfo(_source).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)));
+            if (e.PropertyName == "NbFile")
+            {
+                NbFileRemaining = NbFile;
+            }
         }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
-        public void Start()
+        public void Start(LogService log)
         {
+            var dir = new DirectoryInfo(Source);
+            Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
+            
+            Thread = new Thread(delegate ()
+            {
+                this.State = BackupState.En_Cours;
+                CreateDirs(this.Destination, dir.GetDirectories());//recreates the structure of the directory
+                Stopwatch timer = new Stopwatch();
+                foreach (var file in Files)
+                {
+                    try
+                    {
+                        timer.Start();
+                        Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
+                        timer.Stop();
+                        log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                    }
 
+                }
+                this.State = BackupState.Finie;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
+            });
+            Thread.Start();
+        }
+        private void Copyfile(FileInfo source, string destination)
+        {
+            //if the file does not exist an exception is returned
+            if (!source.Exists) throw new Exception("Source file not found");//si le fichier n'existe pas on renvoie une exception
+            //Copy an existing file to a new file. The overwriting of a file with the same name is allowed.
+            source.CopyTo(destination, true);//Copie un fichier existant dans un nouveau fichier. L'écrasement d'un fichier du même nom est autorisé.
+            this.NbFileRemaining--;//every time we make a copy the number of files decreases
         }
         private static void CreateDirs(string path, DirectoryInfo[] dirs)
         {
@@ -220,7 +274,7 @@ namespace EasySave_GUI.Models
             }
             return size;
         }
-        public static Backup[] fromFile()
+        public static List<Backup> fromFile()
         {
             string Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Log";
             if (!Directory.Exists(Path))
@@ -230,10 +284,10 @@ namespace EasySave_GUI.Models
             if (!File.Exists(Path + $"\\tasks.json"))
             {
                 File.Create(Path + $"\\tasks.json").Dispose();
-                return new Backup[0];
+                return new List<Backup>();
             }
-
-            return JsonConvert.DeserializeObject<Backup[]>(File.ReadAllText(Path + $"\\tasks.json")) ?? new Backup[0]; ;
+            List<Backup> tasks = new List<Backup>(JsonConvert.DeserializeObject<Backup[]>(File.ReadAllText(Path + $"\\tasks.json")));
+            return tasks;
         }
     }
 }

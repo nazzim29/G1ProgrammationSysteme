@@ -25,7 +25,6 @@ namespace EasySave_GUI
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = new ViewModel();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

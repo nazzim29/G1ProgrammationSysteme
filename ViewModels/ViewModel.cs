@@ -112,6 +112,25 @@ namespace EasySave_GUI.ViewModels
         private ICommand _addTaskCommand;
         private ICommand _deleteTaskCommand;
         private ICommand _LaunchCommand;
+        private ICommand _ChangeModeToSimultaneCommand;
+        private ICommand _ChangeModeToSequentielCommand;
+
+        public ICommand ChangeModeToSimultaneCommand
+        {
+            get
+            {
+                if (_ChangeModeToSimultaneCommand == null) _ChangeModeToSimultaneCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.simultane),(object p) => Preferences.Mode != CopyMode.simultane && Q.Count() == 0);
+                return _ChangeModeToSimultaneCommand;
+            }
+        }
+        public ICommand ChangeModeToSequentielCommand
+        {
+            get
+            {
+                if (_ChangeModeToSequentielCommand == null) _ChangeModeToSequentielCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.sequentiel),(object p) => Preferences.Mode != CopyMode.sequentiel && Q.Count() == 0);
+                return _ChangeModeToSequentielCommand;
+            }
+        }
         public ICommand ChangeTypeCommand
         {
             get
@@ -150,6 +169,11 @@ namespace EasySave_GUI.ViewModels
                 return _LaunchCommand;
             }
         }
+        public void ChangeCopyMode(CopyMode m)
+        {
+            if (Preferences.Mode == m) return;
+            Preferences.Mode = m;
+        }
         public void AddTask()
         {
             this.Backups.Add(new Backup
@@ -170,28 +194,36 @@ namespace EasySave_GUI.ViewModels
         }
         private void Launch(bool next=false)
         {
+
             CanLaunch = false;
             if (Preferences.Mode == CopyMode.sequentiel)
             {
-                if (next && Q.Count() != 0)
+                    if (next)
+                    {
+                        if(Q.Count() != 0) Q[0].Start(LogService);
+                        return;
+                    }
+                if(!Q.Contains(Backup))
                 {
-                    Q[0].Start();
-                    return;
-                }
-                Backup.PropertyChanged += LaunchNext;
-                Q.Add(Backup);
-                if (Q.Count() == 1)
-                {
-                    Q[0].Start();
-                    return;
+                    Backup.PropertyChanged += LaunchNext;
+                    Q.Add(Backup);
+                    Backup.State = BackupState.En_Attente;
+                    if (Q.Count() == 1)
+                    {
+                        Q[0].Start(LogService);
+                        return;
+                    }
                 }
             }
             else
             {
-
+                if (!Q.Contains(Backup))
+                {
+                    Q.Add(Backup);
+                    Backup.Start(LogService);
+                }
             }
         }
-
         private void LaunchNext(object? sender, PropertyChangedEventArgs e)
         {
             if ((sender as Backup).State == BackupState.Finie)
