@@ -194,7 +194,7 @@
                             Content="Quitter"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command=""/>
+                            Command="" Click="Button_Click_2"/>
                 </StackPanel>
 
             </StackPanel>
