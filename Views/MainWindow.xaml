@@ -47,7 +47,7 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     BorderThickness="0" 
-                    Padding="-4" Grid.Column="1" Style="{StaticResource nohover}" Click="Button_Click_3" Command="{Binding ChangeLanguageCommand}">
+                    Padding="-4" Grid.Column="1" Style="{StaticResource nohover}" Click="Button_Click_3" Command="{Binding ChangeLanguageCommand}" Cursor="Hand">
                 <Image Grid.Row="0" Grid.Column="1"
                    Source="/image/langue.png"
                    HorizontalAlignment="Center" Height="100" Width="98">
