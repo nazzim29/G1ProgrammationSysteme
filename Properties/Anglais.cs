@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EasySave_GUI.Properties
 {
-    class Anglais : Langue
+    class Anglais 
     {
         public static string backup_name { get { return "Name"; } }
         public static string source { get { return "Source"; } }
@@ -21,7 +21,7 @@ namespace EasySave_GUI.Properties
         public static string simultane { get { return "Simultaneous"; } }
         public override string ToString()
         {
-            return "hadja";
+            return "EN";
         }
     }
 }
