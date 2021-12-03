@@ -43,7 +43,7 @@
                    HorizontalAlignment="Left"
                    Margin="20,30,0,0" />
             <Image Grid.Row="0" Grid.Column="1"
-                   Source="\image\langue.png"
+                   Source="/image/langue.png"
                    HorizontalAlignment="right"
                    Margin="0,30,20,0" MouseDown="Image_MouseDown">
                 <Image.InputBindings>
@@ -70,7 +70,7 @@
                                    Height="40"                       
                                    Foreground="White"
                                    FontFamily="Corbel"
-                                   Content="Appellation"/>
+                                   Content="{DynamicResource backup_name}"/>
                             <TextBox Height="30"
                                      TextWrapping="Wrap"
                                      Width="390"
@@ -284,7 +284,7 @@
                     Padding="330,5,5,0">
                     Launched by
                 </Label>
-                <Image Source="\image\prosoftlogo.png" Height="20" VerticalAlignment="Top"/>
+                <Image Source="pack://application:,,,/EasySave-GUI;component/image/prosoftlogo.png" Height="20" VerticalAlignment="Top"/>
                 <Label
                     Height="20"
                     FontWeight="Bold"

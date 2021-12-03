@@ -22,9 +22,24 @@ namespace EasySave_GUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ResourceDictionary EN,FR;
         public MainWindow()
         {
             InitializeComponent();
+            EN = new ResourceDictionary();
+            FR = new ResourceDictionary();
+            EN.Source = new Uri("..\\Properties\\EN.xaml", UriKind.Relative);
+            FR.Source = new Uri("..\\Properties\\FR.xaml", UriKind.Relative);
+            if((DataContext as ViewModel).Preferences.language == "EN")
+            {
+                this.Resources.MergedDictionaries.Remove(FR);
+                this.Resources.MergedDictionaries.Add(EN);
+            }
+            else
+            {
+                this.Resources.MergedDictionaries.Remove(EN);
+                this.Resources.MergedDictionaries.Add(FR);
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -53,9 +68,16 @@ namespace EasySave_GUI
 
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            ResourceDictionary Ressource = new ResourceDictionary();
-            Ressource.Source = new Uri("Properties/EN.xaml");
-            this.Resources.MergedDictionaries.Add(Ressource);
+            if ((DataContext as ViewModel).Preferences.language == "EN")
+            {
+                this.Resources.MergedDictionaries.Remove(FR);
+                this.Resources.MergedDictionaries.Add(EN);
+            }
+            else
+            {
+                this.Resources.MergedDictionaries.Remove(EN);
+                this.Resources.MergedDictionaries.Add(FR);
+            }
         }
     }
 }
