@@ -158,13 +158,13 @@ namespace EasySave_GUI.ViewModels
         private void Launch(bool next=false)
         {
             CanLaunch = false;
-            if (Preferences.Mode == CopyMode.Sequentielle)
+            /*if (Preferences.Mode == CopyMode.Sequentielle)
             {
                 if (next && Q.Count() != 0) return Q[0].Start();
                 Backup.PropertyChanged += LaunchNext;
                 Q.Add(Backup);
                 if(Q.Count() ==1) return Q[0].Start();
-            }
+            }*/
         }
 
         private void LaunchNext(object? sender, PropertyChangedEventArgs e)
