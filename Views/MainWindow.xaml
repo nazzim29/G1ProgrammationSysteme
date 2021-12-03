@@ -33,7 +33,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="120"/>
-                <RowDefinition Height="280"/>
+                <RowDefinition Height="260"/>
+                <RowDefinition Height="235"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
@@ -53,11 +54,11 @@
                             BorderThickness="6"
                             Margin="10"
                             Width="600"
-                            Height="250"       
+                            Height="240"       
                             Background="#B49CC9"  
                             HorizontalAlignment="Left"
                             VerticalAlignment="top">
-                    <StackPanel Margin="20,8,5,5"
+                    <StackPanel Margin="20,5,5,5"
                                 RenderTransformOrigin="0.5,0.5">
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -88,8 +89,8 @@
                                      FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
-                                    Width="320"
-                                    Margin="91,0,0,0"
+                                    Width="319"
+                                    Margin="92,0,0,0"
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center" 
@@ -199,7 +200,7 @@
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
-                            Margin="10,8"
+                            Margin="10,6"
                             Height="50" 
                             Width="180"
                             FontSize="18"
@@ -211,7 +212,7 @@
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
-                            Margin="10,8"
+                            Margin="10,6"
                             Height="50" 
                             Width="180"
                             FontSize="18"
@@ -223,7 +224,7 @@
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
-                            Margin="10,8"
+                            Margin="10,6"
                             Height="50" 
                             Width="180"
                             FontSize="18"
@@ -247,31 +248,46 @@
                         Background="#fff"  
                         HorizontalAlignment="Left"
                         VerticalAlignment="top">
-            <DataGrid Grid.Row="2" Grid.Column="1" 
-                      x:Name="EasySave"
-                      Height="200" Width="785" 
-                      HorizontalAlignment="Left" 
-                      VerticalAlignment="Top" 
-                      RowHeight="25" 
-                      FontSize="15"
-                      Background="Transparent" 
-                      RowBackground="White"
-                      GridLinesVisibility="All" 
-                      HeadersVisibility="All"  
-                      BorderBrush="#F0F0F0" 
-                      BorderThickness="0" 
-                      HorizontalScrollBarVisibility="Visible" 
-                      SelectionMode="Single"  
-                      Foreground="#2F203C"
-                      HorizontalGridLinesBrush="#F0F0F0"
-                      VerticalGridLinesBrush="#F0F0F0"
-                      ItemsSource="{Binding Backups, Mode=TwoWay}"   
-                      SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True">
-            </DataGrid>
+                    <DataGrid Grid.Row="2" Grid.Column="1" 
+                              x:Name="EasySave"
+                              Height="200" Width="785" 
+                              HorizontalAlignment="Left" 
+                              VerticalAlignment="Top" 
+                              RowHeight="25" 
+                              FontSize="15"
+                              Background="Transparent" 
+                              RowBackground="White"
+                              GridLinesVisibility="All" 
+                              HeadersVisibility="All"  
+                              BorderBrush="#F0F0F0" 
+                              BorderThickness="0" 
+                              HorizontalScrollBarVisibility="Visible" 
+                              SelectionMode="Single"  
+                              Foreground="#2F203C"
+                              HorizontalGridLinesBrush="#F0F0F0"
+                              VerticalGridLinesBrush="#F0F0F0"
+                              ItemsSource="{Binding Backups, Mode=TwoWay}"   
+                              SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True">
+                    </DataGrid>
                 </Border>
+            </StackPanel>
+            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal">
+                <Label
+                    Height="20"
+                    FontWeight="Bold"
+                    VerticalAlignment="Top"
+                    Padding="330,5,5,0">
+                    Launched by
+                </Label>
+                <Image Source="\image\prosoftlogo.png" Height="20" VerticalAlignment="Top"/>
+                <Label
+                    Height="20"
+                    FontWeight="Bold"
+                    VerticalAlignment="Top"
+                    Padding="5,5,0,0">
+                    Prosoft
+                </Label>
             </StackPanel>
         </Grid>
     </Border>
-
-
 </Window>
