@@ -1,4 +1,5 @@
 ﻿using EasySave_GUI.ViewModels;
+using Ookii.Dialogs.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,14 @@ namespace EasySave_GUI
             DataContext = new ViewModel();
         }
 
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dlg = new VistaFolderBrowserDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                (DataContext as ViewModel).NewBackup.Source = dlg.SelectedPath;
+            }
 
+        }
     }
 }
