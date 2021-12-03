@@ -22,7 +22,7 @@ namespace EasySave_GUI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private Preferences prefences;
+        private Preferences preferences;
         private Backup _backup;
         private Backup _newbackup;
         private Backup _runningTask;
