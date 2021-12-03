@@ -1,5 +1,6 @@
 ﻿using EasySave_GUI.Libs;
 using EasySave_GUI.Models;
+using EasySave_GUI.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +22,7 @@ namespace EasySave_GUI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        private Preferences prefences;
         private Backup _backup;
         private Backup _newbackup;
         private Backup _runningTask;
@@ -158,7 +160,7 @@ namespace EasySave_GUI.ViewModels
         private void Launch(bool next=false)
         {
             CanLaunch = false;
-            /*if (Preferences.Mode == CopyMode.Sequentielle)
+            /*if (preferences.Mode == CopyMode.Sequentielle)
             {
                 if (next && Q.Count() != 0) return Q[0].Start();
                 Backup.PropertyChanged += LaunchNext;
