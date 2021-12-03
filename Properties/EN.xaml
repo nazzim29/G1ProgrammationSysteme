@@ -5,4 +5,14 @@
 
     <system:String x:Key="backup_name">Name</system:String>
     <system:String x:Key="source">Source</system:String>
+    <system:String x:Key="destination">Destination</system:String>
+    <system:String x:Key="type">Type</system:String>
+    <system:String x:Key="crypt">Encryption</system:String>
+    <system:String x:Key="ajouter">Add</system:String>
+    <system:String x:Key="lancer">Launch</system:String>
+    <system:String x:Key="supp">Delete</system:String>
+    <system:String x:Key="quitter">Exit</system:String>
+    <system:String x:Key="sequentiel">One By one</system:String>
+    <system:String x:Key="simultane">Simultaneous</system:String>
+    
 </ResourceDictionary>

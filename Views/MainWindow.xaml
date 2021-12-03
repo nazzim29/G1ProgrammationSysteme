@@ -67,7 +67,8 @@
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
                                    FontSize="18"
-                                   Height="40"                       
+                                   Height="40"
+                                   Width="100"
                                    Foreground="White"
                                    FontFamily="Corbel"
                                    Content="{DynamicResource backup_name}"/>
@@ -88,7 +89,7 @@
                                    FontSize="18"
                                    Height="40"                       
                                    Foreground="White"
-                                   Content="Source"/>
+                                   Content="{DynamicResource source}"/>
                             <TextBox Height="30"
                                      FontFamily="Corbel"
                                     TextWrapping="NoWrap"
@@ -114,7 +115,7 @@
                                     FontSize="18"
                                     Height="40"                       
                                     Foreground="White"
-                                    Content="Destination"/>
+                                    Content="{DynamicResource destination}"/>
                             <TextBox Height="30"
                                      FontFamily="Corbel"
                                     TextWrapping="NoWrap"
@@ -139,7 +140,7 @@
                                    FontSize="18"
                                    Height="40"                       
                                    Foreground="White"
-                                   Content="Type" Width="107"/>
+                                   Content="{DynamicResource type}" Width="107"/>
                             <ComboBox Background="White" 
                                       FontFamily="Corbel"
                                       FontSize="15"
@@ -158,7 +159,7 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content="Séquentielle" Command ="{Binding ChangeModeToSequentielCommand}"/>
+                                    Content="{DynamicResource sequentiel}" Command ="{Binding ChangeModeToSequentielCommand}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -166,7 +167,7 @@
                                    FontSize="18"
                                    Height="40"                       
                                    Foreground="White"
-                                   Content="Cryptage" Width="107"/>
+                                   Content="{DynamicResource crypt}" Width="107"/>
                             <TextBox Height="30"
                                      FontFamily="Corbel"
                                      TextWrapping="Wrap"
@@ -184,7 +185,7 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content="Simultané"
+                                    Content="{DynamicResource simultane}"
                                     Command="{Binding ChangeModeToSimultaneCommand}"/>
                         </StackPanel>
                     </StackPanel>
@@ -197,7 +198,7 @@
                             Width="180"
                             FontSize="18"
                             Foreground="White"
-                            Content="Ajouter"
+                            Content="{DynamicResource ajouter}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}"
                             Command="{Binding AddTaskCommand}" 
@@ -210,7 +211,7 @@
                             Width="180"
                             FontSize="18"
                             Foreground="White"
-                            Content="Lancer"
+                            Content="{DynamicResource lancer}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
                             Command="{Binding LaunchCommand}"/>
@@ -222,7 +223,7 @@
                             Width="180"
                             FontSize="18"
                             Foreground="White"
-                            Content="Supprimer"
+                            Content="{DynamicResource supp}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
                             Command="{Binding DeleteTaskCommand}"/>
@@ -234,7 +235,7 @@
                             Width="180"
                             FontSize="18"
                             Foreground="White"
-                            Content="Quitter"
+                            Content="{DynamicResource quitter}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
                             Command="" Click="Button_Click_2" IsEnabled="{Binding canChangeparam}"/>
