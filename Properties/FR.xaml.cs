@@ -19,9 +19,6 @@ namespace EasySave_GUI.Properties
     /// </summary>
     public partial class FR : Window
     {
-        public FR()
-        {
-            InitializeComponent();
-        }
+      
     }
 }
