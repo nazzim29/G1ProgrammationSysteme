@@ -73,11 +73,11 @@ To open the application, download the executable file by following the link:
 
 
 For any information please refer to the user guide:
-- [User Documentation V2.0](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/Documentation%20Version%202.0.pdf)
+[User Documentation V2.0](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/Documentation%20Version%202.0.pdf)
 
 ## Project Status
 - Version 1.0 : Done :white_check_mark: 
-- Version 1.1 : In progress
+- Version 1.1 : In progress :hourglass_flowing_sand:
 - Version 2.0 : Done :white_check_mark: 
 
 
