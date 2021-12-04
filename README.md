@@ -44,15 +44,22 @@ To ensure that our work can be taken over by other teams, we must work within ce
 - GitHub 
 
 ## Features
-- EasySave version 1.0 is a Console application using . Net Core.
+EasySave version 1.0
+- EasySave version 1.0 is a Console application using .Net Core.
 - It allows you to create up to 5 backup jobs.
-- The software is usable by English-speaking and French-speaking users
+- The software is usable by English and French speaking users
 - The user may request the execution of one of the backup jobs or the sequential execution of all the jobs.
 - All items in the source directory are concerned by the backup.
 - The software writes in real time in a daily log file the history of the actions of the backup jobs.
 - The software records in real time, in a single file, the progress of the backup work.
 - The software saves in real time, in a single file, the list of backup tasks
 - The files (daily log, status and task list) and configuration files are in JSON format.
+
+EasySave version 2.0
+- EasySave version 2.0 is a desktop client application using WPF and .Net Core.
+- It allows you to create backup jobs with no limitation.
+- The software is able to encrypt the files (extensions defined by the user) using the CryptoSoft software.
+- If the presence of business software is detected, the software must prevent the start of a backup job.
 
 ## GitHub 
 To clone this repository use the following command:
@@ -67,10 +74,10 @@ To open the application, download the executable file by following the link:
 
 For any information please refer to the user guide:
 - [Documentation User EN version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/UserDocumentation/DocumentationEN_Version_1.0.pdf)
-- [Documentation User FR version](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/UserDocumentation/DocumentationFR_Version_1.0.pdf)
 
 ## Project Status
 Version 1.0 : Done :white_check_mark: 
+Version 2.0 : Done :white_check_mark: 
 
 
 ## Created by 
