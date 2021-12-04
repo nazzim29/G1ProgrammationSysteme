@@ -260,7 +260,8 @@ namespace EasySave_GUI.ViewModels
             Preferences = Preferences.fromFile();
             processStartEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStartTrace");
             processStopEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStopTrace");
-            CanLaunch = true;
+            var fd = System.Diagnostics.Process.GetProcesses().Select(el=>el.ProcessName).ToList();
+            CanLaunch = !fd.Contains(Preferences.LogicielMetier.Replace(".exe",""));
             processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
             processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
             processStartEvent.Start();
