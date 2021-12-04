@@ -14,5 +14,8 @@
     <system:String x:Key="quitter">Exit</system:String>
     <system:String x:Key="sequentiel">One By one</system:String>
     <system:String x:Key="simultane">Simultaneous</system:String>
-    
+    <system:String x:Key="name">Name</system:String>
+    <system:String x:Key="state">State</system:String>
+    <system:String x:Key="nbfile">Nb Files</system:String>
+    <system:String x:Key="nbfileremaining">Remaining Files</system:String>
 </ResourceDictionary>

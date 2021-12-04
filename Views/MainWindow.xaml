@@ -51,7 +51,7 @@
                 <Image Grid.Row="0" Grid.Column="1"
                    Source="/image/langue.png"
                    HorizontalAlignment="Center" Height="100" Width="98">
-            </Image>
+                </Image>
             </Button>
             <!--<Image Grid.Row="0" Grid.Column="1"
                    Source="/image/langue.png"
@@ -284,7 +284,45 @@
                               HorizontalGridLinesBrush="#F0F0F0"
                               VerticalGridLinesBrush="#F0F0F0"
                               ItemsSource="{Binding Backups, Mode=TwoWay}"   
-                              SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True">
+                              SelectedItem="{Binding Backup}" CurrentItem="{Binding Backup}" IsReadOnly="True" AutoGenerateColumns="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Name}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource name}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn  Binding="{Binding Source}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource source}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Destination}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource destination}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Type}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource type}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding State}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource state}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding NbFile, Mode=OneWay}" >
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource nbfile}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding NbFileRemaining}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource nbfileremaining}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn/>
+                        </DataGrid.Columns>
                     </DataGrid>
                 </Border>
             </StackPanel>
