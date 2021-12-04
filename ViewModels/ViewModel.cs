@@ -55,7 +55,6 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_CanLaunch == null) _CanLaunch = true;
                 return _CanLaunch;
             }
             set
@@ -208,10 +207,9 @@ namespace EasySave_GUI.ViewModels
         private void Launch(bool next=false)
         {
             if (!CanLaunch) return;
-            CanLaunch = false;
             if (Preferences.Mode == CopyMode.sequentiel)
             {
-                if (next&&CanLaunch)
+                if (next)
                 {
                     if(Q.Count() != 0) Q[0].Start(LogService,Preferences.CryptExt);
                     return;
@@ -328,9 +326,9 @@ namespace EasySave_GUI.ViewModels
 
         private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Backup" || e.PropertyName == "Q")
+            if (e.PropertyName == "Backup")
             {
-                if(Backup == RunningTask || Q.Contains(Backup)) CanLaunch = false;
+                if(Q.Contains(Backup)) CanLaunch = false;
             }
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
