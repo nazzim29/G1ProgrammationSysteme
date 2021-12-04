@@ -118,7 +118,7 @@
                                     FontSize="18"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content=". . ." Click="Button_Click"/>
+                                    Content=". . ." Click="Button_Click" Cursor="Hand"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -143,7 +143,7 @@
                                         FontSize="18"
                                         Foreground="White"
                                         Style="{StaticResource brosehover}" 
-                                        Content=". . ." Click="Button_Click_1"/>
+                                        Content=". . ." Click="Button_Click_1" Cursor="Hand"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -170,7 +170,7 @@
                                     FontSize="16"
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
-                                    Content="{DynamicResource sequentiel}" Command ="{Binding ChangeModeToSequentielCommand}"/>
+                                    Content="{DynamicResource sequentiel}" Command ="{Binding ChangeModeToSequentielCommand}" Cursor="Hand"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
@@ -197,7 +197,7 @@
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
                                     Content="{DynamicResource simultane}"
-                                    Command="{Binding ChangeModeToSimultaneCommand}"/>
+                                    Command="{Binding ChangeModeToSimultaneCommand}" Cursor="Hand"/>
                         </StackPanel>
                     </StackPanel>
                 </Border>
@@ -213,7 +213,7 @@
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}"
                             Command="{Binding AddTaskCommand}" 
-                            CommandParameter="{Binding NewBackup}"/>
+                            CommandParameter="{Binding NewBackup}" Cursor="Hand"/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
@@ -225,7 +225,7 @@
                             Content="{DynamicResource lancer}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="{Binding LaunchCommand}"/>
+                            Command="{Binding LaunchCommand}" Cursor=""/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
@@ -237,7 +237,7 @@
                             Content="{DynamicResource supp}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="{Binding DeleteTaskCommand}"/>
+                            Command="{Binding DeleteTaskCommand}" Cursor="Hand"/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
@@ -249,7 +249,7 @@
                             Content="{DynamicResource quitter}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="" Click="Button_Click_2" IsEnabled="{Binding canChangeparam}"/>
+                            Command="" Click="Button_Click_2" IsEnabled="{Binding canChangeparam}" Cursor="Hand"/>
                 </StackPanel>
 
             </StackPanel>
