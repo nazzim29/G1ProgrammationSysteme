@@ -44,7 +44,7 @@ namespace EasySave_GUI.Models
             string pathdest = el.Replace(this.Source, this.Destination);
             if (File.Exists(pathdest))
             {
-                var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Destination + "\\cryptedfiles.json")));
+                var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(Destination + "\\cryptedfiles.json"));
                 if (cryptedFiles.Contains(el))
                 {
                     return true;
@@ -368,13 +368,11 @@ namespace EasySave_GUI.Models
             p.StartInfo.Arguments = $"{file.FullName} {file.FullName.Replace(Source, Destination)}";
             p.Start();
             p.WaitForExit();
-            if(p.ExitCode == 0)
+            if(p.ExitCode != 0)
             {
-                NbFileRemaining--;
-                return p.TotalProcessorTime.TotalMilliseconds;
-
-            }
                 return (double)p.ExitCode;
+            }
+            return p.TotalProcessorTime.TotalMilliseconds;
 
         }
 
