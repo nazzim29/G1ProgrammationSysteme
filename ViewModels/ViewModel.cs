@@ -16,14 +16,14 @@ namespace EasySave_GUI.ViewModels
     public class ViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public Icommand ChangeTypeCommand;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
         private Backup _backup;
         private ObservableCollection<Backup> _backups;
-        private ICommand _start_command;
+        public ICommand _start_command;
 
         public Backup Backup
         {
@@ -51,10 +51,14 @@ namespace EasySave_GUI.ViewModels
             {
                 if (_start_command == null)
                 {
-                    _start_command = new RelayCommand(param => Start(), null);
+                    _start_command = new RelayCommand(ChangeType, ()=>Bakcup != null);
                 }
                 return _start_command;
             }
+        }
+        private void ChangeType(object parameter)
+        {
+           Backup.Type = BackupType.Complete;
         }
         private void Start()
         {

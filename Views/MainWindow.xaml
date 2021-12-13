@@ -13,7 +13,15 @@
     </Window.DataContext>
     <Grid x:Name="EasySave">
 
-        <DataGrid ItemsSource="{Binding Backups}" AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding Backups}" AutoGenerateColumns="False" SelectedItem="{Binding Backup}" IsReadOnly="True" SelectionMode="Single" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,155">
+            <DataGrid.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform AngleX="-0.21"/>
+                    <RotateTransform/>
+                    <TranslateTransform X="-0.796"/>
+                </TransformGroup>
+            </DataGrid.RenderTransform>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="name" Binding="{Binding Name}"/>
                 <DataGridTextColumn Header="source" Binding="{Binding Source}"/>
@@ -22,5 +30,6 @@
                 <DataGridTextColumn Header="state" Binding="{Binding State}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <TextBox HorizontalAlignment="Left" Height="19" Margin="38,296,0,0" TextWrapping="Wrap" Text="{Binding Backup.Name}" VerticalAlignment="Top" Width="101"/>
     </Grid>
 </Window>
