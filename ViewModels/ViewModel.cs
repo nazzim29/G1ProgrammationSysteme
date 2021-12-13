@@ -16,7 +16,7 @@ namespace EasySave_GUI.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private ManagementEventWatcher processStartEvent;
         private ManagementEventWatcher processStopEvent;
-        public Icommand ChangeTypeCommand;
+        public ICommand ChangeTypeCommand;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -132,17 +132,6 @@ namespace EasySave_GUI.ViewModels
                 return _ChangeModeToSequentielCommand;
             }
         }
-        public ICommand ChangeTypeCommand
-        {
-            get
-            {
-                if (_changetype == null)
-                {
-                    _changetype = new RelayCommand(()=>ChangeType(), (object sender)=>true);
-                }
-                return _changetype;
-            }
-        }
         public ICommand AddTaskCommand
         {
             get
@@ -202,10 +191,6 @@ namespace EasySave_GUI.ViewModels
                 Source = NewBackup.Source,
                 Type = NewBackup.Type
             });
-        }
-        private void ChangeType()
-        {
-            Backup.Type = BackupType.Complete;
         }
         private void DeleteTask()
         {

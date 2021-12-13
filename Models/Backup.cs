@@ -129,18 +129,8 @@ namespace EasySave_GUI.Models
                 OnPropertyChanged("Type");
             }
         }
-        private void onchange(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "source" || e.PropertyName == "destination" || e.PropertyName == "type")
-            {
-                //get all the files of a directory
-                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
-                NbFileRemaining = NbFile;
-                this.State = BackupState.Inactif;
 
 
-            }
-        }
         public BackupState State
         {
             get { return _state; }
@@ -250,36 +240,7 @@ namespace EasySave_GUI.Models
             
             return "";
         }
-        private bool isEligible(string el)
-        {
-            if (this.Type == BackupType.Complete)
-            {
-                return true;
-            }
-            string cryptedExtensions = GetCryptedExtension();
-            string pathdest = el.Replace(this.Source, this.Destination);
-            if (File.Exists(pathdest))
-            {
-                using (var sourcef = File.OpenRead(el))
-                {
-                    //on ouvre le fichier destination
-                    //opens the destination file
-                    using (var destinationf = File.OpenRead(pathdest))
-                    {
-                        var hash1 = BitConverter.ToString(MD5.Create().ComputeHash(sourcef));//we hash the content of the source file//on hash le contenu du fichier source
-                        var hash2 = BitConverter.ToString(MD5.Create().ComputeHash(destinationf));//we hash the content of the destination file;//on hash le contenu du fichier destination
-
-                        //if the hash is the same we move to the next iteration without making a backup
-                        //si le hash est le meme on saute a l'itération suivante sans faire de sauvegarde
-                        if (hash1 == hash2)
-                        {
-                            return false; ;
-                        };
-                    }
-                }
-            }
-            return true;
-        }
+       
         private void onchange(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "source" || e.PropertyName == "destination" || e.PropertyName == "type")
