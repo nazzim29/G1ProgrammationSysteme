@@ -15,19 +15,10 @@ using System.Windows.Shapes;
 namespace EasySave_GUI.Properties
 {
     /// <summary>
-    /// Logique d'interaction pour EN.xaml
+    /// Logique d'interaction pour FR.xaml
     /// </summary>
-    public partial class EN : Window
+    public partial class FR : Window
     {
-<<<<<<< HEAD:Views/MainWindow.xaml.cs
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-
-=======
-       
->>>>>>> 6aa65942fbbdf3b7b9119c1cfa097332d7e5ce11:Properties/EN.xaml.cs
+      
     }
 }

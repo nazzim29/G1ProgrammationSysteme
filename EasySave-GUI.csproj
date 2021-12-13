@@ -6,10 +6,20 @@
     <RootNamespace>EasySave_GUI</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+	
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CryptoSoft">
+      <HintPath>..\CryptoSoft\bin\Debug\net5.0\CryptoSoft.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
