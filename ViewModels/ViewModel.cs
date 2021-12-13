@@ -8,6 +8,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Management;
+using System.Diagnostics;
+using System;
 
 namespace EasySave_GUI.ViewModels
 {
@@ -23,14 +25,8 @@ namespace EasySave_GUI.ViewModels
         private Preferences _preferences;
         private Backup _backup;
         private Backup _newbackup;
-        private Backup _runningTask;
-        private ObservableCollection<Backup> _q;
         private bool _CanLaunch;
-        private ObservableCollection<Backup> Q
-        {
-            get { return _q; }
-            set { _q = value; OnPropertyChanged("Q"); }
-        }
+
         public Preferences Preferences
         {
             get
@@ -42,15 +38,7 @@ namespace EasySave_GUI.ViewModels
                 _preferences = value; OnPropertyChanged("Preferences");
             }
         }
-        private Backup RunningTask
-        {
-            get
-            {
-                if(_runningTask == null) _runningTask = new Backup();
-                return _runningTask;
-            }
-            set { _runningTask = value; OnPropertyChanged("RunningTask"); }
-        }
+
         public bool CanLaunch
         {
             get
@@ -113,22 +101,7 @@ namespace EasySave_GUI.ViewModels
         private ICommand _ChangeModeToSequentielCommand;
         private ICommand _changeLanguageCommand;
 
-        public ICommand ChangeModeToSimultaneCommand
-        {
-            get
-            {
-                if (_ChangeModeToSimultaneCommand == null) _ChangeModeToSimultaneCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.simultane),(object p) => Preferences.Mode != CopyMode.simultane && Q.Count() == 0);
-                return _ChangeModeToSimultaneCommand;
-            }
-        }
-        public ICommand ChangeModeToSequentielCommand
-        {
-            get
-            {
-                if (_ChangeModeToSequentielCommand == null) _ChangeModeToSequentielCommand = new RelayCommand(() => ChangeCopyMode(CopyMode.sequentiel),(object p) => Preferences.Mode != CopyMode.sequentiel && Q.Count() == 0);
-                return _ChangeModeToSequentielCommand;
-            }
-        }
+        
         public ICommand ChangeTypeCommand
         {
             get
@@ -180,12 +153,6 @@ namespace EasySave_GUI.ViewModels
         {
             Preferences.language = Preferences.language.ToString() == "EN" ? "FR" : "EN";
         }
-
-        public void ChangeCopyMode(CopyMode m)
-        {
-            if (Preferences.Mode == m) return;
-            Preferences.Mode = m;
-        }
         public void AddTask()
         {
             this.Backups.Add(new Backup
@@ -204,52 +171,13 @@ namespace EasySave_GUI.ViewModels
         {
             Backups.Remove(Backup);
         }
-        private void Launch(bool next=false)
+        private void Launch()
         {
             if (!CanLaunch) return;
-            if (Preferences.Mode == CopyMode.sequentiel)
+            
+            if (Backup.State != BackupState.En_Cours)
             {
-                if (next)
-                {
-                    if(Q.Count() != 0) Q[0].Start(LogService,Preferences.CryptExt);
-                    return;
-                }
-                if(!Q.Contains(Backup))
-                {
-                    Backup.PropertyChanged += LaunchNext;
-                    Q.Add(Backup);
-                    Backup.State = BackupState.En_Attente;
-                    if (Q.Count() == 1)
-                    {
-                        Q[0].Start(LogService,Preferences.CryptExt);
-                        return;
-                    }
-                }
-            }
-            else
-            {
-                if (next) return;
-                if (!Q.Contains(Backup))
-                {
-                    Backup.PropertyChanged += LaunchNext;
-                    Q.Add(Backup);
-                    Backup.Start(LogService,Preferences.CryptExt);
-                }
-            }
-        }
-        public bool canChangeparam
-        {
-            get
-            {
-                return Q.Count() == 0;
-            }
-        }
-        private void LaunchNext(object? sender, PropertyChangedEventArgs e)
-        {
-            if ((sender as Backup).State == BackupState.Finie)
-            {
-                Q.Remove((sender as Backup));
-                Launch(true);
+                Backup.Start(LogService,Preferences.CryptExt);
             }
         }
 
@@ -262,11 +190,16 @@ namespace EasySave_GUI.ViewModels
             CanLaunch = !fd.Contains(Preferences.LogicielMetier.Replace(".exe",""));
             processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
             processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
+            try
+            {
+
             processStartEvent.Start();
             processStopEvent.Start();
+            }catch(ManagementException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
-            Q = new ObservableCollection<Backup>();
-            Q.CollectionChanged += new NotifyCollectionChangedEventHandler(Changed_q);
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
             PropertyChanged += SaveTasks;
             PropertyChanged += checklaunch;
@@ -279,25 +212,14 @@ namespace EasySave_GUI.ViewModels
             if(proname == Preferences.LogicielMetier)
             {
                 CanLaunch = true;
-                if (Preferences.Mode == CopyMode.sequentiel)
+                foreach (var i in Backups)
                 {
-                    if (Q[0].State == BackupState.En_Attente)
+                    if (i.State == BackupState.En_Attente)
                     {
-                        Launch(true);
+                        i.State = BackupState.En_Cours;
+                        i.Thread.Resume();
                     }
                 }
-                else
-                {
-                    foreach (var i in Q)
-                    {
-                        if (i.State == BackupState.En_Attente)
-                        {
-                            i.State = BackupState.En_Cours;
-                            i.Thread.Resume();
-                        }
-                    }
-                }
-
             }
         }
 
@@ -307,28 +229,24 @@ namespace EasySave_GUI.ViewModels
             if(proname == Preferences.LogicielMetier)
             {
                 CanLaunch = false;
-                if(Preferences.Mode != CopyMode.sequentiel)
+                foreach(var i  in Backups)
                 {
-                    foreach(var i  in Q)
+                    if(i.State == BackupState.En_Cours)
                     {
-                        i.State = BackupState.En_Attente;
-                        i.Thread.Suspend();
+                    i.State = BackupState.En_Attente;
+                    i.Thread.Suspend();
                     }
                 }
             }
         }
 
-        private void Changed_q(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            OnPropertyChanged("Q");
-            OnPropertyChanged("canChangeparam");
-        }
 
         private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Backup")
             {
-                if(Q.Contains(Backup)) CanLaunch = false;
+                if (Backup.State == BackupState.En_Cours) CanLaunch = false;
+                else CanLaunch = true;
             }
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
@@ -344,24 +262,6 @@ namespace EasySave_GUI.ViewModels
                     (item as Backup).PropertyChanged += SaveTasks;
                 }
             }
-            //foreach (var (task, i) in tasks.Select((el, i) => (el, i)))
-            //{
-            //    task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
-            //    {
-            //        int fr = (int)sender.GetType().GetField("nb_file_remaining").GetValue(sender);
-            //        string state = (string)sender.GetType().GetProperty("state").GetValue(sender);
-            //        if (preferences.ModeCopy == ModeCopy.sequentiel)
-            //        {
-            //            if (state == "Finished" && fr == 0 && i < tasks.Count())
-            //            {
-            //                running_tasks.Clear();
-            //                var t = tasks[i + 1].Start(LogService);
-            //                t.Name = tasks[i + 1].name;
-            //                running_tasks.Add(t);
-            //                t.Start();
-            //            }
-            //        }
-            //    };
             OnPropertyChanged("Backups");
         }
 

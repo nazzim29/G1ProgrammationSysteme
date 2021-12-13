@@ -10,11 +10,6 @@ using System.Threading.Tasks;
 
 namespace EasySave_GUI.Properties
 {
-    public enum CopyMode : ushort
-    {
-        sequentiel = 1,
-        simultane = 2
-    }
     public class Preferences : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -25,7 +20,6 @@ namespace EasySave_GUI.Properties
         }
         private static readonly string PrefPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EasySave\\Preferences";//the path of the preferences config file
         private string _language;
-        private CopyMode _Mode;
         private string _cryptExt;
         private string _logicielMetier;
         public string LogicielMetier
@@ -43,11 +37,7 @@ namespace EasySave_GUI.Properties
             get { return _cryptExt; }
             set { _cryptExt = value; OnPropertyChanged("CryptExt"); }
         }
-        public CopyMode Mode
-        {
-            get { return _Mode; }
-            set { _Mode = value; OnPropertyChanged("Mode"); }
-        }
+       
         public string language
         {
             get { return _language; }
@@ -70,11 +60,10 @@ namespace EasySave_GUI.Properties
             var pref = JsonConvert.DeserializeObject<Preferences>(File.ReadAllText(PrefPath + "\\config.json"));
             return pref;
         }
-        public Preferences(string _language = "EN", CopyMode mode = CopyMode.simultane,string _ext = "",string _p = "notepad.exe")
+        public Preferences(string _language = "EN",string _ext = "",string _p = "notepad.exe")
         {
             PropertyChanged += Save;
             this._language = _language;
-            this._Mode = mode;
             this._cryptExt = _ext;
             this._logicielMetier = _p;
         }
@@ -89,7 +78,7 @@ namespace EasySave_GUI.Properties
             {
                 File.Create(PrefPath + "\\config.json").Dispose();
             }
-            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language, Mode = this.Mode,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier }, Formatting.Indented));
+            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier }, Formatting.Indented));
         }
     }
 }

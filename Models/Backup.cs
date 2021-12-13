@@ -23,7 +23,8 @@ namespace EasySave_GUI.Models
         Inactif,
         En_Cours,
         En_Attente,
-        Finie
+        Finie,
+        Erreur
     }
     public class Backup : BaseModel
     {
@@ -215,11 +216,14 @@ namespace EasySave_GUI.Models
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
         public void Start(LogService log,string cryptExt)
         {
+                try
+                {
             var dir = new DirectoryInfo(Source);
             Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
             
             Thread = new Thread(delegate ()
             {
+
                 this.State = BackupState.En_Cours;
                 CreateDirs(this.Destination, dir.GetDirectories());//recreates the structure of the directory
                 Stopwatch timer = new Stopwatch();
@@ -255,6 +259,11 @@ namespace EasySave_GUI.Models
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
             });
             Thread.Start();
+                }catch(Exception e)
+            {
+                Debug.WriteLine(e);
+                this.State = BackupState.Erreur;
+            }
         }
 
         private double CryptFile(FileInfo file)
