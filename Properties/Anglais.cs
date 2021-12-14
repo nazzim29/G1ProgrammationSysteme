@@ -53,6 +53,7 @@ namespace EasySave.Properties
         public static string sequentiel { get { return "One by one"; } }
         public static string simultane { get { return "Simultaneous"; } }
         public static string extensionlog { get { return "    7- Choose the Log file's extension\t"; } }
+        public static string chooseextension { get { return "  Log files extenison: "; } }
 
 
     }

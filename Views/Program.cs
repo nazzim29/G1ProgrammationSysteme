@@ -217,6 +217,14 @@ namespace EasySave.Views
         {
             vm.ChangeLanguage();
         }
+        //method to choose the log file's extension 
+        void LogExtension()
+        {
+            Console.WriteLine(lang.get("chooseextension"));
+            Console.Write(" 1- JSON\n 2- XML\n");
+            Console.Write(lang.get("Tapp_chiffre"));
+            string logextension = Console.ReadLine();
+        }
         //method to manage the menu
         void MenuPrincipale()
         {
@@ -263,7 +271,7 @@ namespace EasySave.Views
                     vm.ChangeCopyMode(vm.preferences.ModeCopy == ModeCopy.sequentiel ? ModeCopy.simultane : ModeCopy.sequentiel);
                     break;
                 case 7:
-                    Console.WriteLine("JSON XML");
+                    LogExtension();
                     break;
                 default:
                     MenuPrincipale();
