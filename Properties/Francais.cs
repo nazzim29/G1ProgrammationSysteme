@@ -52,8 +52,7 @@ namespace EasySave.Properties
         public static string Copy_mode { get { return "\t\t\t6- Changer le mode de copie "; } }
         public static string sequentiel { get { return "Séquentielle"; } }
         public static string simultane { get { return "Simultanée"; } }
-
-
+        public static string extensionlog { get { return "    7- Choisir l'extension du fichier Log\t";  } }
 
     }
 }

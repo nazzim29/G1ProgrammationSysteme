@@ -48,6 +48,7 @@ namespace EasySave.Properties
         public static string Revenir_en_arriere { get; }
         public static string Copy_mode { get; }
         public static string sequentiel { get; }
+        public static string extensionlog { get; }
         
         public string get(string prop)
         {
