@@ -18,5 +18,11 @@
     <system:String x:Key="state">Etat</system:String>
     <system:String x:Key="nbfile">Nb Fichiers</system:String>
     <system:String x:Key="nbfileremaining">Fichiers Restants</system:String>
-   
+    <system:String x:Key="prioritaire">Fichiers prioritaires</system:String>
+    <system:String x:Key="tailleMax">Taille max fichier</system:String>
+    <system:String x:Key="BPMax">Bande passante max</system:String>
+    <system:String x:Key="mdp">Mot de passe pour les utilisateurs distants</system:String>
+    <system:String x:Key="pause">Pause</system:String>
+    <system:String x:Key="stop">Stop</system:String>
+
 </ResourceDictionary>
