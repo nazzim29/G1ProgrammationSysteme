@@ -100,6 +100,18 @@ namespace EasySave_GUI.ViewModels
         private ICommand _ChangeModeToSimultaneCommand;
         private ICommand _ChangeModeToSequentielCommand;
         private ICommand _changeLanguageCommand;
+        private ICommand _PauseTask;
+
+
+
+        public ICommand PauseTask
+        {
+            get
+            {
+                if (_PauseTask == null) _PauseTask = new RelayCommand(() => Backup.Pause(), (object sender) => true);
+                return _PauseTask;
+            }
+        }
 
         
         public ICommand ChangeTypeCommand

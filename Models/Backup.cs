@@ -28,12 +28,15 @@ namespace EasySave_GUI.Models
     }
     public class Backup : BaseModel
     {
+        public EventWaitHandle mre = new AutoResetEvent(false);
         public Thread Thread;
+        private bool resumed = false;
         private string _name, _source, _destination;
         private BackupType _type;
         private BackupState _state;
         private double _nb_file_remaining, _total_size;
         private ObservableCollection<FileInfo> _files;
+        private FileInfo _currentfile;
         
         public event PropertyChangedEventHandler PropertyChanged;
         private bool isEligible(string el)
@@ -45,7 +48,8 @@ namespace EasySave_GUI.Models
             string pathdest = el.Replace(this.Source, this.Destination);
             if (File.Exists(pathdest))
             {
-                var cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Destination + "\\cryptedfiles.json")));
+                var cryptedFiles = new List<string>();
+                if(File.Exists(Destination + "\\cryptedfiles.json")) cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Destination + "\\cryptedfiles.json")));
                 if (cryptedFiles.Contains(el))
                 {
                     return true;
@@ -138,8 +142,6 @@ namespace EasySave_GUI.Models
                 Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
                 NbFileRemaining = NbFile;
                 this.State = BackupState.Inactif;
-
-
             }
         }
         public BackupState State
@@ -212,32 +214,61 @@ namespace EasySave_GUI.Models
                 NbFileRemaining = NbFile;
             }
         }
+        public void Pause()
+        {
+            State = BackupState.En_Attente;
+            mre.Reset();
+        }
+        public void Stop()
+        {
+            State = BackupState.Inactif;
+            mre.Reset();
+        }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
         public void Start(LogService log,string cryptExt)
         {
                 try
                 {
-            var dir = new DirectoryInfo(Source);
-            Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
-            
-            Thread = new Thread(delegate ()
-            {
-
+                    if(State == BackupState.En_Attente)
+                {
+                    resumed = true;
+                    State = BackupState.En_Cours;
+                    mre.Set();
+                    return;
+                }
+                    var dir = new DirectoryInfo(Source);
+                    Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)&& el.Name != "cryptedfiles.json")) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
+                    Thread = new Thread(()=>ThreadProc(dir,cryptExt,log));
+                    Thread.Start();
+                }catch(Exception e)
+                {
+                    Debug.WriteLine(e);
+                    this.State = BackupState.Erreur;
+                }
+        }
+        private void ThreadProc(DirectoryInfo dir,string cryptExt,LogService log)
+        {
+                
                 this.State = BackupState.En_Cours;
                 CreateDirs(this.Destination, dir.GetDirectories());//recreates the structure of the directory
                 Stopwatch timer = new Stopwatch();
                 foreach (var file in Files)
                 {
+                    if (State == BackupState.En_Cours) mre.Set();
+                    mre.WaitOne();
+                    //fileremaining = files - x
+                    //x = files - remaining
+                    if (resumed && Files.IndexOf(_currentfile) + 1 < NbFile - NbFileRemaining) continue;
                     try
                     {
-                        if(new Regex(cryptExt).IsMatch(file.Extension))
+                        if (new Regex(cryptExt).IsMatch(file.Extension))
                         {
                             timer.Start();
                             var gg = CryptFile(file);
                             timer.Stop();
 
-                                log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds,CryptageTime= gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
 
                         }
                         else
@@ -245,33 +276,24 @@ namespace EasySave_GUI.Models
                             timer.Start();
                             Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
                             timer.Stop();
-                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds,CryptageTime= 0, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = 0, Time = DateTime.Now.ToString("G") }, new LogJournalier());
                         }
-                        
+
                     }
-                    catch (Exception ex)
+                    catch (Win32Exception ex)
                     {
+                        Debug.WriteLine(ex);
                         log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
                     }
 
                 }
                 this.State = BackupState.Finie;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
-            });
-            Thread.Start();
-                }catch(Exception e)
-            {
-                Debug.WriteLine(e);
-                this.State = BackupState.Erreur;
-            }
         }
-
         private double CryptFile(FileInfo file)
         {
             var cryptedFiles = new List<string>();
             if (File.Exists(Destination + "\\cryptedfiles.json")) cryptedFiles = new List<string>(JsonConvert.DeserializeObject<string[]>(File.ReadAllText(Destination + "\\cryptedfiles.json")));
-            if(cryptedFiles.Contains(file.FullName.Replace(this.Source, this.Destination))) cryptedFiles.Add(file.FullName.Replace(this.Source, this.Destination));
-            File.WriteAllText($"{Destination}\\cryptedfiles.json", JsonConvert.SerializeObject(cryptedFiles, Formatting.Indented));
             var p = new Process();
             p.StartInfo.FileName = "CryptoSoft.exe";
             p.StartInfo.Arguments = $"{file.FullName} {file.FullName.Replace(Source, Destination)}";
@@ -279,6 +301,8 @@ namespace EasySave_GUI.Models
             p.WaitForExit();
             if(p.ExitCode == 0)
             {
+                if(!cryptedFiles.Contains(file.FullName.Replace(this.Source, this.Destination))) cryptedFiles.Add(file.FullName.Replace(this.Source, this.Destination));
+                File.WriteAllText($"{Destination}\\cryptedfiles.json", JsonConvert.SerializeObject(cryptedFiles, Formatting.Indented));
                 NbFileRemaining--;
                 return p.TotalProcessorTime.TotalMilliseconds;
 

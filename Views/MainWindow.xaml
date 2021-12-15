@@ -162,6 +162,14 @@
                                       BorderBrush="White"
                                       SelectedItem="{Binding NewBackup.Type}" 
                                       ItemsSource="{Binding Source={StaticResource enumValues}}"/>
+                            <Button 
+                                FontFamily="Corbel"
+                                Height="29" 
+                                Width="180"
+                                FontSize="18"
+                                Foreground="White"
+                                FontWeight="Bold"
+                                Style="{StaticResource btnHover}"  Cursor="Hand" Command="{Binding PauseTask, Mode=OneWay}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <Label FontWeight="Bold"
