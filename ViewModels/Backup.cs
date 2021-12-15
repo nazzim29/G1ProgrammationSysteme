@@ -37,7 +37,7 @@ namespace EasySave.ViewModels
             //Dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.
             //tasks is an instance of Travail
             tasks = new ObservableCollection<Travail>();
-            LogService = new LogService();
+            if(preferences.logextension == logextension.json) LogService = new LogService(new JSONStrategy);
             //tasks.CollectionChanged += taskschanged;
         }
         //log state file method, it adds an object that contains task state properties to the state file
