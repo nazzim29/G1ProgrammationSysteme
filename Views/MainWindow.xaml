@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:EasySave_GUI.ViewModels"
         xmlns:Models="clr-namespace:EasySave_GUI.Models"
         mc:Ignorable="d"
-        Height="650" Width="920"
+        Height="720" Width="920"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Transparent"
@@ -33,7 +33,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="120"/>
-                <RowDefinition Height="260"/>
+                <RowDefinition Height="330"/>
                 <RowDefinition Height="235"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
@@ -64,26 +64,28 @@
 
             <StackPanel Grid.Row="1" Grid.Column="1"
                         Orientation="Horizontal">
-                <Border CornerRadius="6"
+                <StackPanel Orientation="Vertical">
+
+                    <Border CornerRadius="6"
                             BorderBrush="#B49CC9"
                             BorderThickness="6"
-                            Margin="10"
+                            Margin="10, 10, 10, 6"
                             Width="600"
-                            Height="240"       
+                            Height="155"       
                             Background="#B49CC9"  
                             HorizontalAlignment="Left"
                             VerticalAlignment="top">
-                    <StackPanel Margin="20,5,5,5"
+                        <StackPanel Margin="20,2,5,2"
                                 RenderTransformOrigin="0.5,0.5">
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label FontWeight="Bold"
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <Label FontWeight="Bold"
                                    FontSize="18"
-                                   Height="40"
+                                   Height="30"
                                    Width="100"
                                    Foreground="White"
                                    FontFamily="Corbel"
                                    Content="{DynamicResource backup_name}"/>
-                            <TextBox Height="30"
+                                <TextBox Height="25"
                                      TextWrapping="Wrap"
                                      Width="390"
                                      Margin="55,0,0,0"
@@ -92,17 +94,17 @@
                                      FontFamily="Corbel"
                                      VerticalContentAlignment="Center" 
                                      Text="{Binding NewBackup.Name}"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal"
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal"
                                     Margin="0,0,0,5">
-                            <Label FontWeight="Bold"
+                                <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                    FontSize="18"
-                                   Height="40"     
+                                   Height="30"     
                                    Width="100"
                                    Foreground="White"
                                    Content="{DynamicResource source}"/>
-                            <TextBox Height="30"
+                                <TextBox Height="25"
                                      FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
@@ -112,7 +114,7 @@
                                     FontSize="15"
                                     VerticalContentAlignment="Center" 
                                     Text="{Binding NewBackup.Source, Mode=OneWay}"/>
-                            <Button Height="30" BorderThickness="0"
+                                <Button Height="25" BorderThickness="0"
                                     FontFamily="Corbel"
                                     Width="50"
                                     Margin="20,0,0,0"
@@ -120,16 +122,16 @@
                                     Foreground="White"
                                     Style="{StaticResource brosehover}" 
                                     Content=". . ." Click="Button_Click" Cursor="Hand"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label FontWeight="Bold"
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                     FontSize="18"
-                                    Height="40"      
+                                    Height="30"      
                                     Width="100"
                                     Foreground="White"
                                     Content="{DynamicResource destination}"/>
-                            <TextBox Height="30"
+                                <TextBox Height="25"
                                      FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
@@ -139,64 +141,159 @@
                                     FontSize="15"
                                     VerticalContentAlignment="Center"
                                     Text="{Binding NewBackup.Destination, Mode=OneWay}"/>
-                            <Button Height="30" BorderThickness="0"
+                                <Button Height="25" BorderThickness="0"
                                         Width="50"
                                         Margin="20,0,0,0"
                                         FontSize="18"
                                         Foreground="White"
                                         Style="{StaticResource brosehover}" 
                                         Content=". . ." Click="Button_Click_1" Cursor="Hand"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label FontWeight="Bold"
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                    FontSize="18"
-                                   Height="40"                       
+                                   Height="31"                       
                                    Foreground="White"
                                    Content="{DynamicResource type}" Width="107"/>
-                            <ComboBox Background="White" 
+                                <ComboBox Background="White" 
                                       FontFamily="Corbel"
                                       FontSize="15"
                                       VerticalContentAlignment="Center" 
-                                      Margin="50,0,0,0" x:Name="ComboBox1" 
+                                      Margin="50,0,0,0" 
+                                      x:Name="ComboBox1" 
                                       VerticalAlignment="Center" 
-                                      Width="220" Height="30" 
+                                      Width="390" 
+                                      Height="27" 
                                       BorderBrush="White"
                                       SelectedItem="{Binding NewBackup.Type}" 
                                       ItemsSource="{Binding Source={StaticResource enumValues}}"/>
-                            <Button 
-                                FontFamily="Corbel"
-                                Height="29" 
-                                Width="180"
-                                FontSize="18"
-                                Foreground="White"
-                                FontWeight="Bold"
-                                Style="{StaticResource btnHover}"  Cursor="Hand" Command="{Binding PauseTask, Mode=OneWay}"/>
+                            </StackPanel>
+
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                            <Label FontWeight="Bold"
-                                   FontFamily="Corbel"
-                                   FontSize="18"
-                                   Height="40"                       
-                                   Foreground="White"
-                                   Content="{DynamicResource crypt}" Width="107"/>
-                            <TextBox Height="30"
+                    </Border>
+
+
+
+                    <Border CornerRadius="6"
+                            BorderBrush="#B49CC9"
+                            BorderThickness="6"
+                            Margin="10"
+                            Width="600"
+                            Height="140"       
+                            Background="#B49CC9"  
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="top">
+                        <StackPanel Margin="20,2,5,2"
+                                    RenderTransformOrigin="0.5,0.5"
+                                    Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" >
+                                <StackPanel Orientation="Vertical" 
+                                            Margin="0,0,20,0">
+                                <Label FontWeight="Bold"
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="30"   
+                                       Foreground="White"
+                                       HorizontalAlignment="Left"
+                                       Content="{DynamicResource crypt}" 
+                                       Width="170"/>
+                                <TextBox Height="25"
                                      FontFamily="Corbel"
                                      TextWrapping="Wrap"
-                                     Width="220"
-                                     Margin="50,0,0,0"
+                                     Width="170"
                                      Text="{Binding Preferences.CryptExt}"
-                                     VerticalAlignment="Center"
                                      FontSize="15"
                                      VerticalContentAlignment="Center" IsEnabled="{Binding canChangeparam}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical"
+                                            Margin="0,0,20,0">
+                                <Label FontWeight="Bold"
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="30" 
+                                       Foreground="White"
+                                       Content="Taille max fichier (Ko)" 
+                                       HorizontalAlignment="Left"
+                                       Width="170"/>
+                                <TextBox Height="25"
+                                         FontFamily="Corbel"
+                                         TextWrapping="Wrap"
+                                         Width="170"
+                                         Text=""
+                                         FontSize="15"
+                                         VerticalContentAlignment="Center"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Vertical">
+                                    <Label FontWeight="Bold"
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="30"                       
+                                       Foreground="White"
+                                       HorizontalAlignment="Left"
+                                       Content="Bande passante max" 
+                                       Width="170"/>
+                                <TextBox Height="25"
+                                         FontFamily="Corbel"
+                                         TextWrapping="Wrap"
+                                         Width="170"
+                                         Text=""
+                                         FontSize="15"
+                                         VerticalContentAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <StackPanel Orientation="Vertical"
+                                            Margin="0,0,20,0">
+                                <Label FontWeight="Bold"
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="30"                       
+                                       Foreground="White"
+                                       HorizontalAlignment="Left"
+                                       Content="Fichiers prioritaires" 
+                                       Width="170"/>
+                                <TextBox Height="25"
+                                         FontFamily="Corbel"
+                                         TextWrapping="Wrap"
+                                         Width="170"
+                                         Text=""
+                                         FontSize="15"
+                                         VerticalContentAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Vertical" >
+                                    <Label FontWeight="Bold"
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="30"
+                                       Foreground="White"
+                                       HorizontalAlignment="Left"
+                                       Content="Mot de passe pour les utilisateurs distants" 
+                                       Width="360"/>
+                                    <TextBox Height="25"
+                                             FontFamily="Corbel"
+                                             TextWrapping="Wrap"
+                                             HorizontalAlignment="Left"
+                                             Width="360"
+                                             Text=""
+                                             FontSize="15"
+                                             VerticalContentAlignment="Center"/>
+
+                                </StackPanel>
+
+                            </StackPanel>
+
+                           
+
                         </StackPanel>
-                    </StackPanel>
-                </Border>
+                    </Border>
+                </StackPanel>
                 <StackPanel>
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
                             Margin="10"
-                            Height="50" 
+                            Height="41" 
                             Width="180"
                             FontSize="18"
                             Foreground="White"
@@ -206,41 +303,91 @@
                             Command="{Binding AddTaskCommand}" 
                             CommandParameter="{Binding NewBackup}" Cursor="Hand"/>
 
-                    <Button HorizontalAlignment="Right" 
-                            FontFamily="Corbel"
-                            Margin="10,6"
-                            Height="50" 
-                            Width="180"
-                            FontSize="18"
-                            Foreground="White"
-                            Content="{DynamicResource lancer}"
-                            FontWeight="Bold"
-                            Style="{StaticResource btnHover}" 
-                            Command="{Binding LaunchCommand}" Cursor=""/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
                             Margin="10,6"
-                            Height="50" 
+                            Height="41" 
+                            Width="180"
+                            
+                            FontWeight="Bold"
+                            Style="{StaticResource btnHover}" 
+                            Command="{Binding LaunchCommand}" 
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="\image\play.png"
+                                   Height="15" 
+                                   Margin="0,0,5,0"/>
+                            <Label FontSize="18"
+                            Foreground="White" 
+                                   Content="{DynamicResource lancer}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
+                            Margin="10,6"
+                            Height="41" 
+                            Width="180"
+                            FontWeight="Bold"
+                            Command="{Binding PauseTask, Mode=OneWay}"
+                            Style="{StaticResource btnHover}" 
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="\image\pause.png"
+                                   Height="15" 
+                                   Margin="0,0,5,0"/>
+                            <Label FontSize="18"
+                            Foreground="White" 
+                                   Content="Pause"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
+                            Margin="10,6"
+                            Height="41" 
+                            Width="180"
+                            FontWeight="Bold"
+                            Command=""
+                            Style="{StaticResource btnHover}" 
+                            Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="\image\carre-blanc.png"
+                                   Height="12" 
+                                   Margin="0,0,5,0"/>
+                            <Label FontSize="18"
+                            Foreground="White" 
+                                   Content="Stop"/>
+                        </StackPanel>
+                    </Button>
+
+                <Button HorizontalAlignment="Right" 
+                            FontFamily="Corbel"
+                            Margin="10,6"
+                            Height="41" 
                             Width="180"
                             FontSize="18"
                             Foreground="White"
                             Content="{DynamicResource supp}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="{Binding DeleteTaskCommand}" Cursor="Hand"/>
+                            Command="{Binding DeleteTaskCommand}" 
+                            Cursor="Hand"/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
                             Margin="10,6"
-                            Height="50" 
+                            Height="41" 
                             Width="180"
                             FontSize="18"
                             Foreground="White"
                             Content="{DynamicResource quitter}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="" Click="Button_Click_2" IsEnabled="{Binding canChangeparam}" Cursor="Hand"/>
+                            Command="" Click="Button_Click_2" 
+                            IsEnabled="{Binding canChangeparam}" 
+                            Cursor="Hand"/>
                 </StackPanel>
 
             </StackPanel>
