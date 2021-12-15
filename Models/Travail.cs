@@ -1,4 +1,5 @@
 ﻿using EasySave.Helpers;
+using EasySave.Properties;
 using Newtonsoft.Json;
 using System;
 using System.Collections.ObjectModel;
@@ -192,7 +193,7 @@ namespace EasySave.Models
         public override int GetHashCode() => (source.GetHashCode() + destination.GetHashCode()).GetHashCode();
         //function that returns a thread that executes the backup
         //fonction qui retourne un thread qui effectue la sauvegarde
-        public Thread Start(LogService log)
+        public Thread Start(LogService log,logextension e)
         {
             var dir = new DirectoryInfo(this.source);
             files = new ObservableCollection<string>((new DirectoryInfo(source)).GetFiles("*", SearchOption.AllDirectories).Select(el => el.FullName).Where(el => isEligible(el))) ?? new ObservableCollection<string>();//récupérer les fichiers du répertoire
@@ -209,10 +210,10 @@ namespace EasySave.Models
                         timer.Start();
                         Copyfile(file, file.Replace(this.source, this.destination), this.type == "Diferentiel" ? true : false);//function to copy files
                         timer.Stop();
-                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
+                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogJournalier(e));
                     }catch(Exception ex)
                     {
-                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogService.LogJournalier());
+                        log.Log(new { name = this.name, SourceFile = file, TargetFile = file.Replace(this.source, this.destination), FileSize = (new FileInfo(file)).Length, FileTransfertTime = timer.ElapsedMilliseconds,Time = DateTime.Now.ToString("G") },new LogJournalier(e));
                     }
                     
                 }

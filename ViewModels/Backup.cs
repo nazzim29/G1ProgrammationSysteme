@@ -14,7 +14,7 @@ namespace EasySave.ViewModels
     {
         //class backup attributes
         public Preferences preferences;
-        private LogService LogService;
+        public LogService LogService = new LogService();
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,7 +37,6 @@ namespace EasySave.ViewModels
             //Dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.
             //tasks is an instance of Travail
             tasks = new ObservableCollection<Travail>();
-            if(preferences.logextension == logextension.json) LogService = new LogService(new JSONStrategy);
             //tasks.CollectionChanged += taskschanged;
         }
         //log state file method, it adds an object that contains task state properties to the state file
@@ -59,7 +58,7 @@ namespace EasySave.ViewModels
                 };
                 l.Add(obj);
             }
-            new LogService().Log(l, new LogService.LogState());
+            new LogService().Log(l, new LogState(preferences.logextension));
 
         }
         //method to delete a task
@@ -74,7 +73,7 @@ namespace EasySave.ViewModels
         //update the content of the log file
         private void taskschanged()
         {
-            LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogService.LogTasks());
+            LogService.Log(this.tasks.Select(el=>new { name = el.name, source = el.source, destination = el.destination, type = el.type }), new LogTasks(preferences.logextension));
             foreach(var (task,i) in tasks.Select((el,i)=>(el,i)))
             {
                 task.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
@@ -86,7 +85,7 @@ namespace EasySave.ViewModels
                         if(state == "Finished" && fr == 0 && i < tasks.Count())
                         {
                             running_tasks.Clear();
-                            var t = tasks[i + 1].Start(LogService);
+                            var t = tasks[i + 1].Start(LogService,preferences.logextension);
                             t.Name = tasks[i + 1].name;
                             running_tasks.Add(t);
                             t.Start();
@@ -114,7 +113,7 @@ namespace EasySave.ViewModels
             if(name != null)
             {
                 Travail t = (Travail)_tasks.Single(el => el.name == name);
-                Thread task = t.Start(LogService);
+                Thread task = t.Start(LogService,preferences.logextension);
                 task.Name = name;
                 running_tasks.Add(task);
                 task.Start();
@@ -123,7 +122,7 @@ namespace EasySave.ViewModels
             }
             if(preferences.ModeCopy == ModeCopy.sequentiel)
             {
-                var t  = tasks[0].Start(LogService);
+                var t  = tasks[0].Start(LogService,preferences.logextension);
                 t.Name = tasks[0].name;
                 running_tasks.Clear();
                 running_tasks.Add(t);
@@ -133,6 +132,7 @@ namespace EasySave.ViewModels
 
 
         }
+
     public void ParsePreferences()
         {
             preferences = Preferences.fromFile();
@@ -170,7 +170,7 @@ namespace EasySave.ViewModels
                         if (state == "Finished" && fr == 0 && i+1 < tasks.Count())
                         {
                             running_tasks.Clear();
-                            var t = tasks[i + 1].Start(LogService);
+                            var t = tasks[i + 1].Start(LogService,preferences.logextension);
                             t.Name = tasks[i + 1].name;
                             running_tasks.Add(t);
                             t.Start();
