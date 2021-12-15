@@ -328,9 +328,8 @@
                             Height="41" 
                             Width="180"
                             FontWeight="Bold"
-                            Command="{Binding PauseTask, Mode=OneWay}"
                             Style="{StaticResource btnHover}" 
-                            Cursor="Hand">
+                            Cursor="Hand" Command="{Binding PauseTask, Mode=OneWay}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="\image\pause.png"
                                    Height="15" 
@@ -347,9 +346,8 @@
                             Height="41" 
                             Width="180"
                             FontWeight="Bold"
-                            Command=""
                             Style="{StaticResource btnHover}" 
-                            Cursor="Hand">
+                            Cursor="Hand" Command="{Binding StopTask, Mode=OneWay}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="\image\carre-blanc.png"
                                    Height="12" 

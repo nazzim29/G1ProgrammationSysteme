@@ -97,18 +97,24 @@ namespace EasySave_GUI.ViewModels
         private ICommand _addTaskCommand;
         private ICommand _deleteTaskCommand;
         private ICommand _LaunchCommand;
-        private ICommand _ChangeModeToSimultaneCommand;
-        private ICommand _ChangeModeToSequentielCommand;
         private ICommand _changeLanguageCommand;
         private ICommand _PauseTask;
+        private ICommand _StopTask;
 
 
-
+        public ICommand StopTask
+        {
+            get
+            {
+                if (_StopTask == null) _StopTask = new RelayCommand(() => Backup.Stop(), (object sender) => Backup != null && Backup.State == BackupState.En_Cours);
+                return _StopTask;
+            }
+        }
         public ICommand PauseTask
         {
             get
             {
-                if (_PauseTask == null) _PauseTask = new RelayCommand(() => Backup.Pause(), (object sender) => true);
+                if (_PauseTask == null) _PauseTask = new RelayCommand(() => Backup.Pause(), (object sender) => Backup != null && Backup.State == BackupState.En_Cours);
                 return _PauseTask;
             }
         }
@@ -131,7 +137,9 @@ namespace EasySave_GUI.ViewModels
             {
                 if(_addTaskCommand == null)
                 {
-                    _addTaskCommand = new RelayCommand(() => AddTask(), (object param) => true) ;
+                    _addTaskCommand = new RelayCommand(() => AddTask(), (object param) => 
+                    NewBackup != null && NewBackup.Name != null && NewBackup.Name!="" && NewBackup.Destination!= null && 
+                    NewBackup.Destination != "" && NewBackup.Source != null && NewBackup.Source != "") ;
                 }
                 return _addTaskCommand;
             }
@@ -140,7 +148,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_deleteTaskCommand == null) _deleteTaskCommand = new RelayCommand(() => DeleteTask(), (object sender) => true);
+                if (_deleteTaskCommand == null) _deleteTaskCommand = new RelayCommand(() => DeleteTask(), (object sender) => Backup != null && Backup.State != BackupState.En_Cours);
                 return _deleteTaskCommand;
             }
         }
