@@ -14,7 +14,7 @@ namespace EasySave.ViewModels
     {
         //class backup attributes
         public Preferences preferences;
-        private LogService LogService = new LogService();
+        private LogService LogService;
         private ObservableCollection<Travail> _tasks;
         private ObservableCollection<Thread> running_tasks = new ObservableCollection<Thread>();
         public event PropertyChangedEventHandler PropertyChanged;
@@ -37,6 +37,7 @@ namespace EasySave.ViewModels
             //Dynamic data collection that provides notifications when items get added, removed, or when the whole list is refreshed.
             //tasks is an instance of Travail
             tasks = new ObservableCollection<Travail>();
+            LogService = new LogService();
             //tasks.CollectionChanged += taskschanged;
         }
         //log state file method, it adds an object that contains task state properties to the state file
@@ -147,6 +148,11 @@ namespace EasySave.ViewModels
         public void ChangeCopyMode(ModeCopy mode)
         {
             preferences.ModeCopy = mode;
+        }
+        //xml file
+        public void ChangeLogExtension(logextension exstension)
+        {
+            preferences.logextension = exstension;
         }
         //method to read the list of the task in the task file
         public void ParseTasks()

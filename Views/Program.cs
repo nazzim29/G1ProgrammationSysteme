@@ -221,9 +221,10 @@ namespace EasySave.Views
         void LogExtension()
         {
             Console.WriteLine(lang.get("chooseextension"));
-            Console.Write(" 1- JSON\n 2- XML\n");
+            Console.Write("    1- JSON\n    2- XML\n");
             Console.Write(lang.get("Tapp_chiffre"));
-            string logextension = Console.ReadLine();
+            string extensionlog = Console.ReadLine();
+            
         }
         //method to manage the menu
         void MenuPrincipale()
