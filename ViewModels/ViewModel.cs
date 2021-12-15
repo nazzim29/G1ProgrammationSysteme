@@ -190,7 +190,9 @@ namespace EasySave_GUI.ViewModels
             if (Backup.State != BackupState.En_Cours)
             {
                 Backup.Start(LogService,Preferences.CryptExt);
+                return;
             }
+            CanLaunch = false;
         }
 
         public ViewModel()
@@ -202,15 +204,8 @@ namespace EasySave_GUI.ViewModels
             CanLaunch = !fd.Contains(Preferences.LogicielMetier.Replace(".exe",""));
             processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
             processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
-            try
-            {
-
             processStartEvent.Start();
             processStopEvent.Start();
-            }catch(ManagementException e)
-            {
-                Debug.WriteLine(e.Message);
-            }
             Backups = new ObservableCollection<Backup>(Backup.fromFile());
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
             PropertyChanged += SaveTasks;
@@ -220,16 +215,15 @@ namespace EasySave_GUI.ViewModels
 
         private void processended(object sender, EventArrivedEventArgs e)
         {
-            var proname = e.NewEvent.Properties["ProcessName"].Value.ToString();
-            if(proname == Preferences.LogicielMetier)
-            {
-                CanLaunch = true;
+            var fd = System.Diagnostics.Process.GetProcesses().Select(el => el.ProcessName).ToList();
+            CanLaunch = Backup != null && Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
+            if (CanLaunch)
+            { 
                 foreach (var i in Backups)
                 {
                     if (i.State == BackupState.En_Attente)
                     {
-                        i.State = BackupState.En_Cours;
-                        i.Thread.Resume();
+                        i.Start(LogService, Preferences.CryptExt);
                     }
                 }
             }
@@ -245,8 +239,7 @@ namespace EasySave_GUI.ViewModels
                 {
                     if(i.State == BackupState.En_Cours)
                     {
-                    i.State = BackupState.En_Attente;
-                    i.Thread.Suspend();
+                        i.Pause();
                     }
                 }
             }
@@ -257,8 +250,8 @@ namespace EasySave_GUI.ViewModels
         {
             if (e.PropertyName == "Backup")
             {
-                if (Backup.State == BackupState.En_Cours) CanLaunch = false;
-                else CanLaunch = true;
+                var fd = System.Diagnostics.Process.GetProcesses().Select(el => el.ProcessName).ToList();
+                CanLaunch = Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
             }
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)

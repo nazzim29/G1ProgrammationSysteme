@@ -221,6 +221,8 @@ namespace EasySave_GUI.Models
         }
         public void Stop()
         {
+
+            resumed = false;
             State = BackupState.Inactif;
             mre.Reset();
         }
@@ -259,7 +261,7 @@ namespace EasySave_GUI.Models
                     mre.WaitOne();
                     //fileremaining = files - x
                     //x = files - remaining
-                    if (resumed && Files.IndexOf(_currentfile) + 1 < NbFile - NbFileRemaining) continue;
+                    //
                     try
                     {
                         if (new Regex(cryptExt).IsMatch(file.Extension))

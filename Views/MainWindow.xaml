@@ -214,7 +214,7 @@
                             Content="{DynamicResource lancer}"
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
-                            Command="{Binding LaunchCommand}" Cursor=""/>
+                            Command="{Binding LaunchCommand}" Cursor="" IsEnabled="{Binding CanLaunch}"/>
 
                     <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"

@@ -26,6 +26,7 @@ namespace EasySave_GUI
         public MainWindow()
         {
             InitializeComponent();
+
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             EN = new ResourceDictionary();
             FR = new ResourceDictionary();
@@ -64,7 +65,7 @@ namespace EasySave_GUI
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            Close();
+            App.Current.Shutdown();
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)
