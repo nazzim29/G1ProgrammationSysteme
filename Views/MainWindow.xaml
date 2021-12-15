@@ -98,7 +98,8 @@
                             <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                    FontSize="18"
-                                   Height="40"                       
+                                   Height="40"     
+                                   Width="100"
                                    Foreground="White"
                                    Content="{DynamicResource source}"/>
                             <TextBox Height="30"
@@ -106,7 +107,7 @@
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
                                     Width="319"
-                                    Margin="92,0,0,0"
+                                    Margin="55,0,0,0"
                                     VerticalAlignment="Center"
                                     FontSize="15"
                                     VerticalContentAlignment="Center" 
@@ -124,7 +125,8 @@
                             <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                     FontSize="18"
-                                    Height="40"                       
+                                    Height="40"      
+                                    Width="100"
                                     Foreground="White"
                                     Content="{DynamicResource destination}"/>
                             <TextBox Height="30"
