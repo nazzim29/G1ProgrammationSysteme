@@ -28,21 +28,6 @@ namespace EasySave_GUI.Models
     }
     public class Backup : BaseModel
     {
-    public class FileComparer : IComparer<string>
-    {
-            private Regex Prio;
-        public FileComparer(string prio)
-            {
-                Prio = new Regex(prio);
-            }
-        public int Compare(string a,string b)
-        {
-            if (a == null || b == null) return 0;
-            if (Prio.IsMatch(a) && !Prio.IsMatch(a)) return -1;
-            if (!Prio.IsMatch(a) && Prio.IsMatch(a)) return 1;
-            return 0;
-        }
-    }
         public EventWaitHandle mre = new AutoResetEvent(false);
         public Thread Thread;
         private string _name, _source, _destination;
@@ -52,14 +37,13 @@ namespace EasySave_GUI.Models
         private ObservableCollection<FileInfo> _files;
         private int _currentindex = 0;
         private Regex Prio;
-
         
         public event PropertyChangedEventHandler PropertyChanged;
         public bool isPrio
         {
             get
             {
-                return Prio.IsMatch(Files[0].Name);
+                return Prio.IsMatch(Files[_currentindex].Name) && State == BackupState.En_Cours;
             }
         }
         private bool isEligible(string el)
@@ -113,6 +97,7 @@ namespace EasySave_GUI.Models
                 OnPropertyChanged("NbFile");
                 OnPropertyChanged("TotalSize");
                 OnPropertyChanged("Progression");
+                OnPropertyChanged("IsPrio");
             }
         }
         public string Name
@@ -163,6 +148,7 @@ namespace EasySave_GUI.Models
             {
                 //get all the files of a directory
                 Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)))?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
+                Files = OrderFiles(Files);
                 NbFileRemaining = NbFile;
                 this.State = BackupState.Inactif;
             }
@@ -232,48 +218,54 @@ namespace EasySave_GUI.Models
         }
         private void nbfilechanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Source") Files = new ObservableCollection<FileInfo>(new DirectoryInfo(_source).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)));
+            if (e.PropertyName == "Source") Files = OrderFiles(new ObservableCollection<FileInfo>(new DirectoryInfo(_source).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))));
             if (e.PropertyName == "NbFile")
             {
                 NbFileRemaining = NbFile;
             }
         }
-            public void Pause()
-            {
-                State = BackupState.En_Attente;
-                mre.Reset();
-            }
-            public void Stop()
-            {
-                State = BackupState.Inactif;
-                mre.Reset();
-            }
+        public void Pause()
+        {
+            State = BackupState.En_Attente;
+            mre.Reset();
+        }
+        public void Stop()
+        {
+            State = BackupState.Inactif;
+            mre.Reset();
+        }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
         public void Start(LogService log,string cryptExt,string prio)
         {
             Prio = new Regex(prio);
-                try
-                {
-                    if(State == BackupState.En_Attente)
+            try
+            {
+                if(State == BackupState.En_Attente)
                 {
                     State = BackupState.En_Cours;
                     mre.Set();
                     return;
                 }
-                    var dir = new DirectoryInfo(Source);
-                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName) && el.Name != "cryptedfiles.json"));
-                   if(Files != null && Files.Count != 0) Files = new ObservableCollection<FileInfo>(Files.OrderBy(el => el.Name, new FileComparer(prio)).ToList());
-                    Thread = new Thread(()=>ThreadProc(dir,cryptExt,log));
-                    NbFileRemaining = Files.Count;
-                    Thread.Start();
-                }catch(Exception e)
-                {
-                    Debug.WriteLine(e);
-                    this.State = BackupState.Erreur;
-                }
+                var dir = new DirectoryInfo(Source);
+                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)));
+                if (Files != null && Files.Count != 0) Files = OrderFiles(Files);
+                Thread = new Thread(() => ThreadProc(dir, cryptExt, log));
+                NbFileRemaining = Files.Count;
+                Thread.Start();
+            }catch(Exception e)
+            {
+                Debug.WriteLine(e);
+                this.State = BackupState.Erreur;
+            }
         }
-
+        private ObservableCollection<FileInfo> OrderFiles(ObservableCollection<FileInfo> l)
+        {
+            List<FileInfo> lp=  l.Where(el=>Prio.IsMatch(el.Name)).ToList();
+            foreach (var t in lp) l.Remove(t);
+            lp.AddRange(l);
+            return new ObservableCollection<FileInfo>(lp);
+        }
         private void ThreadProc(DirectoryInfo dir,string cryptExt,LogService log)
         {
                 
@@ -284,9 +276,6 @@ namespace EasySave_GUI.Models
                 {
                     if (State == BackupState.En_Cours) mre.Set();
                     mre.WaitOne();
-                    //fileremaining = files - x
-                    //x = files - remaining
-                    //
                     try
                     {
                         if (new Regex(cryptExt).IsMatch(file.Extension))
@@ -312,7 +301,8 @@ namespace EasySave_GUI.Models
                         Debug.WriteLine(ex);
                         log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
                     }
-
+                _currentindex++;
+                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsPrio"));
                 }
                 this.State = BackupState.Finie;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));

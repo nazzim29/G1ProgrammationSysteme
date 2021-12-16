@@ -43,7 +43,8 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                return _CanLaunch;
+                var fd = Process.GetProcesses().Select(el => el.ProcessName).ToList();
+                return !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
             }
             set
             {
@@ -200,7 +201,7 @@ namespace EasySave_GUI.ViewModels
                 Backup.Start(LogService,Preferences.CryptExt,Preferences.Prioritaire);
                 return;
             }
-            CanLaunch = false;
+            OnPropertyChanged("CanLaunch");
         }
 
         public ViewModel()
@@ -208,8 +209,6 @@ namespace EasySave_GUI.ViewModels
             Preferences = Preferences.fromFile();
             processStartEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStartTrace");
             processStopEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStopTrace");
-            var fd = Process.GetProcesses().Select(el=>el.ProcessName).ToList();
-            CanLaunch = !fd.Contains(Preferences.LogicielMetier.Replace(".exe",""));
             processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
             processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
             processStartEvent.Start();
@@ -223,8 +222,7 @@ namespace EasySave_GUI.ViewModels
 
         private void processended(object sender, EventArrivedEventArgs e)
         {
-            var fd = System.Diagnostics.Process.GetProcesses().Select(el => el.ProcessName).ToList();
-            CanLaunch = Backup != null && Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
+            if (e.NewEvent.Properties["ProcessName"].Value.ToString() != Preferences.LogicielMetier) return;
             if (CanLaunch)
             { 
                 foreach (var i in Backups)
@@ -242,8 +240,8 @@ namespace EasySave_GUI.ViewModels
             var proname = e.NewEvent.Properties["ProcessName"].Value.ToString();
             if(proname == Preferences.LogicielMetier)
             {
-                CanLaunch = false;
-                foreach(var i  in Backups)
+                OnPropertyChanged("CanLaunch");
+                foreach (var i  in Backups)
                 {
                     if(i.State == BackupState.En_Cours)
                     {
@@ -256,11 +254,7 @@ namespace EasySave_GUI.ViewModels
 
         private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "State" ||e.PropertyName == "Backups")
-            {
-                var fd = System.Diagnostics.Process.GetProcesses().Select(el => el.ProcessName).ToList();
-                CanLaunch = Backup != null && Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
-            }
+            
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
         {

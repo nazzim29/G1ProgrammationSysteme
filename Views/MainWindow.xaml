@@ -219,7 +219,6 @@
                                 <TextBox Height="25"
                                          TextWrapping="Wrap"
                                          Width="170"
-                                         Text="Ko"
                                          FontSize="15"
                                          VerticalContentAlignment="Center"/>
                                 </StackPanel>
@@ -255,7 +254,7 @@
                                          FontFamily="Corbel"
                                          TextWrapping="Wrap"
                                          Width="170"
-                                         Text=""
+                                         Text="{Binding Preferences.Prioritaire, Mode=TwoWay}"
                                          FontSize="15"
                                          VerticalContentAlignment="Center"/>
                                 </StackPanel>
