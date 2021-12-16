@@ -28,17 +28,40 @@ namespace EasySave_GUI.Models
     }
     public class Backup : BaseModel
     {
+    public class FileComparer : IComparer<string>
+    {
+            private Regex Prio;
+        public FileComparer(string prio)
+            {
+                Prio = new Regex(prio);
+            }
+        public int Compare(string a,string b)
+        {
+            if (a == null || b == null) return 0;
+            if (Prio.IsMatch(a) && !Prio.IsMatch(a)) return -1;
+            if (!Prio.IsMatch(a) && Prio.IsMatch(a)) return 1;
+            return 0;
+        }
+    }
         public EventWaitHandle mre = new AutoResetEvent(false);
         public Thread Thread;
-        private bool resumed = false;
         private string _name, _source, _destination;
         private BackupType _type;
         private BackupState _state;
         private double _nb_file_remaining, _total_size;
         private ObservableCollection<FileInfo> _files;
-        private FileInfo _currentfile;
+        private int _currentindex = 0;
+        private Regex Prio;
+
         
         public event PropertyChangedEventHandler PropertyChanged;
+        public bool isPrio
+        {
+            get
+            {
+                return Prio.IsMatch(Files[0].Name);
+            }
+        }
         private bool isEligible(string el)
         {
             if (this.Type == BackupType.Complete)
@@ -139,7 +162,7 @@ namespace EasySave_GUI.Models
             if (e.PropertyName == "source" || e.PropertyName == "destination" || e.PropertyName == "type")
             {
                 //get all the files of a directory
-                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName))) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
+                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)))?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
                 NbFileRemaining = NbFile;
                 this.State = BackupState.Inactif;
             }
@@ -162,6 +185,7 @@ namespace EasySave_GUI.Models
                 _nb_file_remaining = value;
                 OnPropertyChanged("NbFileRemaining");
                 OnPropertyChanged("Progression");
+                OnPropertyChanged("IsPrioritaire");
             }
         }
         public double TotalSize
@@ -214,34 +238,34 @@ namespace EasySave_GUI.Models
                 NbFileRemaining = NbFile;
             }
         }
-        public void Pause()
-        {
-            State = BackupState.En_Attente;
-            mre.Reset();
-        }
-        public void Stop()
-        {
-
-            resumed = false;
-            State = BackupState.Inactif;
-            mre.Reset();
-        }
+            public void Pause()
+            {
+                State = BackupState.En_Attente;
+                mre.Reset();
+            }
+            public void Stop()
+            {
+                State = BackupState.Inactif;
+                mre.Reset();
+            }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
-        public void Start(LogService log,string cryptExt)
+        public void Start(LogService log,string cryptExt,string prio)
         {
+            Prio = new Regex(prio);
                 try
                 {
                     if(State == BackupState.En_Attente)
                 {
-                    resumed = true;
                     State = BackupState.En_Cours;
                     mre.Set();
                     return;
                 }
                     var dir = new DirectoryInfo(Source);
-                    Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)&& el.Name != "cryptedfiles.json")) ?? new ObservableCollection<FileInfo>();//récupérer les fichiers du répertoire
+                Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName) && el.Name != "cryptedfiles.json"));
+                   if(Files != null && Files.Count != 0) Files = new ObservableCollection<FileInfo>(Files.OrderBy(el => el.Name, new FileComparer(prio)).ToList());
                     Thread = new Thread(()=>ThreadProc(dir,cryptExt,log));
+                    NbFileRemaining = Files.Count;
                     Thread.Start();
                 }catch(Exception e)
                 {
@@ -249,6 +273,7 @@ namespace EasySave_GUI.Models
                     this.State = BackupState.Erreur;
                 }
         }
+
         private void ThreadProc(DirectoryInfo dir,string cryptExt,LogService log)
         {
                 

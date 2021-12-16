@@ -106,7 +106,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_StopTask == null) _StopTask = new RelayCommand(() => Backup.Stop(), (object sender) => Backup != null && Backup.State == BackupState.En_Cours);
+                if (_StopTask == null) _StopTask = new RelayCommand(() => Backup.Stop(), (object sender) => Backup != null && (Backup.State == BackupState.En_Cours || Backup.State == BackupState.En_Attente));
                 return _StopTask;
             }
         }
@@ -197,7 +197,7 @@ namespace EasySave_GUI.ViewModels
             
             if (Backup.State != BackupState.En_Cours)
             {
-                Backup.Start(LogService,Preferences.CryptExt);
+                Backup.Start(LogService,Preferences.CryptExt,Preferences.Prioritaire);
                 return;
             }
             CanLaunch = false;
@@ -208,7 +208,7 @@ namespace EasySave_GUI.ViewModels
             Preferences = Preferences.fromFile();
             processStartEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStartTrace");
             processStopEvent = new ManagementEventWatcher("SELECT * FROM Win32_ProcessStopTrace");
-            var fd = System.Diagnostics.Process.GetProcesses().Select(el=>el.ProcessName).ToList();
+            var fd = Process.GetProcesses().Select(el=>el.ProcessName).ToList();
             CanLaunch = !fd.Contains(Preferences.LogicielMetier.Replace(".exe",""));
             processStartEvent.EventArrived += new EventArrivedEventHandler(processlaunched);
             processStopEvent.EventArrived += new EventArrivedEventHandler(processended);
@@ -231,7 +231,7 @@ namespace EasySave_GUI.ViewModels
                 {
                     if (i.State == BackupState.En_Attente)
                     {
-                        i.Start(LogService, Preferences.CryptExt);
+                        i.Start(LogService, Preferences.CryptExt,Preferences.Prioritaire);
                     }
                 }
             }
@@ -256,10 +256,10 @@ namespace EasySave_GUI.ViewModels
 
         private void checklaunch(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Backup")
+            if (e.PropertyName == "State" ||e.PropertyName == "Backups")
             {
                 var fd = System.Diagnostics.Process.GetProcesses().Select(el => el.ProcessName).ToList();
-                CanLaunch = Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
+                CanLaunch = Backup != null && Backup.State != BackupState.En_Cours && !fd.Contains(Preferences.LogicielMetier.Replace(".exe", ""));
             }
         }
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
@@ -268,7 +268,7 @@ namespace EasySave_GUI.ViewModels
         }
         private void Backups_ChangedCollection(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == NotifyCollectionChangedAction.Add)
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
                 foreach(var item in e.NewItems)
                 {

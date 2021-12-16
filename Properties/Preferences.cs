@@ -22,6 +22,19 @@ namespace EasySave_GUI.Properties
         private string _language;
         private string _cryptExt;
         private string _logicielMetier;
+        private string _Prioritaire;
+        public string Prioritaire
+        {
+            get
+            {
+                return _Prioritaire;
+            }
+            set
+            {
+                _Prioritaire = value;
+                OnPropertyChanged("Prioritaire");
+            }
+        }
         public string LogicielMetier
         {
             get { return _logicielMetier; }
@@ -53,7 +66,7 @@ namespace EasySave_GUI.Properties
             if (!File.Exists(PrefPath + "\\config.json"))
             {
                 File.Create(PrefPath + "\\config.json").Dispose();
-                File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = "EN", Mode = 1,CryptExt = "",LogicielMetier = "notepad.exe"}, Formatting.Indented));
+                File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = "EN", Mode = 1,CryptExt = "",LogicielMetier = "notepad.exe",Prioritaire =""}, Formatting.Indented));
                 //default app preferences
 
             }
@@ -78,7 +91,7 @@ namespace EasySave_GUI.Properties
             {
                 File.Create(PrefPath + "\\config.json").Dispose();
             }
-            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier }, Formatting.Indented));
+            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier, Prioritaire = this.Prioritaire }, Formatting.Indented));
         }
     }
 }
