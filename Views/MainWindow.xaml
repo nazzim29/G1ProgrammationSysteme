@@ -190,7 +190,7 @@
                             <StackPanel Orientation="Horizontal" >
                                 <StackPanel Orientation="Vertical" 
                                             Margin="0,0,20,0">
-                                <Label FontWeight="Bold"
+                                    <Label FontWeight="Bold"
                                        FontFamily="Corbel"
                                        FontSize="18"
                                        Height="30"   
@@ -198,7 +198,7 @@
                                        HorizontalAlignment="Left"
                                        Content="{DynamicResource crypt}" 
                                        Width="170"/>
-                                <TextBox Height="25"
+                                    <TextBox Height="25"
                                      FontFamily="Corbel"
                                      TextWrapping="Wrap"
                                      Width="170"
@@ -208,7 +208,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical"
                                             Margin="0,0,20,0">
-                                <Label FontWeight="Bold"
+                                    <Label FontWeight="Bold"
                                        FontFamily="Corbel"
                                        FontSize="18"
                                        Height="30" 
@@ -216,11 +216,11 @@
                                        Content="{DynamicResource tailleMax}" 
                                        HorizontalAlignment="Left"
                                        Width="170"/>
-                                <TextBox Height="25"
+                                    <TextBox Height="25"
                                          TextWrapping="Wrap"
                                          Width="170"
                                          FontSize="15"
-                                         VerticalContentAlignment="Center"/>
+                                         VerticalContentAlignment="Center" Text="{Binding Preferences.LimiteFichier}" PreviewTextInput="PreviewTextInput"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical">
                                     <Label FontWeight="Bold"
@@ -231,18 +231,17 @@
                                        HorizontalAlignment="Left"
                                        Content="{DynamicResource BPMax}" 
                                        Width="170"/>
-                                <TextBox Height="25"
+                                    <TextBox Height="25"
                                          TextWrapping="Wrap"
                                          Width="170"
-                                         Text="Hz"
                                          FontSize="15"
-                                         VerticalContentAlignment="Center"/>
+                                         VerticalContentAlignment="Center" Text="{Binding Preferences.LimiteBandePassante}" PreviewTextInput="PreviewTextInput"/>
                                 </StackPanel>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <StackPanel Orientation="Vertical"
                                             Margin="0,0,20,0">
-                                <Label FontWeight="Bold"
+                                    <Label FontWeight="Bold"
                                        FontFamily="Corbel"
                                        FontSize="18"
                                        Height="30"                       
@@ -250,7 +249,7 @@
                                        HorizontalAlignment="Left"
                                        Content="{DynamicResource prioritaire}" 
                                        Width="170"/>
-                                <TextBox Height="25"
+                                    <TextBox Height="25"
                                          FontFamily="Corbel"
                                          TextWrapping="Wrap"
                                          Width="170"
@@ -265,23 +264,31 @@
                                        FontSize="18"
                                        Height="30"
                                        Foreground="White"
-                                       HorizontalAlignment="Left"
-                                       Content="{DynamicResource mdp}" 
-                                       Width="360"/>
-                                    <TextBox Height="25"
-                                             FontFamily="Corbel"
-                                             TextWrapping="Wrap"
-                                             HorizontalAlignment="Left"
-                                             Width="360"
-                                             Text=""
-                                             FontSize="15"
-                                             VerticalContentAlignment="Center"/>
-
+                                       HorizontalAlignment="Left" 
+                                       Width="360" Content="{DynamicResource mdp}">
+                                    </Label>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <PasswordBox Height="25"
+                                                     Name="pwdtb"
+                                                 FontFamily="Corbel"
+                                                 HorizontalAlignment="Left"
+                                                 Width="288"
+                                                 FontSize="15"
+                                                 VerticalContentAlignment="Center" PasswordChanged="pwdtb_PasswordChanged" Loaded="pwdtb_Loaded"
+                                                   />
+                                        <TextBox Height="26"
+                                                 x:Name="pwd"
+                                                 FontFamily="Corbel"
+                                                 Width="288"
+                                                 FontSize="15"
+                                                 VerticalContentAlignment="Center" Visibility="Collapsed" Text="{Binding Preferences.Password,Mode=TwoWay}" />
+                                        <Button Height="46" Width="66" Click="Button_Click_4"/>
+                                    </StackPanel>
                                 </StackPanel>
 
                             </StackPanel>
 
-                           
+
 
                         </StackPanel>
                     </Border>
@@ -357,7 +364,7 @@
                         </StackPanel>
                     </Button>
 
-                <Button HorizontalAlignment="Right" 
+                    <Button HorizontalAlignment="Right" 
                             FontFamily="Corbel"
                             Margin="10,6"
                             Height="41" 

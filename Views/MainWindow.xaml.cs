@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -66,6 +67,38 @@ namespace EasySave_GUI
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             App.Current.Shutdown();
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+           if(pwdtb.Visibility == Visibility.Collapsed)
+            {
+                pwdtb.Visibility = Visibility.Visible;
+           pwd.Visibility = Visibility.Collapsed;
+
+            }
+            else
+            {
+           pwdtb.Visibility = Visibility.Collapsed;
+           pwd.Visibility = Visibility.Visible;
+            }
+           
+        }
+
+        private void PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void pwdtb_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+           (DataContext as ViewModel).Preferences.Password = pwdtb.Password;
+        }
+
+        private void pwdtb_Loaded(object sender, RoutedEventArgs e)
+        {
+            pwdtb.Password = pwd.Text;
         }
 
         private void Button_Click_3(object sender, RoutedEventArgs e)

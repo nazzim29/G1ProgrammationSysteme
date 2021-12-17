@@ -259,6 +259,29 @@ namespace EasySave_GUI.ViewModels
         private void SaveTasks(object? sender, PropertyChangedEventArgs e)
         {
             if(e.PropertyName == "Backups" || e.PropertyName == "Backup") LogService.Log(this.Backups.Select(el => new { name = el.Name, source = el.Source, destination = el.Destination, type = el.Type }), new LogTasks());
+            if (e.PropertyName == "IsPrio")
+            {
+                if (!(sender as Backup).IsPrio)
+                {
+                    if (Backups.Any(el => el.IsPrio))
+                    {
+                        (sender as Backup).Pause();
+                        return;
+                    }
+                    foreach (var i in Backups)
+                    {
+                        if (i.State == BackupState.En_Attente) i.Start(LogService, Preferences.CryptExt, Preferences.Prioritaire);
+                    }
+                    return;
+                }
+                else
+                {
+                    foreach (var i in Backups)
+                    {
+                        if (!i.IsPrio && i.State == BackupState.En_Cours) i.Pause();
+                    }
+                }
+            }
         }
         private void Backups_ChangedCollection(object? sender, NotifyCollectionChangedEventArgs e)
         {

@@ -23,6 +23,27 @@ namespace EasySave_GUI.Properties
         private string _cryptExt;
         private string _logicielMetier;
         private string _Prioritaire;
+        private string _Password;
+        private long _LimiteBandePassante;
+        private long _LimiteFichier;
+        
+
+        
+        public long LimiteBandePassante
+        {
+            get { return _LimiteBandePassante; }
+            set { _LimiteBandePassante = value;OnPropertyChanged("LimiteBandePassante"); }
+        }
+        public long LimiteFichier
+        {
+            get { return _LimiteFichier; }
+            set { _LimiteFichier = value;OnPropertyChanged("LimiteFichier"); }
+        }
+        public string Password
+        {
+            get { return _Password; }
+            set { _Password = value; OnPropertyChanged("Password");}
+        }
         public string Prioritaire
         {
             get
@@ -66,7 +87,7 @@ namespace EasySave_GUI.Properties
             if (!File.Exists(PrefPath + "\\config.json"))
             {
                 File.Create(PrefPath + "\\config.json").Dispose();
-                File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = "EN", Mode = 1,CryptExt = "",LogicielMetier = "notepad.exe",Prioritaire =""}, Formatting.Indented));
+                File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = "EN", Mode = 1,CryptExt = "",LogicielMetier = "notepad.exe",Prioritaire ="",Password="",LimiteBandePassante = 20,LimiteFichier=20}, Formatting.Indented));
                 //default app preferences
 
             }
@@ -91,7 +112,7 @@ namespace EasySave_GUI.Properties
             {
                 File.Create(PrefPath + "\\config.json").Dispose();
             }
-            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier, Prioritaire = this.Prioritaire }, Formatting.Indented));
+            File.WriteAllText(PrefPath + "\\config.json", JsonConvert.SerializeObject(new { language = this.language,CryptExt = this.CryptExt,LogicielMetier=this.LogicielMetier, Prioritaire = this.Prioritaire,Password = this.Password,LimiteBandePassante = this.LimiteBandePassante, LimiteFichier = this.LimiteFichier}, Formatting.Indented));
         }
     }
 }

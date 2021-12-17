@@ -39,7 +39,7 @@ namespace EasySave_GUI.Models
         private Regex Prio;
         
         public event PropertyChangedEventHandler PropertyChanged;
-        public bool isPrio
+        public bool IsPrio
         {
             get
             {
@@ -252,6 +252,7 @@ namespace EasySave_GUI.Models
                 if (Files != null && Files.Count != 0) Files = OrderFiles(Files);
                 Thread = new Thread(() => ThreadProc(dir, cryptExt, log));
                 NbFileRemaining = Files.Count;
+                _currentindex = 0;
                 Thread.Start();
             }catch(Exception e)
             {
