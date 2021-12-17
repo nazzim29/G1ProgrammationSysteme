@@ -61,6 +61,18 @@ EasySave version 2.0
 - The software is able to encrypt the files (extensions defined by the user) using the CryptoSoft software.
 - If the presence of business software is detected, the software must prevent the start of a backup job.
 
+EasySave version 3.0
+-	EasySave version 3.0 is a desktop client application using WPF and .Net Core.
+-	Parallel backup
+-	Priority file management: Priority files are files whose extensions are declared by the user in a predefined list.
+-	Prohibition to simultaneously transfer files of more n KB so as not to saturate the bandwidth.
+-	Real-time interaction with each or all backup works. The user can Pause, Play or Stop each backup job.
+-	Temporary pause if the operation of a business software is detected.
+-	Remote console: To make it possible to follow in real time the progress of backups on a remote computer, we have developed an interface allowing a user to follow on a remote computer the progress of backup work but also to act on them.
+-	Our application is  Single Instance. The application cannot be launched more than once on the same computer.
+-	Reduction of parallel jobs if networkload, if the network load is above a threshold, the application will reduce the tasks in parallel so as not to saturate the network.
+
+
 ## GitHub 
 To clone this repository use the following command:
 ```sh
@@ -74,6 +86,7 @@ To open the application, download the executable file by following the link:
 
 For any information please refer to the user guide:
 [User Documentation V2.0](https://github.com/nazzim29/G1ProgrammationSysteme/blob/master/Documentation%20Version%202.0.pdf)
+[User Documentation V3.0](https://github.com/nazzim29/G1ProgrammationSysteme/blob/3.0/Documentation%20Version%203.0.pdf)
 
 ## Project Status
 - Version 1.0 : Done :white_check_mark: 
