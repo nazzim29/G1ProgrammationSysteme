@@ -10,6 +10,9 @@ using System.Windows.Input;
 using System.Management;
 using System.Diagnostics;
 using System;
+using System.Windows;
+using System.Threading;
+using Newtonsoft.Json;
 
 namespace EasySave_GUI.ViewModels
 {
@@ -26,7 +29,8 @@ namespace EasySave_GUI.ViewModels
         private Backup _backup;
         private Backup _newbackup;
         private bool _CanLaunch;
-
+        private Serveur Serveur;
+        private Thread ServerThread;
         public Preferences Preferences
         {
             get
@@ -107,7 +111,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_StopTask == null) _StopTask = new RelayCommand(() => Backup.Stop(), (object sender) => Backup != null && (Backup.State == BackupState.En_Cours || Backup.State == BackupState.En_Attente));
+                if (_StopTask == null) _StopTask = new RelayCommand((object param) => Backup.Stop(), (object sender) => Backup != null && (Backup.State == BackupState.En_Cours || Backup.State == BackupState.En_Attente));
                 return _StopTask;
             }
         }
@@ -115,7 +119,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_PauseTask == null) _PauseTask = new RelayCommand(() => Backup.Pause(), (object sender) => Backup != null && Backup.State == BackupState.En_Cours);
+                if (_PauseTask == null) _PauseTask = new RelayCommand((object param) => Backup.Pause(), (object sender) => Backup != null && Backup.State == BackupState.En_Cours);
                 return _PauseTask;
             }
         }
@@ -127,7 +131,7 @@ namespace EasySave_GUI.ViewModels
             {
                 if (_changetype == null)
                 {
-                    _changetype = new RelayCommand(()=>ChangeType(), (object sender)=>true);
+                    _changetype = new RelayCommand((object param)=>ChangeType(), (object sender)=>true);
                 }
                 return _changetype;
             }
@@ -138,7 +142,7 @@ namespace EasySave_GUI.ViewModels
             {
                 if(_addTaskCommand == null)
                 {
-                    _addTaskCommand = new RelayCommand(() => AddTask(), (object param) => 
+                    _addTaskCommand = new RelayCommand((object param) => AddTask(), (object param) => 
                     NewBackup != null && NewBackup.Name != null && NewBackup.Name!="" && NewBackup.Destination!= null && 
                     NewBackup.Destination != "" && NewBackup.Source != null && NewBackup.Source != "") ;
                 }
@@ -149,7 +153,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_deleteTaskCommand == null) _deleteTaskCommand = new RelayCommand(() => DeleteTask(), (object sender) => Backup != null && Backup.State != BackupState.En_Cours);
+                if (_deleteTaskCommand == null) _deleteTaskCommand = new RelayCommand((object param) => DeleteTask(), (object sender) => Backup != null && Backup.State != BackupState.En_Cours);
                 return _deleteTaskCommand;
             }
         }
@@ -157,7 +161,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand(() => Launch(), (object sender) => Backup != null && CanLaunch);
+                if (_LaunchCommand == null) _LaunchCommand = new RelayCommand((object param) => Launch(), (object sender) => Backup != null && CanLaunch);
                 return _LaunchCommand;
             }
         }
@@ -165,7 +169,7 @@ namespace EasySave_GUI.ViewModels
         {
             get
             {
-                if (_changeLanguageCommand == null) _changeLanguageCommand = new RelayCommand(() => ChangeLanguage(), (object sender) => true);
+                if (_changeLanguageCommand == null) _changeLanguageCommand = new RelayCommand((object param) => ChangeLanguage(), (object sender) => true);
                 return _changeLanguageCommand;
             }
         }
@@ -198,7 +202,7 @@ namespace EasySave_GUI.ViewModels
             
             if (Backup.State != BackupState.En_Cours)
             {
-                Backup.Start(LogService,Preferences.CryptExt,Preferences.Prioritaire);
+                Backup.Start(LogService,Preferences.CryptExt,Preferences.LimiteFichier,Preferences.Prioritaire);
                 return;
             }
             OnPropertyChanged("CanLaunch");
@@ -217,9 +221,21 @@ namespace EasySave_GUI.ViewModels
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
             PropertyChanged += SaveTasks;
             PropertyChanged += checklaunch;
-
+            Serveur = new Serveur();
+            Serveur.cmds["GetTasks"] = new GetTasks((object param) => SendTasks(),(object sender)=> true);
+            Serveur.cmds["PauseTask"] = new GetTasks((object param) => PauseDist(param),(object sender)=> true);
+            ServerThread = new Thread(() => Serveur.LaunchServer(Preferences));
         }
-
+        private void PauseDist(object param)
+        {
+            Backup b = param as Backup;
+            if (b == null) return;
+            if (Backups.Contains(b)) Backups[Backups.IndexOf(b)].Pause();
+        }
+        private void SendTasks()
+        {
+            Serveur.envoiData(JsonConvert.SerializeObject(Backups));
+        }
         private void processended(object sender, EventArrivedEventArgs e)
         {
             if (e.NewEvent.Properties["ProcessName"].Value.ToString() != Preferences.LogicielMetier) return;
@@ -229,7 +245,7 @@ namespace EasySave_GUI.ViewModels
                 {
                     if (i.State == BackupState.En_Attente)
                     {
-                        i.Start(LogService, Preferences.CryptExt,Preferences.Prioritaire);
+                        i.Start(LogService, Preferences.CryptExt,Preferences.LimiteFichier,Preferences.Prioritaire);
                     }
                 }
             }
@@ -270,7 +286,7 @@ namespace EasySave_GUI.ViewModels
                     }
                     foreach (var i in Backups)
                     {
-                        if (i.State == BackupState.En_Attente) i.Start(LogService, Preferences.CryptExt, Preferences.Prioritaire);
+                        if (i.State == BackupState.En_Attente) i.Start(LogService, Preferences.CryptExt,Preferences.LimiteFichier, Preferences.Prioritaire);
                     }
                     return;
                 }

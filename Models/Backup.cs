@@ -29,6 +29,7 @@ namespace EasySave_GUI.Models
     public class Backup : BaseModel
     {
         public EventWaitHandle mre = new AutoResetEvent(false);
+        private static Object _locker = new Object();
         public Thread Thread;
         private string _name, _source, _destination;
         private BackupType _type;
@@ -236,7 +237,7 @@ namespace EasySave_GUI.Models
         }
         //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
-        public void Start(LogService log,string cryptExt,string prio)
+        public void Start(LogService log,string cryptExt,long filemax,string prio)
         {
             Prio = new Regex(prio);
             try
@@ -250,7 +251,7 @@ namespace EasySave_GUI.Models
                 var dir = new DirectoryInfo(Source);
                 Files = new ObservableCollection<FileInfo>((new DirectoryInfo(Source)).GetFiles("*", SearchOption.AllDirectories).Where(el => isEligible(el.FullName)));
                 if (Files != null && Files.Count != 0) Files = OrderFiles(Files);
-                Thread = new Thread(() => ThreadProc(dir, cryptExt, log));
+                Thread = new Thread(() => ThreadProc(dir, cryptExt,filemax, log));
                 NbFileRemaining = Files.Count;
                 _currentindex = 0;
                 Thread.Start();
@@ -267,46 +268,30 @@ namespace EasySave_GUI.Models
             lp.AddRange(l);
             return new ObservableCollection<FileInfo>(lp);
         }
-        private void ThreadProc(DirectoryInfo dir,string cryptExt,LogService log)
+        private void ThreadProc(DirectoryInfo dir,string cryptExt,long filemax,LogService log)
         {
                 
-                this.State = BackupState.En_Cours;
-                CreateDirs(this.Destination, dir.GetDirectories());//recreates the structure of the directory
-                Stopwatch timer = new Stopwatch();
-                foreach (var file in Files)
+            this.State = BackupState.En_Cours;
+            CreateDirs(this.Destination, dir.GetDirectories());//recreates the structure of the directory
+            Stopwatch timer = new Stopwatch();
+            foreach (var file in Files)
+            {
+                if(file.Length < filemax)
                 {
-                    if (State == BackupState.En_Cours) mre.Set();
-                    mre.WaitOne();
-                    try
-                    {
-                        if (new Regex(cryptExt).IsMatch(file.Extension))
-                        {
-                            timer.Start();
-                            var gg = CryptFile(file);
-                            timer.Stop();
-
-                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
-
-                        }
-                        else
-                        {
-                            timer.Start();
-                            Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
-                            timer.Stop();
-                            log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = 0, Time = DateTime.Now.ToString("G") }, new LogJournalier());
-                        }
-
-                    }
-                    catch (Win32Exception ex)
-                    {
-                        Debug.WriteLine(ex);
-                        log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
-                    }
-                _currentindex++;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsPrio"));
+                    locked(cryptExt, log, file, timer);
                 }
-                this.State = BackupState.Finie;
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
+                else
+                {
+                    lock (_locker)
+                    {
+                        locked(cryptExt,log, file, timer);
+                    }
+                }
+                _currentindex++;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsPrio"));
+            }
+            this.State = BackupState.Finie;
+            PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
         }
         private double CryptFile(FileInfo file)
         {
@@ -328,7 +313,36 @@ namespace EasySave_GUI.Models
                 return (double)p.ExitCode;
 
         }
+        private void locked(string cryptExt,LogService log,FileInfo file,Stopwatch timer)
+        {
+            if (State == BackupState.En_Cours) mre.Set();
+            mre.WaitOne();
+            try
+            {
+                if (new Regex(cryptExt).IsMatch(file.Extension))
+                {
+                    timer.Start();
+                    var gg = CryptFile(file);
+                    timer.Stop();
 
+                    log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = gg, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+
+                }
+                else
+                {
+                    timer.Start();
+                    Copyfile(file, file.FullName.Replace(this.Source, this.Destination));//function to copy files
+                    timer.Stop();
+                    log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, CryptageTime = 0, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+                }
+
+            }
+            catch (Win32Exception ex)
+            {
+                Debug.WriteLine(ex);
+                log.Log(new { name = this.Name, SourceFile = file.FullName, TargetFile = file.FullName.Replace(this.Source, this.Destination), FileSize = file.Length, FileTransfertTime = timer.ElapsedMilliseconds, Time = DateTime.Now.ToString("G") }, new LogJournalier());
+            }
+        }
         private void Copyfile(FileInfo source, string destination)
         {
             //if the file does not exist an exception is returned
