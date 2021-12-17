@@ -66,9 +66,6 @@ For any information please refer to the user guide:
 [User Documentation V3.0](https://github.com/nazzim29/G1ProgrammationSysteme/blob/3.0/Documentation%20Version%203.0.pdf)
 
 ## Project Status
-- Version 1.0 : Done :white_check_mark: 
-- Version 1.1 : In progress :hourglass_flowing_sand:
-- Version 2.0 : Done :white_check_mark: 
 - Version 3.0 : In progress :hourglass_flowing_sand:
 
 
