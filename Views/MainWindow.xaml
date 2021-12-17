@@ -269,20 +269,24 @@
                                     </Label>
                                     <StackPanel Orientation="Horizontal" >
                                         <PasswordBox Height="25"
-                                                     Name="pwdtb"
+                                                     x:Name="pwdtb"
                                                  FontFamily="Corbel"
-                                                 HorizontalAlignment="Left"
-                                                 Width="288"
+                                                 Width="294"
                                                  FontSize="15"
                                                  VerticalContentAlignment="Center" PasswordChanged="pwdtb_PasswordChanged" Loaded="pwdtb_Loaded"
                                                    />
-                                        <TextBox Height="26"
+                                        <TextBox Height="25"
                                                  x:Name="pwd"
                                                  FontFamily="Corbel"
                                                  Width="288"
                                                  FontSize="15"
-                                                 VerticalContentAlignment="Center" Visibility="Collapsed" Text="{Binding Preferences.Password,Mode=TwoWay}" />
-                                        <Button Height="46" Width="66" Click="Button_Click_4"/>
+                                                 VerticalContentAlignment="Center" Visibility="Collapsed" Text="{Binding Preferences.Password, Mode=TwoWay}" />
+                                        <Button Height="24" Width="66"  Click="Button_Click_4" Style="{StaticResource showHover}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="\image\visibility.png"
+                                                       Height="20" />
+                                            </StackPanel>
+                                        </Button>
                                     </StackPanel>
                                 </StackPanel>
 
