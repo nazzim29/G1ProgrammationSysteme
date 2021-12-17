@@ -44,7 +44,7 @@ To ensure that our work can be taken over by other teams, we must work within ce
 - GitHub 
 
 ## Features
-- EasySave version 3.0 is a desktop client application using WPF and .Net Core.
+-	EasySave version 3.0 is a desktop client application using WPF and .Net Core.
 -	Parallel backup
 -	Priority file management: Priority files are files whose extensions are declared by the user in a predefined list.
 -	Prohibition to simultaneously transfer files of more n KB so as not to saturate the bandwidth.
