@@ -44,6 +44,7 @@ namespace EasySave_GUI.Models
         {
             get
             {
+                if (Prio == null) return false;
                 return Prio.IsMatch(Files[_currentindex].Name) && State == BackupState.En_Cours;
             }
         }
@@ -223,6 +224,7 @@ namespace EasySave_GUI.Models
             if (e.PropertyName == "NbFile")
             {
                 NbFileRemaining = NbFile;
+                _currentindex = 0;
             }
         }
         public void Pause()
@@ -287,7 +289,7 @@ namespace EasySave_GUI.Models
                         locked(cryptExt,log, file, timer);
                     }
                 }
-                _currentindex++;
+                if(_currentindex < Files.Count)_currentindex++;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsPrio"));
             }
             this.State = BackupState.Finie;

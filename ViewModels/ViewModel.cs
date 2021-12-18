@@ -225,6 +225,7 @@ namespace EasySave_GUI.ViewModels
             Serveur.cmds["GetTasks"] = new GetTasks((object param) => SendTasks(),(object sender)=> true);
             Serveur.cmds["PauseTask"] = new GetTasks((object param) => PauseDist(param),(object sender)=> true);
             ServerThread = new Thread(() => Serveur.LaunchServer(Preferences));
+            ServerThread.Start();
         }
         private void PauseDist(object param)
         {
@@ -234,7 +235,7 @@ namespace EasySave_GUI.ViewModels
         }
         private void SendTasks()
         {
-            Serveur.envoiData(JsonConvert.SerializeObject(Backups));
+            Serveur.envoiData(new Message { obj=Backups.Select(el=>new { Name = el.Name,Destination = el.Destination,Source = el.Source,Type = el.Type,State = el.State, NbFileRemaining =el.NbFileRemaining , TotalSize =el.TotalSize , NbFile =el.NbFile }).ToArray(),Error=false});
         }
         private void processended(object sender, EventArrivedEventArgs e)
         {
