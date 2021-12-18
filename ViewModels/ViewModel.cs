@@ -13,6 +13,8 @@ using System;
 using System.Windows;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace EasySave_GUI.ViewModels
 {
@@ -221,21 +223,48 @@ namespace EasySave_GUI.ViewModels
             Backups.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Backups_ChangedCollection);
             PropertyChanged += SaveTasks;
             PropertyChanged += checklaunch;
-            Serveur = new Serveur();
+            Serveur = new Serveur(Preferences.Password);
             Serveur.cmds["GetTasks"] = new GetTasks((object param) => SendTasks(),(object sender)=> true);
             Serveur.cmds["PauseTask"] = new GetTasks((object param) => PauseDist(param),(object sender)=> true);
+            Serveur.cmds["StartTask"] = new GetTasks((object param) => LaunchDist(param),(object sender)=> true);
+            Serveur.cmds["StopTask"] = new GetTasks((object param) => StopDist(param),(object sender)=> true);
             ServerThread = new Thread(() => Serveur.LaunchServer(Preferences));
             ServerThread.Start();
         }
+
+        private void StopDist(object param)
+        {
+            List<Backup> bb = ((JArray)param).ToObject<List<Backup>>();
+            if (bb == null) return;
+            foreach (var b in bb) if (Backups.Contains(b)) Backups[Backups.IndexOf(b)].Stop();
+            SendTasks();
+        }
+
+        private void LaunchDist(object param)
+        {
+            List<Backup> bb = ((JArray)param).ToObject<List<Backup>>();
+            if (bb == null) return;
+            foreach(var b in bb) if(Backups.Contains(b)) Backups[Backups.IndexOf(b)].Start(LogService, Preferences.CryptExt, Preferences.LimiteFichier, Preferences.Prioritaire);
+            SendTasks();
+        }
+
         private void PauseDist(object param)
         {
-            Backup b = param as Backup;
-            if (b == null) return;
-            if (Backups.Contains(b)) Backups[Backups.IndexOf(b)].Pause();
+            List<Backup> bb = ((JArray)param).ToObject<List<Backup>>();
+            if (bb == null) return;
+            foreach (var b in bb) if (Backups.Contains(b)) Backups[Backups.IndexOf(b)].Pause();
+            SendTasks();
         }
         private void SendTasks()
         {
-            Serveur.envoiData(new Message { obj=Backups.Select(el=>new { Name = el.Name,Destination = el.Destination,Source = el.Source,Type = el.Type,State = el.State, NbFileRemaining =el.NbFileRemaining , TotalSize =el.TotalSize , NbFile =el.NbFile }).ToArray(),Error=false});
+            var currentCulture = Thread.CurrentThread.CurrentCulture;
+            var currentUiCulture = Thread.CurrentThread.CurrentUICulture;
+            Thread th = new Thread(Serveur.envoiData);
+            th.CurrentCulture = System.Globalization.CultureInfo.CurrentCulture;
+            th.Name = "sendtasks";
+            th.CurrentCulture = currentCulture;
+            th.CurrentUICulture = currentUiCulture;
+            th.Start(new Message { obj = Backups.Select(el=>new {Name = el.Name,Destination=el.Destination,Source=el.Source,Type=el.Type,State=el.State,NbFileRemaining = el.NbFileRemaining,TotalSize=el.TotalSize,NbFile=el.NbFile}).ToList(), Error = false });
         }
         private void processended(object sender, EventArrivedEventArgs e)
         {

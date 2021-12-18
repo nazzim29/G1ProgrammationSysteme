@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace EasySave_GUI.Models
 {
@@ -45,8 +46,10 @@ namespace EasySave_GUI.Models
         Socket Client;
         public GetTasks GetTasks;
         public Dictionary<string, RelayCommand> cmds = new Dictionary<string, RelayCommand>();
-        public Serveur()
+        private string password;
+        public Serveur(string p)
         {
+            password = p;
             Server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
         public void SeConnecter(string ip, int port)
@@ -56,14 +59,14 @@ namespace EasySave_GUI.Models
             Server.Bind(endPoint);
             Server.Listen(1);
         }
-        public void AccepterConnection(string password)
+        public void AccepterConnection( )
         {
             Client = Server.Accept();
             ConnectMessage msg = EcouterReseau<ConnectMessage>();
             if (msg.password != password)
             {
                 envoiData(new Message { Error = true });
-                AccepterConnection(password);
+                AccepterConnection();
                 return;
             }
             else
@@ -87,9 +90,12 @@ namespace EasySave_GUI.Models
             }
             return JsonConvert.DeserializeObject<T>(a);
         }
-        public void envoiData(Message data)
+        public void envoiData(object obj)
         {
+            var data = (Message)obj;
             byte[] dataSend = new Byte[1024];
+            var ss = "";
+            //Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.CurrentCulture;
             dataSend = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data));
             Client.Send(dataSend, dataSend.Length, SocketFlags.None);
         }
@@ -103,12 +109,13 @@ namespace EasySave_GUI.Models
             SeConnecter("127.0.0.1", 2906);
             Thread t = new Thread(() =>
             {
-
-                AccepterConnection("nazim");
-                MessageBox.Show(p.language == "FR" ? "Client Connecté" : "Client Connected");
                 Message cmd ;
                 while (true)
                 {
+                    if (Client == null || !Client.Connected)
+                    {
+                        AccepterConnection();
+                    }
                     cmd = EcouterReseau<Message>();
                     Debug.WriteLine(cmd);
                     ExecuteCmd(cmd);

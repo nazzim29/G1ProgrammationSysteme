@@ -237,7 +237,7 @@ namespace EasySave_GUI.Models
             State = BackupState.Inactif;
             mre.Reset();
         }
-        //public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source);
+        public override bool Equals(object obj) => obj != null && obj is Backup && ((Backup)obj).Destination.Equals(Destination) && ((Backup)obj).Source.Equals(Source) &&((Backup)obj).Name == Name;
         //public override int GetHashCode() => (Source.GetHashCode() + Destination.GetHashCode()).GetHashCode();
         public void Start(LogService log,string cryptExt,long filemax,string prio)
         {
