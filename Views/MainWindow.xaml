@@ -449,6 +449,11 @@
                                     <TextBlock Text="{DynamicResource state}" />
                                 </DataGridTextColumn.Header>
                             </DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Progression}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{DynamicResource prog}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
                             <DataGridTextColumn Binding="{Binding NbFile, Mode=OneWay}" >
                                 <DataGridTextColumn.Header>
                                     <TextBlock Text="{DynamicResource nbfile}" />

@@ -24,5 +24,5 @@
     <system:String x:Key="mdp">Password for remote users</system:String>
     <system:String x:Key="pause">Pause</system:String>
     <system:String x:Key="stop">Stop</system:String>
-    
+    <system:String x:Key="prog">Progression</system:String>
 </ResourceDictionary>
