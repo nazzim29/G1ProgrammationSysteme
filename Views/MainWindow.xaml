@@ -53,14 +53,6 @@
                    HorizontalAlignment="Center" Height="100" Width="98">
                 </Image>
             </Button>
-            <!--<Image Grid.Row="0" Grid.Column="1"
-                   Source="/image/langue.png"
-                   HorizontalAlignment="right"
-                   Margin="0,30,20,0" MouseDown="Image_MouseDown">
-                <Image.InputBindings>
-                    <MouseBinding Gesture="LeftClick" Command="{Binding ChangeLanguageCommand}" />
-                </Image.InputBindings>
-            </Image>-->
 
             <StackPanel Grid.Row="1" Grid.Column="1"
                         Orientation="Horizontal">
@@ -96,7 +88,7 @@
                                      Text="{Binding NewBackup.Name}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,5">
+                                        Margin="0,0,0,5">
                                 <Label FontWeight="Bold"
                                    FontFamily="Corbel"
                                    FontSize="18"
@@ -132,7 +124,7 @@
                                     Foreground="White"
                                     Content="{DynamicResource destination}"/>
                                 <TextBox Height="25"
-                                     FontFamily="Corbel"
+                                    FontFamily="Corbel"
                                     TextWrapping="NoWrap"
                                     AcceptsReturn="False" 
                                     Width="320"
@@ -151,11 +143,11 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                                 <Label FontWeight="Bold"
-                                   FontFamily="Corbel"
-                                   FontSize="18"
-                                   Height="31"                       
-                                   Foreground="White"
-                                   Content="{DynamicResource type}" Width="107"/>
+                                       FontFamily="Corbel"
+                                       FontSize="18"
+                                       Height="31"                       
+                                       Foreground="White"
+                                       Content="{DynamicResource type}" Width="107"/>
                                 <ComboBox Background="White" 
                                       FontFamily="Corbel"
                                       FontSize="15"
@@ -199,12 +191,12 @@
                                        Content="{DynamicResource crypt}" 
                                        Width="170"/>
                                     <TextBox Height="25"
-                                     FontFamily="Corbel"
-                                     TextWrapping="Wrap"
-                                     Width="170"
-                                     Text="{Binding Preferences.CryptExt}"
-                                     FontSize="15"
-                                     VerticalContentAlignment="Center" IsEnabled="{Binding canChangeparam}"/>
+                                             FontFamily="Corbel"
+                                             TextWrapping="Wrap"
+                                             Width="170"
+                                             Text="{Binding Preferences.CryptExt}"
+                                             FontSize="15"
+                                             VerticalContentAlignment="Center" IsEnabled="{Binding canChangeparam}"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Vertical"
                                             Margin="0,0,20,0">
@@ -270,22 +262,25 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <PasswordBox Height="25"
                                                      x:Name="pwdtb"
-                                                 FontFamily="Corbel"
-                                                 Width="294"
-                                                 FontSize="15"
-                                                 VerticalContentAlignment="Center" PasswordChanged="pwdtb_PasswordChanged" Loaded="pwdtb_Loaded"
-                                                   />
+                                                     FontFamily="Corbel"
+                                                     Width="294"
+                                                     FontSize="15"
+                                                     VerticalContentAlignment="Center" 
+                                                     PasswordChanged="pwdtb_PasswordChanged" 
+                                                     Loaded="pwdtb_Loaded" />
                                         <TextBox Height="25"
                                                  x:Name="pwd"
                                                  FontFamily="Corbel"
-                                                 Width="288"
+                                                 Width="294"
                                                  FontSize="15"
-                                                 VerticalContentAlignment="Center" Visibility="Collapsed" Text="{Binding Preferences.Password, Mode=TwoWay}" />
-                                        <Button Height="24" Width="66"  Click="Button_Click_4" Style="{StaticResource showHover}">
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Source="\image\visibility.png"
-                                                       Height="20" />
-                                            </StackPanel>
+                                                 VerticalContentAlignment="Center" 
+                                                 Visibility="Collapsed" 
+                                                 Text="{Binding Preferences.Password, Mode=TwoWay}" />
+                                        <Button Height="24" Width="66"  
+                                                Click="Button_Click_4" 
+                                                Style="{StaticResource showHover}">
+                                            <Image Source="\image\visibility.png"
+                                                   Height="20" />
                                         </Button>
                                     </StackPanel>
                                 </StackPanel>
@@ -317,7 +312,6 @@
                             Margin="10,6"
                             Height="41" 
                             Width="180"
-                            
                             FontWeight="Bold"
                             Style="{StaticResource btnHover}" 
                             Command="{Binding LaunchCommand}" 
@@ -327,7 +321,7 @@
                                    Height="15" 
                                    Margin="0,0,5,0"/>
                             <Label FontSize="18"
-                            Foreground="White" 
+                                   Foreground="White" 
                                    Content="{DynamicResource lancer}"/>
                         </StackPanel>
                     </Button>
@@ -363,7 +357,7 @@
                                    Height="12" 
                                    Margin="0,0,7,0"/>
                             <Label FontSize="18"
-                            Foreground="White" 
+                                   Foreground="White" 
                                    Content="{DynamicResource stop}"/>
                         </StackPanel>
                     </Button>
