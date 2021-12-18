@@ -194,7 +194,7 @@ namespace EasySave_GUI.Models
                 if (NbFileRemaining == 0) return "100%";
                 double finit = NbFile - NbFileRemaining;
                 if (finit == 0) return "0%";
-                double p = finit * 100 / NbFile;
+                double p = Math.Round(finit * 100 / NbFile,0);
                 return p + "%";
             }
         }
