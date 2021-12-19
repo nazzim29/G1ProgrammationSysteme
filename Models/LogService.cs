@@ -15,11 +15,11 @@ namespace EasySave.Models
         //attribute with its getter
         public string Path { get; }
         //execute method
-        public void execute(Object obj);
+        public void execute(object obj);
     }
     public interface WriteStrategy
     {
-        public string serialize(Object obj);
+        public string serialize(object obj);
         public T? deserialize<T>(string s);
         public string ToString();
     }
