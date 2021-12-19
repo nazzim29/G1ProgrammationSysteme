@@ -36,9 +36,14 @@ namespace EasySave_GUI.Models
         private BackupState _state;
         private double _nb_file_remaining, _total_size;
         private ObservableCollection<FileInfo> _files;
-        private int _currentindex = 0;
         private Regex Prio;
+        private int _currentidx;
         
+        public int _currentindex
+        {
+            get { if (_currentidx == null) _currentidx = 0;return _currentidx; }
+            set { if(Files != null && Files.Count >= value) _currentidx = value; }
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         public bool IsPrio
         {
@@ -186,16 +191,12 @@ namespace EasySave_GUI.Models
                 OnPropertyChanged("TotalSize");
             }
         }
-        public string Progression
+        public int Progression
         {
             get
             {
-                if (State == BackupState.Inactif) return "0%";
-                if (NbFileRemaining == 0) return "100%";
-                double finit = NbFile - NbFileRemaining;
-                if (finit == 0) return "0%";
-                double p = Math.Round(finit * 100 / NbFile,0);
-                return p + "%";
+                if (State == BackupState.Inactif || NbFile == 0) return 0;
+                return (int)Math.Round((_currentindex / NbFile) * 100);
             }
         }
         public double NbFile
@@ -215,6 +216,7 @@ namespace EasySave_GUI.Models
         }
         public Backup()
         {
+            State = BackupState.Finie;
             Files.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(Files_CollectionChanged);
             PropertyChanged += nbfilechanged;
         }
@@ -278,7 +280,10 @@ namespace EasySave_GUI.Models
             Stopwatch timer = new Stopwatch();
             foreach (var file in Files)
             {
-                if(file.Length < filemax)
+                if (State == BackupState.Erreur || State == BackupState.Finie) return;
+                if (State == BackupState.En_Cours) mre.Set();
+                mre.WaitOne();
+                if (file.Length < filemax)
                 {
                     locked(cryptExt, log, file, timer);
                 }
@@ -291,6 +296,7 @@ namespace EasySave_GUI.Models
                 }
                 if(_currentindex < Files.Count)_currentindex++;
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsPrio"));
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Progression"));
             }
             this.State = BackupState.Finie;
             PropertyChanged.Invoke(this, new PropertyChangedEventArgs("State"));
@@ -317,8 +323,7 @@ namespace EasySave_GUI.Models
         }
         private void locked(string cryptExt,LogService log,FileInfo file,Stopwatch timer)
         {
-            if (State == BackupState.En_Cours) mre.Set();
-            mre.WaitOne();
+            
             try
             {
                 if (new Regex(cryptExt).IsMatch(file.Extension))

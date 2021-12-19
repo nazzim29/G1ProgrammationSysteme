@@ -116,9 +116,15 @@ namespace EasySave_GUI.Models
                     {
                         AccepterConnection();
                     }
-                    cmd = EcouterReseau<Message>();
-                    Debug.WriteLine(cmd);
-                    ExecuteCmd(cmd);
+                    try
+                    {
+                        cmd = EcouterReseau<Message>();
+                        Debug.WriteLine(cmd);
+                        ExecuteCmd(cmd);
+                    }catch(Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
                 }
             });
             t.Start();

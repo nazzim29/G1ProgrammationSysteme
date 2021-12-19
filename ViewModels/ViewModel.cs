@@ -264,7 +264,8 @@ namespace EasySave_GUI.ViewModels
             th.Name = "sendtasks";
             th.CurrentCulture = currentCulture;
             th.CurrentUICulture = currentUiCulture;
-            th.Start(new Message { obj = Backups.Select(el=>new {Name = el.Name,Destination=el.Destination,Source=el.Source,Type=el.Type,State=el.State,NbFileRemaining = el.NbFileRemaining,TotalSize=el.TotalSize,NbFile=el.NbFile}).ToList(), Error = false });
+            var hey = Backups.Select(el => new { Name = el.Name, Destination = el.Destination, Source = el.Source, Type = el.Type, State = el.State, NbFileRemaining = el.NbFileRemaining, TotalSize = el.TotalSize, NbFile = el.NbFile, Progression = el.Progression }).ToList();
+            th.Start(new Message { obj = hey, Error = false });
         }
         private void processended(object sender, EventArrivedEventArgs e)
         {
